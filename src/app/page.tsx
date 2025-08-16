@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
@@ -25,6 +26,7 @@ const categories = ["Baby", "Startup", "Product", "Social", "Group"];
 export default function Home() {
   const [currentName, setCurrentName] = useState("Gitisha");
   const [selectedCategory, setSelectedCategory] = useState("Baby");
+  const router = useRouter();
   const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
@@ -37,6 +39,14 @@ export default function Home() {
       return () => clearInterval(intervalId); // Cleanup on component unmount
     }
   }, []);
+
+  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isBabySelected) {
+      e.preventDefault();
+      return;
+    }
+    router.push('/form/personalize');
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -88,7 +98,11 @@ export default function Home() {
       </main>
        <footer className="w-full sticky bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
             <div className="w-full max-w-md">
-                 <Link href={isBabySelected ? "/form/personalize" : "#"} className={cn(!isBabySelected && "opacity-50 pointer-events-none")}>
+                 <a 
+                    href={isBabySelected ? "/form/personalize" : "#"} 
+                    onClick={handleCtaClick}
+                    className={cn(!isBabySelected && "opacity-50 pointer-events-none")}
+                  >
                     <Button 
                         asChild={false}
                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
@@ -98,7 +112,7 @@ export default function Home() {
                             : "Coming soon"
                         }
                     </Button>
-                </Link>
+                </a>
             </div>
           <div className="flex space-x-6 text-sm">
             <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
