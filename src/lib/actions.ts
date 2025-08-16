@@ -64,8 +64,13 @@ export async function getAndPrioritizeNames(
           .filter((name): name is NameResult => name !== undefined);
 
         const unprioritizedNames = names.filter(name => !prioritizedNameStrings.includes(name.name));
+        
+        const finalNameList = [...prioritizedNames, ...unprioritizedNames];
+        // Deduplicate in case the same name was in both lists
+        const uniqueNames = Array.from(new Map(finalNameList.map(item => [item.id, item])).values());
+        
+        return {names: uniqueNames};
 
-        return {names: [...prioritizedNames, ...unprioritizedNames]};
       } catch (aiError) {
         console.error('AI prioritization failed, returning original list:', aiError);
         // If AI fails, return the original list from the webhook
