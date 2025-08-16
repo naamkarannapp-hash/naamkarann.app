@@ -92,7 +92,7 @@ export default function Home() {
             >
                 {isBabySelected 
                     ? <>Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> in just 4 clicks</> 
-                    : "Start Naming ... Coming soon"
+                    : "Coming soon"
                 }
             </Button>
           </Link>
