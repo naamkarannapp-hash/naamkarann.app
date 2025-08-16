@@ -113,14 +113,6 @@ export default function ResultsPage() {
               </Sheet>
           </div>
       </div>
-      <footer className="w-full bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-          <div className="flex space-x-6 text-sm">
-            <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">Privacy</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">Contact</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary font-bold text-accent">Support</Link>
-          </div>
-       </footer>
     </div>
   );
 }

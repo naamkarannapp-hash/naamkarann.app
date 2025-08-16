@@ -1,5 +1,4 @@
 import { FormHeader } from '@/components/form-header';
-import { FormFooter } from '@/components/form-footer';
 
 export default function FormLayout({
   children,
@@ -14,7 +13,6 @@ export default function FormLayout({
           {children}
         </main>
       </div>
-      <FormFooter />
     </div>
   );
 }

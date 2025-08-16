@@ -95,32 +95,29 @@ export default function Home() {
               <span className="text-muted-foreground/50">•</span>
               <span>Linguist-verified</span>
           </div>
-      </main>
-       <footer className="w-full sticky bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-            <div className="w-full max-w-md">
-                 <a 
-                    href={isBabySelected ? "/form/personalize" : "#"} 
-                    onClick={handleCtaClick}
-                    className={cn(!isBabySelected && "opacity-50 pointer-events-none")}
+
+           <div className="w-full max-w-md mt-8">
+               <a 
+                  href={isBabySelected ? "/form/personalize" : "#"} 
+                  onClick={handleCtaClick}
+                  className={cn(
+                      "w-full",
+                      !isBabySelected && "opacity-50 cursor-not-allowed"
+                  )}
+                >
+                  <Button 
+                      asChild={false}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
                   >
-                    <Button 
-                        asChild={false}
-                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
-                    >
-                        {isBabySelected 
-                            ? "Perfect name in 4 clicks"
-                            : "Coming soon"
-                        }
-                    </Button>
-                </a>
-            </div>
-          <div className="flex space-x-6 text-sm">
-            <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">Privacy</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">Contact</Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary font-bold text-accent">Support</Link>
+                      {isBabySelected 
+                          ? "Perfect name in 4 clicks"
+                          : "Coming soon"
+                      }
+                  </Button>
+              </a>
           </div>
-       </footer>
+      </main>
+      
        <style jsx>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
