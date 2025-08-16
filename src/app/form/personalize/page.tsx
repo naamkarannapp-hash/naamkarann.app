@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
-import { nameFormSchema } from "@/lib/types";
+import { nameFormSchemaBase } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,17 +26,37 @@ import {
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
+const personalizePageSchema = nameFormSchemaBase.pick({
+    gender: true,
+    startingLetters: true,
+    blendParents: true,
+    parent1Name: true,
+    parent2Name: true,
+    matchSibling: true,
+    siblingName: true,
+}).superRefine((data, ctx) => {
+  if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "First parent's name is required.",
+      path: ["parent1Name"],
+    });
+  }
+  if (data.matchSibling && (!data.siblingName || data.siblingName.trim() === '')) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Sibling's name is required.",
+      path: ["siblingName"],
+    });
+  }
+});
+
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
 
   const form = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
-    resolver: zodResolver(nameFormSchema.pick({
-        blendParents: true,
-        parent1Name: true,
-        matchSibling: true,
-        siblingName: true,
-    })),
+    resolver: zodResolver(personalizePageSchema),
     defaultValues: {
       gender: state.formValues.gender || 'Neutral',
       startingLetters: state.formValues.startingLetters,
