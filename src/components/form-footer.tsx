@@ -4,6 +4,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Sparkles, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
   "/form/personalize",
@@ -26,7 +27,6 @@ export function FormFooter() {
             case "/form/inspirations":
                 return { text: "Show Names", formId: "inspirations-form", icon: <Sparkles className="ml-2 h-5 w-5"/> };
             default:
-                // Find the form ID based on the current step
                 if (currentStepIndex !== -1) {
                     const formId = steps[currentStepIndex].split('/').pop() + "-form";
                     return { text: "Next", formId: formId };
@@ -57,7 +57,7 @@ export function FormFooter() {
 
 
     return (
-        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex justify-center border-t border-border/20">
+        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
             <div className="w-full max-w-md flex items-center justify-between space-x-2">
                 <Button 
                     variant="ghost"
@@ -87,6 +87,12 @@ export function FormFooter() {
                     {text}
                     {icon}
                 </Button>
+            </div>
+             <div className="flex space-x-6 text-sm">
+                <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary">Privacy</Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary">Contact</Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary font-bold text-accent">Support</Link>
             </div>
         </footer>
     );
