@@ -48,6 +48,7 @@ export function FormFooter() {
       if (nextStep) {
           router.push(nextStep);
       } else {
+          // This case should ideally not be hit if the last step button is "Show Names"
           router.push('/results');
       }
     };
@@ -57,9 +58,9 @@ export function FormFooter() {
 
 
     return (
-        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-            <div className="w-full max-w-md flex items-center justify-between space-x-2">
-                <Button 
+        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 border-t border-border/20 z-50">
+           <div className="w-full max-w-md mx-auto flex items-center justify-between space-x-2">
+                 <Button 
                     variant="ghost"
                     onClick={handleBack}
                     className="text-muted-foreground"
@@ -87,13 +88,7 @@ export function FormFooter() {
                     {text}
                     {icon}
                 </Button>
-            </div>
-             <div className="flex space-x-6 text-sm">
-                <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary">Privacy</Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary">Contact</Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary font-bold text-accent">Support</Link>
-            </div>
+           </div>
         </footer>
     );
 }
