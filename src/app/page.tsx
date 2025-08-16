@@ -87,18 +87,16 @@ export default function Home() {
         </div>
       </main>
        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-          <Link href={isBabySelected ? "/form/personalize" : "#"} passHref legacyBehavior>
-            <a className="w-full max-w-md">
-                <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
-                    disabled={!isBabySelected}
-                >
-                    {isBabySelected 
-                        ? "Perfect name in 4 clicks"
-                        : "Coming soon"
-                    }
-                </Button>
-            </a>
+          <Link href={isBabySelected ? "/form/personalize" : "#"} className="w-full max-w-md">
+            <Button 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
+                disabled={!isBabySelected}
+            >
+                {isBabySelected 
+                    ? "Perfect name in 4 clicks"
+                    : "Coming soon"
+                }
+            </Button>
           </Link>
           <div className="flex space-x-6 text-sm">
             <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
