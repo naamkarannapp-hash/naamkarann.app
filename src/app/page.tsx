@@ -26,16 +26,18 @@ export default function Home() {
   const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * allNames.length);
-      setCurrentName(allNames[randomIndex]);
-    }, 300); // Change name every 0.3 seconds
+    if (typeof window !== 'undefined') {
+      const intervalId = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * allNames.length);
+        setCurrentName(allNames[randomIndex]);
+      }, 300); // Change name every 0.3 seconds
 
-    return () => clearInterval(intervalId); // Cleanup on component unmount
+      return () => clearInterval(intervalId); // Cleanup on component unmount
+    }
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-1 overflow-y-auto pb-32">
         <div className="flex flex-col items-center text-center p-4 pt-8 md:pt-12">
             <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
@@ -87,7 +89,7 @@ export default function Home() {
        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
           <Link href={isBabySelected ? "/form/personalize" : "#"} passHref className="w-full max-w-md">
             <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 px-8 text-lg rounded-xl shadow-lg"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
                 disabled={!isBabySelected}
             >
                 {isBabySelected 

@@ -27,8 +27,7 @@ export function FormFooter() {
             <Button 
                 type="submit"
                 form={formId}
-                size="lg" 
-                className="w-full max-w-md bg-primary text-primary-foreground font-bold rounded-xl shadow-lg"
+                className="w-full max-w-md bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
             >
                 {text}
                 {icon}
