@@ -1,6 +1,7 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,15 +10,24 @@ import type { NameFormValues } from "@/lib/types";
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Lightbulb, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];
+const moreInspirationsList = [
+    { name: "Mythology", gradient: "from-amber-200 to-yellow-300" },
+    { name: "Animals", gradient: "from-lime-200 to-green-300" },
+    { name: "River", gradient: "from-cyan-200 to-blue-300" },
+    { name: "Mountains", gradient: "from-slate-300 to-gray-400" },
+    { name: "History", gradient: "from-orange-200 to-amber-300" },
+    { name: "Flowers", gradient: "from-pink-200 to-rose-300" },
+];
 
-const ChipButton = ({ label, isSelected, onSelect }: { label: string; isSelected: boolean; onSelect: () => void }) => (
+const ChipButton = ({ label, isSelected, onSelect, className }: { label: string; isSelected: boolean; onSelect: () => void, className?: string }) => (
     <Button
       type="button"
       variant={isSelected ? "default" : "secondary"}
       onClick={onSelect}
-      className="rounded-full"
+      className={cn("rounded-full", isSelected ? 'text-primary-foreground' : 'text-foreground', className)}
     >
       {label}
     </Button>
@@ -27,8 +37,9 @@ export default function InspirationsPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
   const { toast } = useToast();
+  const [showMoreInspirations, setShowMoreInspirations] = useState(false);
 
-  const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'inspirations'>>({
+  const { handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'inspirations'>>({
     defaultValues: {
       inspirations: state.formValues.inspirations || [],
     },
@@ -47,7 +58,7 @@ export default function InspirationsPage() {
     const finalFormValues = { ...state.formValues, ...data };
     setState({ formValues: finalFormValues, isLoading: true });
     
-    router.push('/results'); // Navigate immediately to show loading screen
+    router.push('/results');
 
     const result = await getAndPrioritizeNames(finalFormValues);
     
@@ -58,7 +69,7 @@ export default function InspirationsPage() {
         description: result.error,
       });
       setState({ isLoading: false, nameResults: [], error: result.error });
-      router.back(); // Go back if there's an error
+      router.back();
     } else {
       setState({ nameResults: result.names, isLoading: false, error: null });
     }
@@ -87,7 +98,23 @@ export default function InspirationsPage() {
                 />
               ))}
             </div>
-             <Button type="button" variant="ghost" className="text-primary mt-2">+ More inspirations</Button>
+             {!showMoreInspirations ? (
+                 <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
+             ) : (
+                <div className="mt-4 space-y-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {moreInspirationsList.map((item) => (
+                           <ChipButton
+                                key={item.name}
+                                label={item.name}
+                                isSelected={selectedInspirations.includes(item.name)}
+                                onSelect={() => handleInspirationToggle(item.name)}
+                                className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
+                           />
+                        ))}
+                    </div>
+                </div>
+             )}
           </div>
 
           <div className="flex justify-end pt-8">

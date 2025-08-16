@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import React, { useEffect } from "react";
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
@@ -31,6 +32,19 @@ export default function PersonalizePage() {
 
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
+
+  useEffect(() => {
+      if (blendParents) {
+          setValue('matchSibling', false);
+      }
+  }, [blendParents, setValue]);
+
+  useEffect(() => {
+      if (matchSibling) {
+          setValue('blendParents', false);
+      }
+  }, [matchSibling, setValue]);
+
 
   function onSubmit(data: Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>) {
     setState({ formValues: data });
@@ -70,11 +84,19 @@ export default function PersonalizePage() {
           </div>
 
           <div>
-            <Label htmlFor="startingLetters" className="font-semibold">Starts with (Optional)</Label>
+            <Label htmlFor="startingLetters" className="font-semibold">Starts with (1-3 characters, Optional)</Label>
             <Controller
               name="startingLetters"
               control={control}
-              render={({ field }) => <Input id="startingLetters" placeholder="e.g., A, Ra" {...field} className="mt-2" />}
+              render={({ field }) => <Input 
+                id="startingLetters" 
+                placeholder="e.g., A, Ra" {...field} 
+                className="mt-2"
+                maxLength={3}
+                onChange={(e) => {
+                  field.onChange(e.target.value.slice(0, 3));
+                }}
+                 />}
             />
           </div>
 
