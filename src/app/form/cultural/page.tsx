@@ -70,7 +70,7 @@ export default function CulturalPage() {
         <CardDescription>Select cultural roots and traditional preferences.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <form id="cultural-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
@@ -148,12 +148,6 @@ export default function CulturalPage() {
                     ))}
                 </div>
               )}
-            </div>
-
-            <div className="flex justify-end pt-8">
-              <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
-                Next: Inspirations
-              </Button>
             </div>
         </form>
       </CardContent>

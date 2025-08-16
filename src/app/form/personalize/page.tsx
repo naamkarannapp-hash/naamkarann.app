@@ -72,7 +72,7 @@ export default function PersonalizePage() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form id="personalize-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             
             <FormField
               control={control}
@@ -190,12 +190,6 @@ export default function PersonalizePage() {
                       )}
                   />
               )}
-            </div>
-            
-            <div className="flex justify-end pt-8">
-              <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
-                Next: Cultural
-              </Button>
             </div>
           </form>
         </Form>

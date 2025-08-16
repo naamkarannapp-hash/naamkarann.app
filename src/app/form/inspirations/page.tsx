@@ -9,7 +9,7 @@ import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, Sparkles } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];
@@ -82,7 +82,7 @@ export default function InspirationsPage() {
         <CardDescription>We'll prioritise names with these vibes.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <form id="inspirations-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           <div>
             <div className="flex items-center mb-4">
                 <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
@@ -115,12 +115,6 @@ export default function InspirationsPage() {
                     </div>
                 </div>
              )}
-          </div>
-
-          <div className="flex justify-end pt-8">
-            <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
-              Show Names <Sparkles className="ml-2 h-5 w-5"/>
-            </Button>
           </div>
         </form>
       </CardContent>
