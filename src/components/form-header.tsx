@@ -1,8 +1,9 @@
+
 "use client";
 
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useAppState } from "@/context/app-state-context";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -25,27 +26,9 @@ const chipColorClasses = [
 
 export function FormHeader() {
   const pathname = usePathname();
-  const router = useRouter();
   const { state } = useAppState();
 
   const currentStepIndex = steps.findIndex(step => pathname.startsWith(step.path));
-  
-  const handleBack = () => {
-      if(currentStepIndex > 0) {
-          router.back();
-      } else {
-          router.push('/');
-      }
-  }
-  
-  const handleSkip = () => {
-    const nextStep = steps[currentStepIndex + 1];
-    if (nextStep) {
-        router.push(nextStep.path);
-    } else {
-        router.push('/results');
-    }
-  }
 
   const getVisibleSelections = () => {
     const { formValues } = state;
@@ -76,17 +59,13 @@ export function FormHeader() {
 
   return (
     <header className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Button onClick={handleBack} variant="ghost" size="icon">
-            <ArrowLeft />
-        </Button>
-        <div className="text-sm font-semibold">
+      <div className="flex items-center justify-center relative">
+        <div className="text-sm font-semibold text-center">
             Step {currentStepIndex + 1}/{steps.length}
         </div>
-        <Button onClick={handleSkip} variant="ghost" className="text-primary font-bold">Skip</Button>
       </div>
       {selections.length > 0 && (
-          <div className="flex flex-wrap gap-2 items-center">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
               {selections.map((value, index) => (
                   <Badge 
                     key={`${value}-${index}`} 
