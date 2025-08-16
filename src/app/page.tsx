@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from 'next/navigation';
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
