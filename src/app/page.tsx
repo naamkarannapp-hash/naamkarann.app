@@ -18,9 +18,12 @@ const namesByTradition = {
 
 const allNames = Object.values(namesByTradition).flat();
 
+const categories = ["Baby", "Startup", "Product", "Social", "Group"];
 
 export default function Home() {
   const [currentName, setCurrentName] = useState("Gitisha");
+  const [selectedCategory, setSelectedCategory] = useState("Baby");
+  const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -48,11 +51,16 @@ export default function Home() {
             </p>
             
             <div className="flex flex-wrap justify-center gap-3 my-4 md:my-6">
-                <Badge className="py-2 px-4 text-sm rounded-full bg-primary text-primary-foreground">Baby</Badge>
-                <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Startup</Badge>
-                <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Product</Badge>
-                <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Social</Badge>
-                <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Group</Badge>
+                {categories.map((category) => (
+                    <Badge
+                        key={category}
+                        variant={selectedCategory === category ? "default" : "secondary"}
+                        onClick={() => setSelectedCategory(category)}
+                        className="py-2 px-4 text-sm rounded-full cursor-pointer"
+                    >
+                        {category}
+                    </Badge>
+                ))}
             </div>
 
             <div className="my-2 flex flex-col items-center h-20">
@@ -77,9 +85,15 @@ export default function Home() {
         </div>
       </main>
        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-          <Link href="/form/personalize" passHref className="w-full max-w-md">
-            <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 px-8 text-lg rounded-xl shadow-lg">
-                Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> in just 4 clicks
+          <Link href={isBabySelected ? "/form/personalize" : "#"} passHref className="w-full max-w-md">
+            <Button 
+                className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 px-8 text-lg rounded-xl shadow-lg"
+                disabled={!isBabySelected}
+            >
+                {isBabySelected 
+                    ? <>Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> in just 4 clicks</> 
+                    : "Start Naming ... Coming soon"
+                }
             </Button>
           </Link>
           <div className="flex space-x-6 text-sm">
