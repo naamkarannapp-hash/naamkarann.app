@@ -33,9 +33,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-grow flex flex-col items-center text-center p-4 pt-16">
+      <main className="flex-grow flex flex-col items-center text-center p-4 pt-8 md:pt-16">
         <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
-        <div className="relative my-8">
+        <div className="relative my-6 md:my-8">
             <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight">
                 The perfect name <br /> awaits.
             </h1>
@@ -46,7 +46,7 @@ export default function Home() {
           Thousands of meaningful names, one swipe at a time.
         </p>
         
-        <div className="flex flex-wrap justify-center gap-3 my-8">
+        <div className="flex flex-wrap justify-center gap-3 my-6 md:my-8">
             <Badge className="py-2 px-4 text-sm rounded-full bg-primary text-primary-foreground">Baby</Badge>
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Startup</Badge>
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Product</Badge>
@@ -54,12 +54,12 @@ export default function Home() {
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Group</Badge>
         </div>
 
-        <div className="my-8 flex flex-col items-center h-20">
+        <div className="my-6 md:my-8 flex flex-col items-center h-20">
             <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">{currentName}</p>
             <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
         </div>
 
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-8 p-3 bg-card rounded-lg border">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-6 md:my-8 p-3 bg-card rounded-lg border">
             <div className="flex items-center text-yellow-500">
                 <Star className="w-4 h-4 fill-current" />
                 <Star className="w-4 h-4 fill-current" />
