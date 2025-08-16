@@ -26,6 +26,11 @@ export function FormFooter() {
             case "/form/inspirations":
                 return { text: "Show Names", formId: "inspirations-form", icon: <Sparkles className="ml-2 h-5 w-5"/> };
             default:
+                // Find the form ID based on the current step
+                if (currentStepIndex !== -1) {
+                    const formId = steps[currentStepIndex].split('/').pop() + "-form";
+                    return { text: "Next", formId: formId };
+                }
                 return { text: "Next", formId: "" };
         }
     };
@@ -41,7 +46,7 @@ export function FormFooter() {
     const handleSkip = () => {
       const nextStep = steps[currentStepIndex + 1];
       if (nextStep) {
-          router.push(nextStep.path);
+          router.push(nextStep);
       } else {
           router.push('/results');
       }
