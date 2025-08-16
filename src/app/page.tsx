@@ -39,10 +39,16 @@ export default function Home() {
     }
   }, []);
 
+  const handleCtaClick = () => {
+    if (isBabySelected) {
+      window.location.href = "/form/personalize";
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-1 flex-grow overflow-y-auto">
-        <div className="flex flex-col items-center text-center p-4 pt-8 md:pt-12">
+       <div className="flex-grow">
+        <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12">
             <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
             <div className="relative my-4 md:my-6">
                 <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight">
@@ -87,14 +93,15 @@ export default function Home() {
                 <span className="text-muted-foreground/50">•</span>
                 <span>Linguist-verified</span>
             </div>
-        </div>
-      </main>
+        </main>
+      </div>
        <footer className="w-full sticky bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20 z-50">
-            <Link href={isBabySelected ? "/form/personalize" : "#"} className={cn("w-full max-w-md", !isBabySelected && "pointer-events-none")}>
+            <div className="w-full max-w-md">
                 <Button 
+                    onClick={handleCtaClick}
                     className={cn(
                         "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                        !isBabySelected && "opacity-50"
+                        !isBabySelected && "opacity-50 pointer-events-none"
                     )}
                 >
                     {isBabySelected 
@@ -102,7 +109,7 @@ export default function Home() {
                         : "Coming soon"
                     }
                 </Button>
-            </Link>
+            </div>
           <div className="flex space-x-6 text-sm">
             <Link href="#" className="text-muted-foreground hover:text-primary">About</Link>
             <Link href="#" className="text-muted-foreground hover:text-primary">Privacy</Link>
