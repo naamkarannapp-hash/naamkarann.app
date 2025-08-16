@@ -33,9 +33,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-grow flex flex-col items-center text-center p-4 pt-8 md:pt-16">
+      <main className="flex-grow flex flex-col items-center text-center p-4 pt-8 md:pt-12">
         <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
-        <div className="relative my-6 md:my-8">
+        <div className="relative my-4 md:my-6">
             <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight">
                 The perfect name <br /> awaits.
             </h1>
@@ -46,7 +46,7 @@ export default function Home() {
           Thousands of meaningful names, one swipe at a time.
         </p>
         
-        <div className="flex flex-wrap justify-center gap-3 my-6 md:my-8">
+        <div className="flex flex-wrap justify-center gap-3 my-4 md:my-6">
             <Badge className="py-2 px-4 text-sm rounded-full bg-primary text-primary-foreground">Baby</Badge>
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Startup</Badge>
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Product</Badge>
@@ -54,12 +54,12 @@ export default function Home() {
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Group</Badge>
         </div>
 
-        <div className="my-6 md:my-8 flex flex-col items-center h-20">
+        <div className="my-4 md:my-6 flex flex-col items-center h-20">
             <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">{currentName}</p>
             <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
         </div>
 
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-6 md:my-8 p-3 bg-card rounded-lg border">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-4 md:my-6 p-3 bg-card rounded-lg border">
             <div className="flex items-center text-yellow-500">
                 <Star className="w-4 h-4 fill-current" />
                 <Star className="w-4 h-4 fill-current" />
@@ -75,7 +75,7 @@ export default function Home() {
         </div>
 
       </main>
-       <footer className="w-full py-6 px-4 flex flex-col items-center space-y-6">
+       <footer className="w-full py-4 px-4 flex flex-col items-center space-y-4">
           <Link href="/form/personalize" passHref className="w-full max-w-md">
             <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 px-8 text-lg rounded-xl shadow-lg">
                 Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> 4 quick questions
