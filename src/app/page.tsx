@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
@@ -40,12 +39,10 @@ export default function Home() {
     }
   }, []);
 
-  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isBabySelected) {
-      e.preventDefault();
-      return;
+  const handleCtaClick = () => {
+    if (isBabySelected) {
+      router.push('/form/personalize');
     }
-    router.push('/form/personalize');
   };
 
   return (
@@ -97,24 +94,18 @@ export default function Home() {
           </div>
 
            <div className="w-full max-w-md mt-8">
-               <a 
-                  href={isBabySelected ? "/form/personalize" : "#"} 
+              <Button
                   onClick={handleCtaClick}
                   className={cn(
-                      "w-full",
+                      "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
                       !isBabySelected && "opacity-50 cursor-not-allowed"
                   )}
-                >
-                  <Button 
-                      asChild={false}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
-                  >
-                      {isBabySelected 
-                          ? "Perfect name in 4 clicks"
-                          : "Coming soon"
-                      }
-                  </Button>
-              </a>
+              >
+                  {isBabySelected 
+                      ? "Perfect name in 4 clicks"
+                      : "Coming soon"
+                  }
+              </Button>
           </div>
       </main>
       
