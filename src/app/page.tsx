@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -108,7 +109,7 @@ export default function Home() {
           </div>
       </main>
       
-       <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 border-t border-border/20 z-50">
+       <footer className="w-full bg-background py-4 px-4 border-t border-border/20 z-50">
            <div className="w-full max-w-md mx-auto flex items-center justify-end">
                 <Link 
                   href={isBabySelected ? "/form/personalize" : "#"} 
