@@ -1,11 +1,36 @@
 "use client";
 
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
+const namesByTradition = {
+  "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
+  "Muslim": [ "Zahara", "Noor", "Rayhan", "Muneera", "Samaa", "Asrar", "Qamar", "Naqsh", "Aydin", "Naghma" ],
+  "Christian": [ "Eden", "Lucas", "Coralie", "Psalma", "Lucian", "Rosabel", "Verity", "Azure", "Gloria", "Clement" ],
+  "Sikh": [ "Amrit", "Gurpreet", "Surinder", "Harnoor", "Ravdeep", "Sukhman", "Basanti", "Kirtan", "Nirmaljit", "Baghpreet" ],
+  "Buddhist": [ "Lotusara", "Sujata", "Pema", "Dawa", "Sangita", "Bodhi", "Chandra", "Dhamma", "Saffron", "Anila" ],
+  "Jain": [ "Shrut", "Prakrit", "Harita", "Sumitra", "Nirjin", "Chaitra", "Dhavala", "Shanti", "Ratnesh", "Sargam" ],
+  "Jewish": [ "Talia", "Shira", "Orli", "Lev", "Keshet", "Ziv", "Dorit", "Erez", "Lior", "Yarden" ]
+};
+
+const allNames = Object.values(namesByTradition).flat();
+
+
 export default function Home() {
+  const [currentName, setCurrentName] = useState("Gitisha");
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * allNames.length);
+      setCurrentName(allNames[randomIndex]);
+    }, 2000); // Change name every 2 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center p-4 pt-16">
@@ -29,8 +54,8 @@ export default function Home() {
             <Badge variant="secondary" className="py-2 px-4 text-sm rounded-full">Group</Badge>
         </div>
 
-        <div className="my-8 flex flex-col items-center">
-            <p className="font-headline text-4xl text-purple-500 font-bold">Gitisha</p>
+        <div className="my-8 flex flex-col items-center h-20">
+            <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">{currentName}</p>
             <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
         </div>
 
