@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
@@ -25,7 +26,6 @@ const categories = ["Baby", "Startup", "Product", "Social", "Group"];
 export default function Home() {
   const [currentName, setCurrentName] = useState("Gitisha");
   const [selectedCategory, setSelectedCategory] = useState("Baby");
-  const router = useRouter();
   const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
@@ -38,12 +38,6 @@ export default function Home() {
       return () => clearInterval(intervalId); // Cleanup on component unmount
     }
   }, []);
-
-  const handleCtaClick = () => {
-    if (isBabySelected) {
-      router.push('/form/personalize');
-    }
-  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -94,18 +88,20 @@ export default function Home() {
           </div>
 
            <div className="w-full max-w-md mt-8">
-              <Button
-                  onClick={handleCtaClick}
-                  className={cn(
-                      "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                      !isBabySelected && "opacity-50 cursor-not-allowed"
-                  )}
-              >
-                  {isBabySelected 
-                      ? "Perfect name in 4 clicks"
-                      : "Coming soon"
-                  }
-              </Button>
+            <Link href={isBabySelected ? "/form/personalize" : "#"} className={!isBabySelected ? "cursor-not-allowed" : ""}>
+                <Button
+                    asChild={false} // Ensure this is not set to true
+                    className={cn(
+                        "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
+                        !isBabySelected && "opacity-50 pointer-events-none"
+                    )}
+                >
+                    {isBabySelected 
+                        ? "Perfect name in 4 clicks"
+                        : "Coming soon"
+                    }
+                </Button>
+            </Link>
           </div>
       </main>
       
