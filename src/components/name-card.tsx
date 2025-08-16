@@ -35,7 +35,7 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
       </div>
 
       <div className="flex-shrink-0 z-10">
-        <div className="flex justify-between items-center text-sm opacity-80">
+        <div className="flex justify-between items-center text-sm opacity-80 capitalize">
             <span>Origin: {name.origin}</span>
             <span>Gender: {name.gender}</span>
         </div>

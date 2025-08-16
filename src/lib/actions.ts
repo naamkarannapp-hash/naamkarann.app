@@ -1,36 +1,54 @@
-"use server";
+'use server';
 
-import { z } from "zod";
-import { nameFormSchema, type NameResult } from "./types";
-import { prioritizeNames } from "@/ai/flows/prioritize-names";
+import {z} from 'zod';
+import {nameFormSchema, type NameResult} from './types';
+import {prioritizeNames} from '@/ai/flows/prioritize-names';
 
-const WEBHOOK_URL = "https://n8n-vabues.onrender.com/webhook/getnames";
+const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
 
-export async function getAndPrioritizeNames(values: z.infer<typeof nameFormSchema>): Promise<{ names: NameResult[] } | { error: string }> {
+interface ApiNameResult {
+  name: string;
+  meaning: string;
+  origin: string;
+  category_tag: string;
+  gender: string;
+  gradient_color: string;
+}
+
+export async function getAndPrioritizeNames(
+  values: z.infer<typeof nameFormSchema>
+): Promise<{names: NameResult[]} | {error: string}> {
   try {
     const response = await fetch(WEBHOOK_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(values),
     });
 
     if (!response.ok) {
-      console.error("Webhook response not OK", { status: response.status, statusText: response.statusText });
+      console.error('Webhook response not OK', {status: response.status, statusText: response.statusText});
       const errorText = await response.text();
-      return { error: `Failed to fetch names from webhook. Server responded with: ${errorText}` };
+      return {error: `Failed to fetch names from webhook. Server responded with: ${errorText}`};
     }
 
-    let names: NameResult[] = await response.json();
-    
-    if (!Array.isArray(names)) {
-        console.error("Webhook response is not an array:", names);
-        return { error: "Received unexpected data format from the name service." };
+    const apiResponse = await response.json();
+
+    if (!apiResponse.output || !apiResponse.output.success || !Array.isArray(apiResponse.output.names)) {
+      console.error('Webhook response is not in the expected format:', apiResponse);
+      return {error: 'Received unexpected data format from the name service.'};
     }
-    
-    // Add a unique ID to each name for React keys and saving
-    names = names.map((name, index) => ({ ...name, id: `${name.name}-${index}` }));
+
+    let names: NameResult[] = apiResponse.output.names.map((name: ApiNameResult, index: number) => ({
+      id: `${name.name}-${index}`,
+      name: name.name,
+      meaning: name.meaning,
+      origin: name.origin,
+      category: name.category_tag,
+      gender: name.gender,
+      gradient: name.gradient_color,
+    }));
 
     if (values.inspirations && names.length > 0) {
       try {
@@ -46,21 +64,21 @@ export async function getAndPrioritizeNames(values: z.infer<typeof nameFormSchem
           .filter((name): name is NameResult => name !== undefined);
 
         const unprioritizedNames = names.filter(name => !prioritizedNameStrings.includes(name.name));
-        
-        return { names: [...prioritizedNames, ...unprioritizedNames] };
+
+        return {names: [...prioritizedNames, ...unprioritizedNames]};
       } catch (aiError) {
-        console.error("AI prioritization failed, returning original list:", aiError);
+        console.error('AI prioritization failed, returning original list:', aiError);
         // If AI fails, return the original list from the webhook
-        return { names };
+        return {names};
       }
     }
 
-    return { names };
+    return {names};
   } catch (error) {
-    console.error("Error in getAndPrioritizeNames:", error);
+    console.error('Error in getAndPrioritizeNames:', error);
     if (error instanceof Error) {
-        return { error: `An unexpected error occurred: ${error.message}` };
+      return {error: `An unexpected error occurred: ${error.message}`};
     }
-    return { error: "An unexpected error occurred." };
+    return {error: 'An unexpected error occurred.'};
   }
 }
