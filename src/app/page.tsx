@@ -87,12 +87,11 @@ export default function Home() {
             </div>
         </div>
       </main>
-       <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
-          <Link href={isBabySelected ? "/form/personalize" : "#"} className="w-full max-w-md">
+       <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20 z-50">
+          <Link href={isBabySelected ? "/form/personalize" : "#"} className={cn("w-full max-w-md", !isBabySelected && "opacity-50 pointer-events-none")}>
             <Button 
                 className={cn(
-                    "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                    !isBabySelected && "opacity-50 pointer-events-none"
+                    "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
                 )}
             >
                 {isBabySelected 
