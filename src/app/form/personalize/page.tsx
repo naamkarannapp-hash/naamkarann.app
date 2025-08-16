@@ -14,6 +14,7 @@ import { nameFormSchemaBase } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -59,12 +60,12 @@ export default function PersonalizePage() {
     resolver: zodResolver(personalizePageSchema),
     defaultValues: {
       gender: state.formValues.gender || 'Neutral',
-      startingLetters: state.formValues.startingLetters,
-      blendParents: state.formValues.blendParents,
-      parent1Name: state.formValues.parent1Name,
-      parent2Name: state.formValues.parent2Name,
-      matchSibling: state.formValues.matchSibling,
-      siblingName: state.formValues.siblingName,
+      startingLetters: state.formValues.startingLetters || "",
+      blendParents: state.formValues.blendParents || false,
+      parent1Name: state.formValues.parent1Name || "",
+      parent2Name: state.formValues.parent2Name || "",
+      matchSibling: state.formValues.matchSibling || false,
+      siblingName: state.formValues.siblingName || "",
     },
   });
 
