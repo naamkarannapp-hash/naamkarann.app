@@ -7,14 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
-import { nameFormSchemaBase } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { personalizePageSchema } from "@/lib/types";
 import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -26,31 +23,6 @@ import {
 
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
-
-const personalizePageSchema = nameFormSchemaBase.pick({
-    gender: true,
-    startingLetters: true,
-    blendParents: true,
-    parent1Name: true,
-    parent2Name: true,
-    matchSibling: true,
-    siblingName: true,
-}).superRefine((data, ctx) => {
-  if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "First parent's name is required.",
-      path: ["parent1Name"],
-    });
-  }
-  if (data.matchSibling && (!data.siblingName || data.siblingName.trim() === '')) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Sibling's name is required.",
-      path: ["siblingName"],
-    });
-  }
-});
 
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
@@ -132,13 +104,13 @@ export default function PersonalizePage() {
                 control={control}
                 name="startingLetters"
                 render={({ field }) => (
-                    <FormItem>
-                        <FormLabel htmlFor="startingLetters" className="font-semibold">Starts with (1-3 characters, Optional)</FormLabel>
+                    <FormItem className="flex items-center gap-4">
+                        <FormLabel htmlFor="startingLetters" className="font-semibold whitespace-nowrap">Starts with (1-3 characters, Optional)</FormLabel>
                         <FormControl>
                             <Input 
                                 id="startingLetters" 
                                 placeholder="e.g., A, Ra" {...field} 
-                                className="mt-2"
+                                className="mt-0"
                                 maxLength={3}
                                 onChange={(e) => {
                                   field.onChange(e.target.value.slice(0, 3));
@@ -170,10 +142,10 @@ export default function PersonalizePage() {
                           control={control}
                           render={({ field }) => (
                             <FormItem>
-                               <FormControl>
+                                <FormControl>
                                   <Input placeholder="First parent" {...field} />
-                               </FormControl>
-                               <FormMessage/>
+                                </FormControl>
+                                <FormMessage/>
                             </FormItem>
                           )}
                       />
