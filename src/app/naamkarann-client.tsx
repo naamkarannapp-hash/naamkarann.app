@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
-import { Loader2, Baby, Users, MapPin, CaseUpperA, Lightbulb, BookOpen, Bookmark, X, Star } from "lucide-react";
+import { Loader2, Baby, Users, MapPin, CaseUpper, Lightbulb, BookOpen, Bookmark, X, Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -171,7 +171,7 @@ export default function NaamkarannClient() {
                     )}/>
                     <FormField control={form.control} name="startingLetters" render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="flex items-center"><CaseUpperA className="mr-2 h-4 w-4"/>Starting Letter(s)</FormLabel>
+                        <FormLabel className="flex items-center"><CaseUpper className="mr-2 h-4 w-4"/>Starting Letter(s)</FormLabel>
                         <FormControl><Input placeholder="e.g., A, Ra" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
