@@ -91,7 +91,7 @@ export default function Home() {
                 disabled={!isBabySelected}
             >
                 {isBabySelected 
-                    ? <>Find Names <span className="mx-2 font-light text-primary-foreground/50">••••</span> in just 4 clicks</> 
+                    ? "Perfect name in 4 clicks"
                     : "Coming soon"
                 }
             </Button>
