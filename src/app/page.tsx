@@ -26,7 +26,7 @@ export default function Home() {
     const intervalId = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * allNames.length);
       setCurrentName(allNames[randomIndex]);
-    }, 2000); // Change name every 2 seconds
+    }, 300); // Change name every 0.3 seconds
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
   }, []);
