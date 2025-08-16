@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +10,19 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
+import { nameFormSchema } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
@@ -18,7 +30,13 @@ export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
 
-  const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
+  const form = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
+    resolver: zodResolver(nameFormSchema.pick({
+        blendParents: true,
+        parent1Name: true,
+        matchSibling: true,
+        siblingName: true,
+    })),
     defaultValues: {
       gender: state.formValues.gender || 'Neutral',
       startingLetters: state.formValues.startingLetters,
@@ -29,6 +47,8 @@ export default function PersonalizePage() {
       siblingName: state.formValues.siblingName,
     },
   });
+
+  const { control, handleSubmit, watch, setValue } = form;
 
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
@@ -58,96 +78,134 @@ export default function PersonalizePage() {
         <CardDescription>Add personal touches to make it uniquely yours.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          
-          <div>
-            <Label className="font-semibold">Gender</Label>
-            <Controller
-              name="gender"
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            
+            <FormField
               control={control}
+              name="gender"
               render={({ field }) => (
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {genders.map((gender) => (
-                    <Button
-                      key={gender}
-                      type="button"
-                      variant={field.value === gender ? "default" : "secondary"}
-                      onClick={() => field.onChange(gender)}
-                      className="rounded-full"
-                    >
-                      {gender}
-                    </Button>
-                  ))}
-                </div>
+                <FormItem>
+                  <FormLabel className="font-semibold">Gender</FormLabel>
+                  <FormControl>
+                    <div className="grid grid-cols-3 gap-2 pt-2">
+                        {genders.map((gender) => (
+                            <Button
+                            key={gender}
+                            type="button"
+                            variant={field.value === gender ? "default" : "secondary"}
+                            onClick={() => field.onChange(gender)}
+                            className="rounded-full"
+                            >
+                            {gender}
+                            </Button>
+                        ))}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
-          </div>
 
-          <div>
-            <Label htmlFor="startingLetters" className="font-semibold">Starts with (1-3 characters, Optional)</Label>
-            <Controller
-              name="startingLetters"
-              control={control}
-              render={({ field }) => <Input 
-                id="startingLetters" 
-                placeholder="e.g., A, Ra" {...field} 
-                className="mt-2"
-                maxLength={3}
-                onChange={(e) => {
-                  field.onChange(e.target.value.slice(0, 3));
-                }}
-                 />}
+            <FormField
+                control={control}
+                name="startingLetters"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel htmlFor="startingLetters" className="font-semibold">Starts with (1-3 characters, Optional)</FormLabel>
+                        <FormControl>
+                            <Input 
+                                id="startingLetters" 
+                                placeholder="e.g., A, Ra" {...field} 
+                                className="mt-2"
+                                maxLength={3}
+                                onChange={(e) => {
+                                  field.onChange(e.target.value.slice(0, 3));
+                                }}
+                            />
+                        </FormControl>
+                         <FormMessage />
+                    </FormItem>
+                )}
             />
-          </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label htmlFor="blend-parents-switch" className="font-semibold">Blend with Parent's name (Optional)</Label>
-                <Controller
+            <div className="space-y-4">
+               <FormField
+                  control={control}
                   name="blendParents"
-                  control={control}
-                  render={({ field }) => <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} />}
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between p-4 border rounded-lg">
+                        <FormLabel htmlFor="blend-parents-switch" className="font-semibold mb-0">Blend with Parent's name (Optional)</FormLabel>
+                        <FormControl>
+                          <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
+                    </FormItem>
+                  )}
                 />
-            </div>
-            {blendParents && (
-                <div className="grid grid-cols-2 gap-4">
-                    <Controller
-                        name="parent1Name"
-                        control={control}
-                        render={({ field }) => <Input placeholder="First parent" {...field} />}
-                    />
-                    <Controller
-                        name="parent2Name"
-                        control={control}
-                        render={({ field }) => <Input placeholder="Second parent" {...field} />}
-                    />
-                </div>
-            )}
+              {blendParents && (
+                  <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                          name="parent1Name"
+                          control={control}
+                          render={({ field }) => (
+                            <FormItem>
+                               <FormControl>
+                                  <Input placeholder="First parent" {...field} />
+                               </FormControl>
+                               <FormMessage/>
+                            </FormItem>
+                          )}
+                      />
+                      <FormField
+                          name="parent2Name"
+                          control={control}
+                          render={({ field }) =>(
+                            <FormItem>
+                              <FormControl>
+                                <Input placeholder="Second parent" {...field} />
+                              </FormControl>
+                              <FormMessage/>
+                            </FormItem>
+                          )}
+                      />
+                  </div>
+              )}
 
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label htmlFor="match-sibling-switch" className="font-semibold">Match Sibling's name (Optional)</Label>
-                <Controller
+              <FormField
+                  control={control}
                   name="matchSibling"
-                  control={control}
-                  render={({ field }) => <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} />}
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between p-4 border rounded-lg">
+                        <FormLabel htmlFor="match-sibling-switch" className="font-semibold mb-0">Match Sibling's name (Optional)</FormLabel>
+                        <FormControl>
+                           <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
+                    </FormItem>
+                  )}
                 />
+              {matchSibling && (
+                  <FormField
+                      name="siblingName"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input placeholder="e.g., Priya" {...field} />
+                          </FormControl>
+                          <FormMessage/>
+                        </FormItem>
+                      )}
+                  />
+              )}
             </div>
-            {matchSibling && (
-                <Controller
-                    name="siblingName"
-                    control={control}
-                    render={({ field }) => <Input placeholder="e.g., Priya" {...field} />}
-                />
-            )}
-          </div>
-          
-
-          <div className="flex justify-end pt-8">
-            <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
-              Next: Cultural
-            </Button>
-          </div>
-        </form>
+            
+            <div className="flex justify-end pt-8">
+              <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
+                Next: Cultural
+              </Button>
+            </div>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
