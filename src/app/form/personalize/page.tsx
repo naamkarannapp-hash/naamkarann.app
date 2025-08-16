@@ -1,110 +1,131 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
-import { nameFormSchema } from "@/lib/types";
-import { ArrowRight, Users, Baby } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const genders = ["Boy", "Girl", "Neutral"] as const;
 
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
 
-  const form = useForm<Pick<NameFormValues, 'gender' | 'parent1Name' | 'parent2Name' | 'siblingName'>>({
-    resolver: zodResolver(nameFormSchema.pick({ gender: true, parent1Name: true, parent2Name: true, siblingName: true })),
+  const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
     defaultValues: {
       gender: state.formValues.gender,
+      startingLetters: state.formValues.startingLetters,
+      blendParents: state.formValues.blendParents,
       parent1Name: state.formValues.parent1Name,
       parent2Name: state.formValues.parent2Name,
+      matchSibling: state.formValues.matchSibling,
       siblingName: state.formValues.siblingName,
     },
   });
 
-  function onSubmit(data: Pick<NameFormValues, 'gender' | 'parent1Name' | 'parent2Name' | 'siblingName'>) {
-    setState({ formValues: { ...state.formValues, ...data } });
+  const blendParents = watch("blendParents");
+  const matchSibling = watch("matchSibling");
+
+  function onSubmit(data: Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>) {
+    setState({ formValues: data });
     router.push("/form/cultural");
   }
 
   return (
-    <Card className="w-full max-w-2xl shadow-lg border-primary/20">
+    <Card className="w-full max-w-2xl shadow-none border-none bg-transparent">
       <CardHeader>
-        <CardTitle className="font-headline text-2xl text-primary">Personalize Your Search</CardTitle>
+        <CardTitle className="font-headline text-2xl">Personalise the name</CardTitle>
+        <CardDescription>Add personal touches to make it uniquely yours.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          
+          <div>
+            <Label className="font-semibold">Gender</Label>
+            <Controller
               name="gender"
+              control={control}
               render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel className="font-bold">Gender</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4"
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {genders.map((gender) => (
+                    <Button
+                      key={gender}
+                      type="button"
+                      variant={field.value === gender ? "default" : "secondary"}
+                      onClick={() => field.onChange(gender)}
+                      className="rounded-full"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl><RadioGroupItem value="Male" /></FormControl>
-                        <FormLabel className="font-normal">Male</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl><RadioGroupItem value="Female" /></FormControl>
-                        <FormLabel className="font-normal">Female</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl><RadioGroupItem value="Neutral" /></FormControl>
-                        <FormLabel className="font-normal">Neutral</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                      {gender}
+                    </Button>
+                  ))}
+                </div>
               )}
             />
+          </div>
 
-            <div>
-              <FormLabel className="flex items-center mb-2 font-bold"><Users className="mr-2 h-4 w-4"/>Parent's Name Blend</FormLabel>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                   <FormField control={form.control} name="parent1Name" render={({ field }) => (
-                     <FormItem><FormControl><Input placeholder="Parent 1" {...field} /></FormControl><FormMessage /></FormItem>
-                   )}/>
-                   <FormField control={form.control} name="parent2Name" render={({ field }) => (
-                     <FormItem><FormControl><Input placeholder="Parent 2" {...field} /></FormControl><FormMessage /></FormItem>
-                   )}/>
-              </div>
+          <div>
+            <Label htmlFor="startingLetters" className="font-semibold">Starts with (Optional)</Label>
+            <Controller
+              name="startingLetters"
+              control={control}
+              render={({ field }) => <Input id="startingLetters" placeholder="e.g., A, Ra" {...field} className="mt-2" />}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 border rounded-lg">
+                <Label htmlFor="blend-parents-switch" className="font-semibold">Blend with Parent's name</Label>
+                <Controller
+                  name="blendParents"
+                  control={control}
+                  render={({ field }) => <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} />}
+                />
             </div>
+            {blendParents && (
+                <div className="grid grid-cols-2 gap-4">
+                    <Controller
+                        name="parent1Name"
+                        control={control}
+                        render={({ field }) => <Input placeholder="First parent" {...field} />}
+                    />
+                    <Controller
+                        name="parent2Name"
+                        control={control}
+                        render={({ field }) => <Input placeholder="Second parent" {...field} />}
+                    />
+                </div>
+            )}
 
-            <FormField control={form.control} name="siblingName" render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center font-bold"><Baby className="mr-2 h-4 w-4"/>Match Sibling's Name</FormLabel>
-                <FormControl><Input placeholder="e.g., Priya" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )}/>
-
-            <div className="flex justify-end">
-              <Button type="submit" className="bg-accent hover:bg-accent/90 text-white font-bold py-3 px-6 text-lg">
-                Next <ArrowRight className="ml-2 h-5 w-5"/>
-              </Button>
+            <div className="flex items-center justify-between p-4 border rounded-lg">
+                <Label htmlFor="match-sibling-switch" className="font-semibold">Match Sibling's name</Label>
+                <Controller
+                  name="matchSibling"
+                  control={control}
+                  render={({ field }) => <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} />}
+                />
             </div>
-          </form>
-        </Form>
+            {matchSibling && (
+                <Controller
+                    name="siblingName"
+                    control={control}
+                    render={({ field }) => <Input placeholder="e.g., Priya" {...field} />}
+                />
+            )}
+          </div>
+          
+
+          <div className="flex justify-end pt-8">
+            <Button type="submit" size="lg" className="w-full md:w-auto bg-primary text-primary-foreground font-bold rounded-xl">
+              Next: Cultural
+            </Button>
+          </div>
+        </form>
       </CardContent>
     </Card>
   );

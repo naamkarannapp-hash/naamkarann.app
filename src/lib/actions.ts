@@ -11,7 +11,7 @@ interface ApiNameResult {
   meaning: string;
   origin: string;
   category_tag: string;
-  gender: string;
+  gender: 'boy' | 'girl' | 'neutral';
   gradient_color: string;
 }
 
@@ -19,12 +19,21 @@ export async function getAndPrioritizeNames(
   values: z.infer<typeof nameFormSchema>
 ): Promise<{names: NameResult[]} | {error: string}> {
   try {
+    // Transform the array values into comma-separated strings for the API
+    const apiValues = {
+      ...values,
+      regionalRoots: values.regionalRoots?.join(','),
+      tradition: values.tradition?.join(','),
+      inspirations: values.inspirations?.join(','),
+    };
+
+
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(apiValues),
     });
 
     if (!response.ok) {
@@ -50,12 +59,12 @@ export async function getAndPrioritizeNames(
       gradient: name.gradient_color,
     }));
 
-    if (values.inspirations && names.length > 0) {
+    if (values.inspirations && values.inspirations.length > 0 && names.length > 0) {
       try {
         const nameStrings = names.map(n => n.name);
         const prioritizedNameStrings = await prioritizeNames({
           names: nameStrings,
-          inspiration: values.inspirations,
+          inspiration: values.inspirations.join(', '),
         });
 
         const nameMap = new Map(names.map(n => [n.name, n]));

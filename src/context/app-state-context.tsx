@@ -13,14 +13,16 @@ interface AppState {
 
 const defaultState: AppState = {
   formValues: {
-    gender: undefined,
-    regionalRoots: "",
+    gender: "Girl",
+    regionalRoots: [],
     startingLetters: "",
     parent1Name: "",
     parent2Name: "",
     siblingName: "",
-    inspirations: "",
-    tradition: "",
+    inspirations: [],
+    tradition: [],
+    blendParents: false,
+    matchSibling: false,
   },
   nameResults: [],
   savedNames: [],
@@ -39,7 +41,14 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [state, setState] = useState<AppState>(defaultState);
 
   const setPartialState = (newState: Partial<AppState>) => {
-    setState(prevState => ({ ...prevState, ...newState }));
+    setState(prevState => ({ 
+      ...prevState, 
+      ...newState,
+      formValues: {
+        ...prevState.formValues,
+        ...newState.formValues,
+      }
+    }));
   };
   
   return (
