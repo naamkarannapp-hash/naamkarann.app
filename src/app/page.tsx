@@ -79,7 +79,7 @@ export default function Home() {
        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 flex flex-col items-center space-y-4 border-t border-border/20">
           <Link href="/form/personalize" passHref className="w-full max-w-md">
             <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 px-8 text-lg rounded-xl shadow-lg">
-                Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> 4 quick questions
+                Start naming <span className="mx-2 font-light text-primary-foreground/50">••••</span> in just 4 clicks
             </Button>
           </Link>
           <div className="flex space-x-6 text-sm">
