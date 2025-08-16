@@ -1,12 +1,10 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const namesByTradition = {
@@ -88,13 +86,18 @@ export default function Home() {
           </div>
 
            <div className="w-full max-w-md mt-8">
-            <Link href={isBabySelected ? "/form/personalize" : "#"} className={!isBabySelected ? "cursor-not-allowed" : ""}>
+            <Link 
+              href={isBabySelected ? "/form/personalize" : "#"} 
+              className={cn(!isBabySelected && "cursor-not-allowed")}
+              aria-disabled={!isBabySelected}
+              tabIndex={!isBabySelected ? -1 : undefined}
+            >
                 <Button
-                    asChild={false} // Ensure this is not set to true
                     className={cn(
                         "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                        !isBabySelected && "opacity-50 pointer-events-none"
+                        !isBabySelected && "opacity-50"
                     )}
+                    disabled={!isBabySelected}
                 >
                     {isBabySelected 
                         ? "Perfect name in 4 clicks"
@@ -105,6 +108,25 @@ export default function Home() {
           </div>
       </main>
       
+       <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 border-t border-border/20 z-50">
+           <div className="w-full max-w-md mx-auto flex items-center justify-end">
+                <Link 
+                  href={isBabySelected ? "/form/personalize" : "#"} 
+                  className={cn(!isBabySelected && "cursor-not-allowed pointer-events-none")}
+                  aria-disabled={!isBabySelected}
+                  tabIndex={!isBabySelected ? -1 : undefined}
+                >
+                    <Button 
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl shadow-lg"
+                        disabled={!isBabySelected}
+                    >
+                        Next
+                        <ArrowRight className="ml-2 h-4 w-4"/>
+                    </Button>
+                </Link>
+           </div>
+        </footer>
+
        <style jsx>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
