@@ -59,7 +59,7 @@ export default function Home() {
             <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
         </div>
 
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-4 md:my-6 p-3 bg-card rounded-lg border">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground my-4 p-3 bg-card rounded-lg border">
             <div className="flex items-center text-yellow-500">
                 <Star className="w-4 h-4 fill-current" />
                 <Star className="w-4 h-4 fill-current" />
