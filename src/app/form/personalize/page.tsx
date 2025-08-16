@@ -20,7 +20,7 @@ export default function PersonalizePage() {
 
   const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
     defaultValues: {
-      gender: state.formValues.gender,
+      gender: state.formValues.gender || 'Neutral',
       startingLetters: state.formValues.startingLetters,
       blendParents: state.formValues.blendParents,
       parent1Name: state.formValues.parent1Name,
@@ -102,7 +102,7 @@ export default function PersonalizePage() {
 
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label htmlFor="blend-parents-switch" className="font-semibold">Blend with Parent's name</Label>
+                <Label htmlFor="blend-parents-switch" className="font-semibold">Blend with Parent's name (Optional)</Label>
                 <Controller
                   name="blendParents"
                   control={control}
@@ -125,7 +125,7 @@ export default function PersonalizePage() {
             )}
 
             <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label htmlFor="match-sibling-switch" className="font-semibold">Match Sibling's name</Label>
+                <Label htmlFor="match-sibling-switch" className="font-semibold">Match Sibling's name (Optional)</Label>
                 <Controller
                   name="matchSibling"
                   control={control}

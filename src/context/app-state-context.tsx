@@ -13,7 +13,7 @@ interface AppState {
 
 const defaultState: AppState = {
   formValues: {
-    gender: "Girl",
+    gender: "Neutral",
     regionalRoots: [],
     startingLetters: "",
     parent1Name: "",
