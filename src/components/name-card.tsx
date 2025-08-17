@@ -29,12 +29,12 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
     >
        <div className="flex-grow flex flex-col justify-center items-center text-center z-10">
         <div className="flex items-center gap-4">
-            <h2 className="font-headline text-6xl font-bold tracking-tight">{name.name}</h2>
+            <h2 className="font-headline text-6xl font-bold tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{name.name}</h2>
             <Button variant="ghost" size="icon" className="bg-white/20 hover:bg-white/30 rounded-full">
                 <Volume2 className="h-6 w-6 text-white" />
             </Button>
         </div>
-        <p className="mt-4 text-lg italic opacity-90">{name.meaning}</p>
+        <p className="mt-4 text-lg italic opacity-90" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.meaning}</p>
         
         <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Badge variant="secondary" className="capitalize bg-white/20 border-none">{name.origin}</Badge>
