@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
@@ -88,7 +89,10 @@ export default function PersonalizePage() {
                             type="button"
                             variant={field.value === gender ? "default" : "secondary"}
                             onClick={() => field.onChange(gender)}
-                            className="rounded-full"
+                            className={cn("rounded-full", {
+                                "bg-blue-100 hover:bg-blue-200 text-blue-800": gender === "Boy" && field.value !== "Boy",
+                                "bg-pink-100 hover:bg-pink-200 text-pink-800": gender === "Girl" && field.value !== "Girl",
+                            })}
                             >
                             {gender}
                             </Button>
