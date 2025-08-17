@@ -1,7 +1,7 @@
 
 "use client";
 
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, AuthError } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
@@ -14,14 +14,18 @@ interface LoginProps {
 export function Login({ isOpen, onOpenChange }: LoginProps) {
   const handleSignIn = async () => {
     try {
-      // The onAuthStateChanged listener in AuthProvider will handle UI updates.
       await signInWithPopup(auth, googleProvider);
-      // The dialog can be closed after initiating, as the auth state will take over.
-      onOpenChange(false); 
-    } catch (error) {
-      console.error("Error signing in with Google: ", error);
-      // Ensure dialog closes even if there is an error, so user can retry.
+      // The onAuthStateChanged listener in AuthProvider will handle success.
       onOpenChange(false);
+    } catch (error) {
+      // Don't log an error if the user intentionally closes the popup.
+      if ((error as AuthError).code === 'auth/popup-closed-by-user') {
+        return;
+      }
+      console.error("Error signing in with Google: ", error);
+    } finally {
+       // Ensure dialog closes even if there is an error, so user can retry.
+       onOpenChange(false);
     }
   };
 
