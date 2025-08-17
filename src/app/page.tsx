@@ -35,14 +35,14 @@ export default function Home() {
   const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const intervalId = setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * allNames.length);
-        setCurrentName(allNames[randomIndex]);
-      }, 300); 
+    // This effect should only run on the client after hydration
+    // to prevent server-client mismatch (hydration error).
+    const intervalId = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * allNames.length);
+      setCurrentName(allNames[randomIndex]);
+    }, 300);
 
-      return () => clearInterval(intervalId);
-    }
+    return () => clearInterval(intervalId);
   }, []);
   
   const handleGetStartedClick = () => {
@@ -63,7 +63,7 @@ export default function Home() {
         {user ? (
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium">Welcome, {user.displayName || user.email}</span>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Log out">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
@@ -101,7 +101,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center space-x-2 text-sm text-muted-foreground my-2 p-3 bg-card rounded-lg border">
-              <div className="flex items-center text-yellow-500">
+              <div className="flex items-center text-yellow-500" aria-label="4.8 out of 5 stars">
                   <Star className="w-4 h-4 fill-current" />
                   <Star className="w-4 h-4 fill-current" />
                   <Star className="w-4 h-4 fill-current" />
@@ -109,9 +109,9 @@ export default function Home() {
                   <Star className="w-4 h-4 fill-current" />
               </div>
               <span>4.8</span>
-              <span className="text-muted-foreground/50">•</span>
+              <span className="text-muted-foreground/50" aria-hidden="true">•</span>
               <span>2,300+ names chosen</span>
-              <span className="text-muted-foreground/50">•</span>
+              <span className="text-muted-foreground/50" aria-hidden="true">•</span>
               <span>Linguist-verified</span>
           </div>
 

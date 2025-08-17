@@ -119,9 +119,6 @@ export default function PersonalizePage() {
                                 placeholder="e.g., A, Ra" {...field} 
                                 className="mt-0 w-28"
                                 maxLength={3}
-                                onChange={(e) => {
-                                  field.onChange(e.target.value.slice(0, 3));
-                                }}
                             />
                         </FormControl>
                          <FormMessage />
@@ -136,7 +133,7 @@ export default function PersonalizePage() {
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between p-4 border rounded-lg">
                          <div className="flex flex-col">
-                            <FormLabel htmlFor="blend-parents-switch" className="font-semibold mb-0">Blend with Parent's name</FormLabel>
+                            <FormLabel htmlFor="blend-parents-switch" className="font-semibold mb-0 cursor-pointer">Blend with Parent's name</FormLabel>
                             <span className="text-sm text-muted-foreground">(Optional)</span>
                          </div>
                         <FormControl>
@@ -152,6 +149,7 @@ export default function PersonalizePage() {
                           control={control}
                           render={({ field }) => (
                             <FormItem>
+                                <FormLabel className="sr-only">First parent's name</FormLabel>
                                 <FormControl>
                                   <Input placeholder="First parent" {...field} />
                                 </FormControl>
@@ -164,6 +162,7 @@ export default function PersonalizePage() {
                           control={control}
                           render={({ field }) =>(
                             <FormItem>
+                              <FormLabel className="sr-only">Second parent's name</FormLabel>
                               <FormControl>
                                 <Input placeholder="Second parent" {...field} />
                               </FormControl>
@@ -180,7 +179,7 @@ export default function PersonalizePage() {
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex flex-col">
-                          <FormLabel htmlFor="match-sibling-switch" className="font-semibold mb-0">Match Sibling's name</FormLabel>
+                          <FormLabel htmlFor="match-sibling-switch" className="font-semibold mb-0 cursor-pointer">Match Sibling's name</FormLabel>
                            <span className="text-sm text-muted-foreground">(Optional)</span>
                         </div>
                         <FormControl>
@@ -195,6 +194,7 @@ export default function PersonalizePage() {
                       control={control}
                       render={({ field }) => (
                         <FormItem>
+                          <FormLabel className="sr-only">Sibling's name</FormLabel>
                           <FormControl>
                             <Input placeholder="e.g., Priya" {...field} />
                           </FormControl>
