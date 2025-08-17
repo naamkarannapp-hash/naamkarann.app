@@ -4,9 +4,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, ArrowRight } from "lucide-react";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
+import { useAuth } from '@/context/auth-context';
+import { Login } from '@/components/login';
+import { useRouter } from 'next/navigation';
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
@@ -23,6 +26,9 @@ const allNames = Object.values(namesByTradition).flat();
 const categories = ["Baby", "Startup", "Product", "Social", "Group"];
 
 export default function Home() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [currentName, setCurrentName] = useState("Gitisha");
   const [selectedCategory, setSelectedCategory] = useState("Baby");
   const isBabySelected = selectedCategory === "Baby";
@@ -37,6 +43,14 @@ export default function Home() {
       return () => clearInterval(intervalId); // Cleanup on component unmount
     }
   }, []);
+  
+  const handleGetStartedClick = () => {
+    if (user) {
+      router.push("/form/personalize");
+    } else {
+      setIsLoginOpen(true);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -87,26 +101,21 @@ export default function Home() {
           </div>
 
            <div className="w-full max-w-md mt-8">
-            <Link 
-              href={isBabySelected ? "/form/personalize" : "#"} 
-              className={cn(!isBabySelected && "cursor-not-allowed")}
-              aria-disabled={!isBabySelected}
-              tabIndex={!isBabySelected ? -1 : undefined}
-            >
-                <Button
-                    className={cn(
-                        "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                        !isBabySelected && "opacity-50"
-                    )}
-                    disabled={!isBabySelected}
-                >
-                    {isBabySelected 
-                        ? "Get Started"
-                        : "Coming soon"
-                    }
-                </Button>
-            </Link>
+              <Button
+                  onClick={handleGetStartedClick}
+                  className={cn(
+                      "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
+                      !isBabySelected && "opacity-50"
+                  )}
+                  disabled={!isBabySelected}
+              >
+                  {isBabySelected 
+                      ? "Get Started"
+                      : "Coming soon"
+                  }
+              </Button>
           </div>
+          <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
       </main>
       
        <style jsx>{`
