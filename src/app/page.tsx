@@ -29,9 +29,16 @@ export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [loginInitiated, setLoginInitiated] = useState(false);
   const [currentName, setCurrentName] = useState("Gitisha");
   const [selectedCategory, setSelectedCategory] = useState("Baby");
   const isBabySelected = selectedCategory === "Baby";
+
+  useEffect(() => {
+    if (user && loginInitiated) {
+      router.push("/form/personalize");
+    }
+  }, [user, loginInitiated, router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -48,9 +55,17 @@ export default function Home() {
     if (user) {
       router.push("/form/personalize");
     } else {
+      setLoginInitiated(true);
       setIsLoginOpen(true);
     }
   };
+
+  const onLoginOpenChange = (isOpen: boolean) => {
+    setIsLoginOpen(isOpen);
+    if (!isOpen) {
+      setLoginInitiated(false);
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -115,7 +130,7 @@ export default function Home() {
                   }
               </Button>
           </div>
-          <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
+          <Login isOpen={isLoginOpen} onOpenChange={onLoginOpenChange} />
       </main>
       
        <style jsx>{`
