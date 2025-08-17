@@ -6,6 +6,8 @@ import { auth, googleProvider } from '@/lib/firebase';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
+import { useEffect } from 'react';
 
 interface LoginProps {
   isOpen: boolean;
@@ -14,22 +16,26 @@ interface LoginProps {
 
 export function Login({ isOpen, onOpenChange }: LoginProps) {
   const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    // If the user is logged in and the dialog is open, close it and navigate.
+    if (user && isOpen) {
+      onOpenChange(false);
+      router.push('/form/personalize');
+    }
+  }, [user, isOpen, onOpenChange, router]);
 
   const handleSignIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      // The onAuthStateChanged listener in AuthProvider will handle global state.
-      // We can navigate immediately after successful sign in.
-      onOpenChange(false);
-      router.push('/form/personalize');
+      // The useEffect above will handle navigation once the user state is updated.
     } catch (error) {
-      // Don't log an error if the user intentionally closes the popup.
       if ((error as AuthError).code === 'auth/popup-closed-by-user') {
+        console.log("Sign-in popup closed by user.");
         return;
       }
       console.error("Error signing in with Google: ", error);
-      // Ensure dialog closes even if there is an error, so user can retry.
-      onOpenChange(false);
     }
   };
 

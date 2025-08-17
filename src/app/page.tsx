@@ -4,12 +4,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
+import { Star, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { Login } from '@/components/login';
 import { useRouter } from 'next/navigation';
+import { auth } from '@/lib/firebase';
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
@@ -52,8 +53,22 @@ export default function Home() {
     }
   };
 
+  const handleLogout = async () => {
+    await auth.signOut();
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
+       <header className="absolute top-0 right-0 p-4">
+        {user ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-medium">Welcome, {user.displayName || user.email}</span>
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : null}
+      </header>
       <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12">
           <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
           <div className="relative my-4 md:my-6">
