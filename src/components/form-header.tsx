@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 
 const steps = [
   { path: "/form/personalize", label: "Personalize" },
-  { path: "/form/cultural", label: "Cultural" },
   { path: "/form/inspirations", label: "Inspirations" },
 ];
 
@@ -42,7 +41,7 @@ export function FormHeader() {
         selections.push(text);
     }
     if(formValues.matchSibling && formValues.siblingName) selections.push(`Match: ${formValues.siblingName}`);
-    if (formValues.regionalRoots && formValues.regionalRoots.length > 0) {
+    if (formValues.regionalRoots && formValues.regionalRoots.length > 0 && !(formValues.regionalRoots.length === 1 && formValues.regionalRoots[0] === 'Surprise Me')) {
         selections.push(...formValues.regionalRoots);
     }
      if (formValues.inspirations && formValues.inspirations.length > 0) {

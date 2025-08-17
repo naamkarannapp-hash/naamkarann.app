@@ -62,7 +62,7 @@ export default function PersonalizePage() {
 
   function onSubmit(data: Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>) {
     setState({ formValues: data });
-    router.push("/form/cultural");
+    router.push("/form/inspirations");
   }
 
   return (

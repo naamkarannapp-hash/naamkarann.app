@@ -8,7 +8,6 @@ import Link from "next/link";
 
 const steps = [
   "/form/personalize",
-  "/form/cultural",
   "/form/inspirations",
 ];
 
@@ -21,9 +20,7 @@ export function FormFooter() {
     const getButtonInfo = () => {
         switch (pathname) {
             case "/form/personalize":
-                return { text: "Next", formId: "personalize-form" };
-            case "/form/cultural":
-                return { text: "Next", formId: "cultural-form" };
+                return { text: "Next: Inspirations", formId: "personalize-form" };
             case "/form/inspirations":
                 return { text: "Show Names", formId: "inspirations-form", icon: <Sparkles className="ml-2 h-5 w-5"/> };
             default:
@@ -44,7 +41,6 @@ export function FormFooter() {
     };
 
     const { text, formId, icon } = getButtonInfo();
-    const isLastStep = currentStepIndex === steps.length - 1;
 
 
     return (
