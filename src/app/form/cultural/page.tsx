@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,6 @@ export default function CulturalPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
   
-  const [showRoots, setShowRoots] = useState(state.formValues.regionalRoots ? state.formValues.regionalRoots.length > 0 : true);
   const [showMoreRoots, setShowMoreRoots] = useState(false);
   const [showTraditions, setShowTraditions] = useState(state.formValues.tradition && state.formValues.tradition.length > 0);
   const [customRoot, setCustomRoot] = useState("");
@@ -97,26 +96,11 @@ export default function CulturalPage() {
       <CardContent>
         <form id="cultural-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
+            <div className="space-y-4 p-4 border rounded-lg">
                 <div className="flex flex-col">
                   <Label className="font-semibold">Indian Language Roots</Label>
                   <span className="text-sm text-muted-foreground">(Optional)</span>
                 </div>
-                <Switch 
-                  checked={showRoots}
-                  onCheckedChange={(checked) => {
-                    setShowRoots(checked)
-                    if (!checked) {
-                      setValue('regionalRoots', []);
-                      setShowMoreRoots(false);
-                    } else {
-                      setValue('regionalRoots', ['Surprise Me']);
-                    }
-                  }}
-                 />
-              </div>
-              {showRoots && (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {culturalRoots.map((root) => (
@@ -153,7 +137,6 @@ export default function CulturalPage() {
                     </div>
                   )}
                 </>
-              )}
             </div>
 
             <div className="space-y-4">
