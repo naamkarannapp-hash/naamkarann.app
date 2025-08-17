@@ -12,18 +12,24 @@ const sampleNames = [
 
 export function LoadingSpinner() {
   const [displayName, setDisplayName] = useState(sampleNames[0]);
-  const [index, setIndex] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex(prevIndex => (prevIndex + 1) % sampleNames.length);
-    }, 300); // Slowed down from 150ms
-    return () => clearInterval(interval);
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
-    setDisplayName(sampleNames[index]);
-  }, [index]);
+    if (hasMounted) {
+      const interval = setInterval(() => {
+        setDisplayName(prevName => {
+          const currentIndex = sampleNames.indexOf(prevName);
+          const nextIndex = (currentIndex + 1) % sampleNames.length;
+          return sampleNames[nextIndex];
+        });
+      }, 300);
+      return () => clearInterval(interval);
+    }
+  }, [hasMounted]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
