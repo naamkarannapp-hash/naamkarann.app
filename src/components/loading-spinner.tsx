@@ -10,7 +10,7 @@ const sampleNames = [
   "Ananya", "Pari", "Diya", "Myra", "Anika", "Avani", "Rohan", "Aryan"
 ];
 
-export function LoadingSpinner() {
+function ClientOnlySpinnerAnimation() {
   const [displayName, setDisplayName] = useState(sampleNames[0]);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -31,16 +31,25 @@ export function LoadingSpinner() {
     }
   }, [hasMounted]);
 
+  if (!hasMounted) {
+    return null;
+  }
+
+  return (
+    <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
+      {displayName}
+    </p>
+  );
+}
+
+
+export function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
       <div className="relative flex items-center justify-center">
         <Loader className="w-48 h-48 text-primary/20 animate-spin-slow" />
         <div className="absolute text-center">
-           {hasMounted && (
-              <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
-                {displayName}
-              </p>
-           )}
+           <ClientOnlySpinnerAnimation />
         </div>
       </div>
       <p className="mt-8 text-lg md:text-xl text-foreground/80 font-semibold">
