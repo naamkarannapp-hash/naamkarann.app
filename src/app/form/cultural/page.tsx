@@ -12,8 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 
-const culturalRoots = ["Surprise Me", "Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati"];
-const moreCulturalRoots = ["Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
+const allCulturalRoots = ["Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati", "Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
 const traditions = ["Hindu", "Christian", "Muslim", "Sikh", "Jain", "Buddhist"];
 
 const ChipButton = ({ label, isSelected, onSelect }: { label: string; isSelected: boolean; onSelect: () => void }) => (
@@ -101,42 +100,37 @@ export default function CulturalPage() {
                   <Label className="font-semibold">Indian Language Roots</Label>
                   <span className="text-sm text-muted-foreground">(Optional)</span>
                 </div>
-                <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {culturalRoots.map((root) => (
-                          <ChipButton 
-                              key={root}
-                              label={root}
-                              isSelected={selectedRoots.includes(root)}
-                              onSelect={() => handleChipSelection('regionalRoots', root)}
-                          />
-                      ))}
-                  </div>
-                  {!showMoreRoots ? (
-                     <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
-                  ) : (
-                    <div className="space-y-3 pt-2">
-                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                          {moreCulturalRoots.map((root) => (
-                              <ChipButton 
-                                  key={root}
-                                  label={root}
-                                  isSelected={selectedRoots.includes(root)}
-                                  onSelect={() => handleChipSelection('regionalRoots', root)}
-                              />
-                          ))}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Input 
-                          placeholder="Add your own root" 
-                          value={customRoot} 
-                          onChange={(e) => setCustomRoot(e.target.value)}
-                        />
-                        <Button type="button" onClick={addCustomRoot}>Add</Button>
-                      </div>
+                <div className="flex flex-wrap gap-3">
+                    <ChipButton 
+                        label="Surprise Me"
+                        isSelected={selectedRoots.includes("Surprise Me")}
+                        onSelect={() => handleChipSelection('regionalRoots', "Surprise Me")}
+                    />
+                </div>
+                {!showMoreRoots ? (
+                    <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                ) : (
+                <div className="space-y-3 pt-2">
+                    <div className="grid grid-cols-3 gap-3">
+                        {allCulturalRoots.map((root) => (
+                            <ChipButton 
+                                key={root}
+                                label={root}
+                                isSelected={selectedRoots.includes(root)}
+                                onSelect={() => handleChipSelection('regionalRoots', root)}
+                            />
+                        ))}
                     </div>
-                  )}
-                </>
+                    <div className="flex items-center gap-2">
+                    <Input 
+                        placeholder="Add your own root" 
+                        value={customRoot} 
+                        onChange={(e) => setCustomRoot(e.target.value)}
+                    />
+                    <Button type="button" onClick={addCustomRoot}>Add</Button>
+                    </div>
+                </div>
+                )}
             </div>
 
             <div className="space-y-4">
