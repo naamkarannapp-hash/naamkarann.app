@@ -32,7 +32,8 @@ export function Login({ isOpen, onOpenChange }: LoginProps) {
       // The useEffect above will handle navigation once the user state is updated.
     } catch (error) {
       if ((error as AuthError).code === 'auth/popup-closed-by-user') {
-        console.log("Sign-in popup closed by user.");
+        // This is a normal flow, user just closed the popup.
+        // No need to show an error.
         return;
       }
       console.error("Error signing in with Google: ", error);
