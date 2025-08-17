@@ -23,7 +23,6 @@ export async function getAndPrioritizeNames(
     const apiValues = {
       ...values,
       regionalRoots: values.regionalRoots?.join(','),
-      tradition: values.tradition?.join(','),
       inspirations: values.inspirations?.join(','),
     };
 

@@ -45,9 +45,6 @@ export function FormHeader() {
     if (formValues.regionalRoots && formValues.regionalRoots.length > 0) {
         selections.push(...formValues.regionalRoots);
     }
-    if (formValues.tradition && formValues.tradition.length > 0) {
-        selections.push(...formValues.tradition);
-    }
      if (formValues.inspirations && formValues.inspirations.length > 0) {
         selections.push(...formValues.inspirations);
     }

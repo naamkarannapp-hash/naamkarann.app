@@ -8,12 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 
 const allCulturalRoots = ["Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati", "Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
-const traditions = ["Hindu", "Christian", "Muslim", "Sikh", "Jain", "Buddhist"];
 
 const ChipButton = ({ label, isSelected, onSelect }: { label: string; isSelected: boolean; onSelect: () => void }) => (
     <Button
@@ -31,32 +29,20 @@ export default function CulturalPage() {
   const router = useRouter();
   
   const [showMoreRoots, setShowMoreRoots] = useState(false);
-  const [showTraditions, setShowTraditions] = useState(state.formValues.tradition && state.formValues.tradition.length > 0);
   const [customRoot, setCustomRoot] = useState("");
 
-  const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'regionalRoots' | 'tradition'>>({
+  const { handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'regionalRoots'>>({
     defaultValues: {
       regionalRoots: state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0 ? state.formValues.regionalRoots : ['Surprise Me'],
-      tradition: state.formValues.tradition || [],
     },
   });
 
   const selectedRoots = watch('regionalRoots') || [];
-  const selectedTraditions = watch('tradition') || [];
 
-  const handleChipSelection = (field: 'regionalRoots' | 'tradition', value: string) => {
-    const currentValues = watch(field) || [];
+  const handleChipSelection = (value: string) => {
     let newValues: string[];
-
-    if (field === 'regionalRoots') {
-        newValues = [value];
-    } else {
-        newValues = currentValues.includes(value)
-            ? currentValues.filter((v: string) => v !== value)
-            : [...currentValues, value];
-    }
-    
-    setValue(field, newValues, { shouldDirty: true });
+    newValues = [value];
+    setValue('regionalRoots', newValues, { shouldDirty: true });
 };
 
   
@@ -67,7 +53,7 @@ export default function CulturalPage() {
     }
   };
 
-  function onSubmit(data: Pick<NameFormValues, 'regionalRoots' | 'tradition'>) {
+  function onSubmit(data: Pick<NameFormValues, 'regionalRoots'>) {
     if(data.regionalRoots?.includes('Surprise Me')) {
       data.regionalRoots = [];
     }
@@ -93,7 +79,7 @@ export default function CulturalPage() {
                     <ChipButton 
                         label="Surprise Me"
                         isSelected={selectedRoots.includes("Surprise Me")}
-                        onSelect={() => handleChipSelection('regionalRoots', "Surprise Me")}
+                        onSelect={() => handleChipSelection("Surprise Me")}
                     />
                 </div>
                 {!showMoreRoots ? (
@@ -106,7 +92,7 @@ export default function CulturalPage() {
                                 key={root}
                                 label={root}
                                 isSelected={selectedRoots.includes(root)}
-                                onSelect={() => handleChipSelection('regionalRoots', root)}
+                                onSelect={() => handleChipSelection(root)}
                             />
                         ))}
                     </div>
@@ -121,34 +107,6 @@ export default function CulturalPage() {
                     <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
                 </div>
                 )}
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                 <div className="flex flex-col">
-                    <Label className="font-semibold">Traditional</Label>
-                    <span className="text-sm text-muted-foreground">(Optional)</span>
-                </div>
-                 <Switch
-                    checked={showTraditions}
-                    onCheckedChange={(checked) => {
-                        setShowTraditions(checked)
-                        if (!checked) setValue('tradition', []);
-                    }}
-                 />
-              </div>
-              {showTraditions && (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {traditions.map((trad) => (
-                        <ChipButton 
-                            key={trad}
-                            label={trad}
-                            isSelected={selectedTraditions.includes(trad)}
-                            onSelect={() => handleChipSelection('tradition', trad)}
-                        />
-                    ))}
-                </div>
-              )}
             </div>
         </form>
       </CardContent>

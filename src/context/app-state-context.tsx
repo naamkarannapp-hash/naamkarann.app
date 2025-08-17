@@ -20,7 +20,6 @@ const defaultState: AppState = {
     parent2Name: "",
     siblingName: "",
     inspirations: [],
-    tradition: [],
     blendParents: false,
     matchSibling: false,
   },

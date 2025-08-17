@@ -8,7 +8,6 @@ export const nameFormSchemaBase = z.object({
   parent2Name: z.string().optional(),
   siblingName: z.string().optional(),
   inspirations: z.array(z.string()).optional(),
-  tradition: z.array(z.string()).optional(),
   blendParents: z.boolean().optional(),
   matchSibling: z.boolean().optional(),
 });
