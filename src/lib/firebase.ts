@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {"apiKey":"API_KEY","authDomain":"PROJECT_ID.firebaseapp.com","projectId":"PROJECT_ID","storageBucket":"PROJECT_ID.appspot.com","messagingSenderId":"SENDER_ID","appId":"APP_ID"};
+const firebaseConfig = {"projectId":"naamkarann","appId":"1:359994149198:web:08708de51a6eedbbb8761f","storageBucket":"naamkarann.firebasestorage.app","apiKey":"AIzaSyA9Sj8gNVdgNhABaxGbmYFvmD2PWgnEp7E","authDomain":"naamkarann.firebaseapp.com","messagingSenderId":"359994149198"};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
