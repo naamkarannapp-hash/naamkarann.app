@@ -67,6 +67,15 @@ export default function ResultsPage() {
                     <CarouselPrevious className="text-primary -left-4" />
                     <CarouselNext className="text-primary -right-4" />
                 </Carousel>
+                <div className="mt-12 text-center">
+                    <p className="text-muted-foreground mb-4">Not feeling these names?</p>
+                    <Link href="/form/personalize" passHref>
+                        <Button variant="outline">
+                            <ArrowLeft className="mr-2 h-4 w-4"/>
+                            Start Over
+                        </Button>
+                    </Link>
+                </div>
             </section>
           ) : (
               <div className="text-center my-20">
