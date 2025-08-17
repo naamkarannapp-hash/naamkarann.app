@@ -49,16 +49,7 @@ export default function CulturalPage() {
     let newValues: string[];
 
     if (field === 'regionalRoots') {
-        if (value === 'Surprise Me') {
-            newValues = currentValues.includes('Surprise Me') ? [] : ['Surprise Me'];
-        } else {
-            newValues = currentValues.filter(v => v !== 'Surprise Me');
-            if (newValues.includes(value)) {
-                newValues = newValues.filter(v => v !== value);
-            } else {
-                newValues.push(value);
-            }
-        }
+        newValues = [value];
     } else {
         newValues = currentValues.includes(value)
             ? currentValues.filter((v: string) => v !== value)
@@ -71,9 +62,7 @@ export default function CulturalPage() {
   
   const addCustomRoot = () => {
     if (customRoot && !selectedRoots.includes(customRoot)) {
-       const currentValues = watch('regionalRoots') || [];
-       const newValues = currentValues.filter(v => v !== 'Surprise Me');
-      setValue('regionalRoots', [...newValues, customRoot], { shouldDirty: true });
+      setValue('regionalRoots', [customRoot], { shouldDirty: true });
       setCustomRoot("");
     }
   };
@@ -129,6 +118,7 @@ export default function CulturalPage() {
                     />
                     <Button type="button" onClick={addCustomRoot}>Add</Button>
                     </div>
+                    <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
                 </div>
                 )}
             </div>
