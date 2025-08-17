@@ -1,47 +1,8 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Loader } from "lucide-react";
-
-const sampleNames = [
-  "Aarav", "Vivaan", "Aditya", "Vihaan", "Arjun", "Sai", "Reyansh",
-  "Ayaan", "Krishna", "Ishaan", "Saanvi", "Aanya", "Aadhya", "Aaradhya",
-  "Ananya", "Pari", "Diya", "Myra", "Anika", "Avani", "Rohan", "Aryan"
-];
-
-function ClientOnlySpinnerAnimation() {
-  const [displayName, setDisplayName] = useState(sampleNames[0]);
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (hasMounted) {
-      const interval = setInterval(() => {
-        setDisplayName(prevName => {
-          const currentIndex = sampleNames.indexOf(prevName);
-          const nextIndex = (currentIndex + 1) % sampleNames.length;
-          return sampleNames[nextIndex];
-        });
-      }, 300);
-      return () => clearInterval(interval);
-    }
-  }, [hasMounted]);
-
-  if (!hasMounted) {
-    return null;
-  }
-
-  return (
-    <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
-      {displayName}
-    </p>
-  );
-}
-
 
 export function LoadingSpinner() {
   return (
@@ -49,7 +10,7 @@ export function LoadingSpinner() {
       <div className="relative flex items-center justify-center">
         <Loader className="w-48 h-48 text-primary/20 animate-spin-slow" />
         <div className="absolute text-center">
-           <ClientOnlySpinnerAnimation />
+           <p className="font-headline text-2xl font-bold text-primary">Loading...</p>
         </div>
       </div>
       <p className="mt-8 text-lg md:text-xl text-foreground/80 font-semibold">
