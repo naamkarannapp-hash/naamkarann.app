@@ -28,7 +28,7 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
       style={{ background: name.gradient || 'linear-gradient(to top right, #1A52E1, #9C27B0)' }}
     >
        <div className="flex-grow flex flex-col justify-center items-center text-center z-10">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
             <h2 className="font-headline text-6xl font-bold tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{name.name}</h2>
             <Button variant="ghost" size="icon" className="bg-white/20 hover:bg-white/30 rounded-full">
                 <Volume2 className="h-6 w-6 text-white" />
