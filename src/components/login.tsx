@@ -14,10 +14,14 @@ interface LoginProps {
 export function Login({ isOpen, onOpenChange }: LoginProps) {
   const handleSignIn = async () => {
     try {
+      // The onAuthStateChanged listener in AuthProvider will handle UI updates.
       await signInWithPopup(auth, googleProvider);
-      onOpenChange(false); // Close dialog on successful sign-in
+      // The dialog can be closed after initiating, as the auth state will take over.
+      onOpenChange(false); 
     } catch (error) {
       console.error("Error signing in with Google: ", error);
+      // Ensure dialog closes even if there is an error, so user can retry.
+      onOpenChange(false);
     }
   };
 
