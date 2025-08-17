@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -16,7 +17,7 @@ export function LoadingSpinner() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(prevIndex => (prevIndex + 1) % sampleNames.length);
-    }, 150);
+    }, 300); // Slowed down from 150ms
     return () => clearInterval(interval);
   }, []);
 
@@ -27,19 +28,19 @@ export function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
       <div className="relative flex items-center justify-center">
-        <Loader className="w-48 h-48 text-primary animate-spin-slow" />
+        <Loader className="w-48 h-48 text-primary/20 animate-spin-slow" />
         <div className="absolute text-center">
-          <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-150 ease-in-out">
+          <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
             {displayName}
           </p>
         </div>
       </div>
       <p className="mt-8 text-lg md:text-xl text-foreground/80 font-semibold">
-        Finding the best name for your baby...
+        Crafting the perfect name for you...
       </p>
       <style jsx>{`
         .animate-spin-slow {
-          animation: spin 5s linear infinite;
+          animation: spin 8s linear infinite;
         }
         @keyframes spin {
           from {
