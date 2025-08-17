@@ -60,7 +60,7 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
             isAnimating && 'animate-heart-beat'
           )}
         >
-          <Heart className={cn("h-8 w-8 transition-colors", isSaved ? "fill-current text-red-500" : "text-white")} />
+          <Heart className={cn("h-10 w-10 transition-colors", isSaved ? "fill-current text-red-500" : "text-white")} />
         </Button>
       </div>
 
