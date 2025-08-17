@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -100,7 +101,7 @@ export default function Home() {
                     disabled={!isBabySelected}
                 >
                     {isBabySelected 
-                        ? "Perfect name in 4 clicks"
+                        ? "Get Started"
                         : "Coming soon"
                     }
                 </Button>
