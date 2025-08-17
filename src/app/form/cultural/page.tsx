@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 
-const culturalRoots = ["Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati"];
+const culturalRoots = ["Surprise Me", "Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati"];
 const moreCulturalRoots = ["Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
 const traditions = ["Hindu", "Christian", "Muslim", "Sikh", "Jain", "Buddhist"];
 
@@ -47,20 +47,42 @@ export default function CulturalPage() {
 
   const handleChipSelection = (field: 'regionalRoots' | 'tradition', value: string) => {
     const currentValues = watch(field) || [];
-    const newValues = currentValues.includes(value)
-      ? currentValues.filter((v: string) => v !== value)
-      : [...currentValues, value];
+    let newValues: string[];
+
+    if (field === 'regionalRoots') {
+        if (value === 'Surprise Me') {
+            newValues = currentValues.includes('Surprise Me') ? [] : ['Surprise Me'];
+        } else {
+            newValues = currentValues.filter(v => v !== 'Surprise Me');
+            if (newValues.includes(value)) {
+                newValues = newValues.filter(v => v !== value);
+            } else {
+                newValues.push(value);
+            }
+        }
+    } else {
+        newValues = currentValues.includes(value)
+            ? currentValues.filter((v: string) => v !== value)
+            : [...currentValues, value];
+    }
+    
     setValue(field, newValues, { shouldDirty: true });
-  };
+};
+
   
   const addCustomRoot = () => {
     if (customRoot && !selectedRoots.includes(customRoot)) {
-      setValue('regionalRoots', [...selectedRoots, customRoot], { shouldDirty: true });
+       const currentValues = watch('regionalRoots') || [];
+       const newValues = currentValues.filter(v => v !== 'Surprise Me');
+      setValue('regionalRoots', [...newValues, customRoot], { shouldDirty: true });
       setCustomRoot("");
     }
   };
 
   function onSubmit(data: Pick<NameFormValues, 'regionalRoots' | 'tradition'>) {
+    if(data.regionalRoots?.includes('Surprise Me')) {
+      data.regionalRoots = [];
+    }
     setState({ formValues: data });
     router.push("/form/inspirations");
   }
