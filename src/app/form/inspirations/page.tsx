@@ -82,7 +82,7 @@ export default function InspirationsPage() {
         <CardDescription>We'll prioritise names with these vibes.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="inspirations-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <form id="inspirations-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <div className="flex items-center mb-4">
                 <Lightbulb className="w-5 h-5 mr-2 text-primary"/>

@@ -72,7 +72,7 @@ export default function PersonalizePage() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form id="personalize-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form id="personalize-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             
             <FormField
               control={control}
