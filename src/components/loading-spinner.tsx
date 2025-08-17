@@ -36,9 +36,11 @@ export function LoadingSpinner() {
       <div className="relative flex items-center justify-center">
         <Loader className="w-48 h-48 text-primary/20 animate-spin-slow" />
         <div className="absolute text-center">
-          <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
-            {displayName}
-          </p>
+           {hasMounted && (
+              <p className="font-headline text-3xl font-bold text-primary transition-opacity duration-300 ease-in-out">
+                {displayName}
+              </p>
+           )}
         </div>
       </div>
       <p className="mt-8 text-lg md:text-xl text-foreground/80 font-semibold">
