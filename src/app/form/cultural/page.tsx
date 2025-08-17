@@ -30,14 +30,15 @@ const ChipButton = ({ label, isSelected, onSelect }: { label: string; isSelected
 export default function CulturalPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
-  const [showRoots, setShowRoots] = useState(state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0);
+  
+  const [showRoots, setShowRoots] = useState(state.formValues.regionalRoots ? state.formValues.regionalRoots.length > 0 : true);
   const [showMoreRoots, setShowMoreRoots] = useState(false);
   const [showTraditions, setShowTraditions] = useState(state.formValues.tradition && state.formValues.tradition.length > 0);
   const [customRoot, setCustomRoot] = useState("");
 
   const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'regionalRoots' | 'tradition'>>({
     defaultValues: {
-      regionalRoots: state.formValues.regionalRoots || [],
+      regionalRoots: state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0 ? state.formValues.regionalRoots : ['Surprise Me'],
       tradition: state.formValues.tradition || [],
     },
   });
@@ -109,6 +110,8 @@ export default function CulturalPage() {
                     if (!checked) {
                       setValue('regionalRoots', []);
                       setShowMoreRoots(false);
+                    } else {
+                      setValue('regionalRoots', ['Surprise Me']);
                     }
                   }}
                  />
