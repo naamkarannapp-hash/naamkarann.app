@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -109,25 +108,6 @@ export default function Home() {
           </div>
       </main>
       
-       <footer className="w-full bg-background py-4 px-4 border-t border-border/20 z-50">
-           <div className="w-full max-w-md mx-auto flex items-center justify-end">
-                <Link 
-                  href={isBabySelected ? "/form/personalize" : "#"} 
-                  className={cn(!isBabySelected && "cursor-not-allowed pointer-events-none")}
-                  aria-disabled={!isBabySelected}
-                  tabIndex={!isBabySelected ? -1 : undefined}
-                >
-                    <Button 
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl shadow-lg"
-                        disabled={!isBabySelected}
-                    >
-                        Next
-                        <ArrowRight className="ml-2 h-4 w-4"/>
-                    </Button>
-                </Link>
-           </div>
-        </footer>
-
        <style jsx>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
