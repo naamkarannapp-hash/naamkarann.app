@@ -77,7 +77,7 @@ export default function CulturalPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex flex-col">
-                  <Label className="font-semibold">Indian Cultural Roots</Label>
+                  <Label className="font-semibold">Indian Language Roots</Label>
                   <span className="text-sm text-muted-foreground">(Optional)</span>
                 </div>
                 <Switch 

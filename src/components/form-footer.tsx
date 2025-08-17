@@ -42,16 +42,6 @@ export function FormFooter() {
           router.push('/');
       }
     };
-  
-    const handleSkip = () => {
-      const nextStep = steps[currentStepIndex + 1];
-      if (nextStep) {
-          router.push(nextStep);
-      } else {
-          // This case should ideally not be hit if the last step button is "Show Names"
-          router.push('/results');
-      }
-    };
 
     const { text, formId, icon } = getButtonInfo();
     const isLastStep = currentStepIndex === steps.length - 1;
@@ -59,7 +49,7 @@ export function FormFooter() {
 
     return (
         <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 border-t border-border/20 z-50">
-           <div className="w-full max-w-md mx-auto flex items-center justify-between space-x-2">
+           <div className="w-full max-w-md mx-auto flex items-center justify-between space-x-4">
                  <Button 
                     variant="ghost"
                     onClick={handleBack}
@@ -68,16 +58,6 @@ export function FormFooter() {
                     <ArrowLeft className="mr-2 h-4 w-4"/>
                     Back
                 </Button>
-
-                {!isLastStep && (
-                  <Button 
-                      variant="ghost" 
-                      onClick={handleSkip} 
-                      className="text-primary font-bold"
-                  >
-                      Skip
-                  </Button>
-                )}
 
                 <Button 
                     type="submit"
