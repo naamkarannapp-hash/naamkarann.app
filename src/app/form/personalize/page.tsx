@@ -105,12 +105,15 @@ export default function PersonalizePage() {
                 name="startingLetters"
                 render={({ field }) => (
                     <FormItem className="flex items-center gap-4">
-                        <FormLabel htmlFor="startingLetters" className="font-semibold whitespace-nowrap">Starts with (1-3 characters, Optional)</FormLabel>
+                        <div className="flex-grow">
+                             <FormLabel htmlFor="startingLetters" className="font-semibold whitespace-nowrap">Starts with</FormLabel>
+                             <p className="text-sm text-muted-foreground">(1-3 characters, Optional)</p>
+                        </div>
                         <FormControl>
                             <Input 
                                 id="startingLetters" 
                                 placeholder="e.g., A, Ra" {...field} 
-                                className="mt-0"
+                                className="mt-0 w-auto"
                                 maxLength={3}
                                 onChange={(e) => {
                                   field.onChange(e.target.value.slice(0, 3));
@@ -128,7 +131,10 @@ export default function PersonalizePage() {
                   name="blendParents"
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between p-4 border rounded-lg">
-                        <FormLabel htmlFor="blend-parents-switch" className="font-semibold mb-0">Blend with Parent's name (Optional)</FormLabel>
+                         <div className="flex flex-col">
+                            <FormLabel htmlFor="blend-parents-switch" className="font-semibold mb-0">Blend with Parent's name</FormLabel>
+                            <span className="text-sm text-muted-foreground">(Optional)</span>
+                         </div>
                         <FormControl>
                           <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
@@ -169,7 +175,10 @@ export default function PersonalizePage() {
                   name="matchSibling"
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between p-4 border rounded-lg">
-                        <FormLabel htmlFor="match-sibling-switch" className="font-semibold mb-0">Match Sibling's name (Optional)</FormLabel>
+                        <div className="flex flex-col">
+                          <FormLabel htmlFor="match-sibling-switch" className="font-semibold mb-0">Match Sibling's name</FormLabel>
+                           <span className="text-sm text-muted-foreground">(Optional)</span>
+                        </div>
                         <FormControl>
                            <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>

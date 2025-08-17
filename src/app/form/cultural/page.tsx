@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -29,8 +30,9 @@ const ChipButton = ({ label, isSelected, onSelect }: { label: string; isSelected
 export default function CulturalPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
+  const [showRoots, setShowRoots] = useState(state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0);
   const [showMoreRoots, setShowMoreRoots] = useState(false);
-  const [showTraditions, setShowTraditions] = useState(false);
+  const [showTraditions, setShowTraditions] = useState(state.formValues.tradition && state.formValues.tradition.length > 0);
   const [customRoot, setCustomRoot] = useState("");
 
   const { control, handleSubmit, watch, setValue } = useForm<Pick<NameFormValues, 'regionalRoots' | 'tradition'>>({
@@ -74,10 +76,14 @@ export default function CulturalPage() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label className="font-semibold">Indian Cultural Roots</Label>
+                <div className="flex flex-col">
+                  <Label className="font-semibold">Indian Cultural Roots</Label>
+                  <span className="text-sm text-muted-foreground">(Optional)</span>
+                </div>
                 <Switch 
-                  checked={selectedRoots.length > 0 || showMoreRoots}
+                  checked={showRoots}
                   onCheckedChange={(checked) => {
+                    setShowRoots(checked)
                     if (!checked) {
                       setValue('regionalRoots', []);
                       setShowMoreRoots(false);
@@ -85,7 +91,7 @@ export default function CulturalPage() {
                   }}
                  />
               </div>
-              {(selectedRoots.length > 0 || showMoreRoots || culturalRoots.some(r => selectedRoots.includes(r))) && (
+              {showRoots && (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {culturalRoots.map((root) => (
@@ -127,7 +133,10 @@ export default function CulturalPage() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
-                <Label className="font-semibold">Traditional (Optional)</Label>
+                 <div className="flex flex-col">
+                    <Label className="font-semibold">Traditional</Label>
+                    <span className="text-sm text-muted-foreground">(Optional)</span>
+                </div>
                  <Switch
                     checked={showTraditions}
                     onCheckedChange={(checked) => {
