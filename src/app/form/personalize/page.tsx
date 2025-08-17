@@ -104,16 +104,16 @@ export default function PersonalizePage() {
                 control={control}
                 name="startingLetters"
                 render={({ field }) => (
-                    <FormItem className="flex items-center gap-4">
-                        <div className="flex-grow">
+                    <FormItem className="flex items-center justify-between gap-4">
+                        <div>
                              <FormLabel htmlFor="startingLetters" className="font-semibold whitespace-nowrap">Starts with</FormLabel>
-                             <p className="text-sm text-muted-foreground">(1-3 characters, Optional)</p>
+                             <p className="text-sm text-muted-foreground whitespace-nowrap">(1-3 characters, Optional)</p>
                         </div>
                         <FormControl>
                             <Input 
                                 id="startingLetters" 
                                 placeholder="e.g., A, Ra" {...field} 
-                                className="mt-0 w-auto"
+                                className="mt-0 w-28"
                                 maxLength={3}
                                 onChange={(e) => {
                                   field.onChange(e.target.value.slice(0, 3));
