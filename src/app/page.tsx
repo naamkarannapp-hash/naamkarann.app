@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Star, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
@@ -34,15 +33,11 @@ const namesByTradition = {
 
 const allNames = Object.values(namesByTradition).flat();
 
-const categories = ["Baby", "Startup", "Product", "Social", "Group"];
-
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [currentName, setCurrentName] = useState("Gitisha");
-  const [selectedCategory, setSelectedCategory] = useState("Baby");
-  const isBabySelected = selectedCategory === "Baby";
 
   useEffect(() => {
     // This effect should only run on the client after hydration
@@ -126,20 +121,7 @@ export default function Home() {
             Thousands of meaningful names, one swipe at a time.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-3 my-4 md:my-6">
-              {categories.map((category) => (
-                  <Badge
-                      key={category}
-                      variant={selectedCategory === category ? "default" : "secondary"}
-                      onClick={() => setSelectedCategory(category)}
-                      className="py-2 px-4 text-sm rounded-full cursor-pointer"
-                  >
-                      {category}
-                  </Badge>
-              ))}
-          </div>
-
-          <div className="my-2 flex flex-col items-center h-20">
+          <div className="my-8 flex flex-col items-center h-20">
               <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">{currentName}</p>
               <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
           </div>
@@ -162,16 +144,9 @@ export default function Home() {
            <div className="w-full max-w-md mt-8">
               <Button
                   onClick={handleGetStartedClick}
-                  className={cn(
-                      "w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg",
-                      !isBabySelected && "opacity-50"
-                  )}
-                  disabled={!isBabySelected}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
               >
-                  {isBabySelected 
-                      ? "Get Started"
-                      : "Coming soon"
-                  }
+                  Get Started
               </Button>
           </div>
           <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
