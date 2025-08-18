@@ -5,6 +5,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import { createUserProfile } from '@/lib/user-actions';
+import type { UserProfile } from '@/lib/types';
+
 
 interface AuthContextType {
   user: User | null;
@@ -19,14 +22,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user);
+        const userProfile: UserProfile = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+        };
+        await createUserProfile(userProfile);
+
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
-
+  
   useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -34,6 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   if (!hasMounted || loading) {
     return <LoadingSpinner />;
   }
+
 
   return (
     <AuthContext.Provider value={{ user, loading: false }}>

@@ -50,3 +50,11 @@ export interface NameResult {
   gender: string;
   gradient: string;
 }
+
+export interface UserProfile {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    photoURL: string | null;
+    searchCount?: number;
+}

@@ -3,6 +3,7 @@
 import {z} from 'zod';
 import {nameFormSchema, type NameResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
+import { trackUserSearch } from './user-actions';
 
 const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
 
@@ -57,6 +58,9 @@ export async function getAndPrioritizeNames(
       gender: name.gender,
       gradient: name.gradient_color,
     }));
+
+    await trackUserSearch(values, names);
+
 
     if (values.inspirations && values.inspirations.length > 0 && names.length > 0) {
       try {
