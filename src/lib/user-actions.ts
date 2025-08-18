@@ -9,6 +9,8 @@ function getAdminApp(): App {
     if (getApps().length > 0) {
         return getApps()[0];
     }
+    // This will use the GOOGLE_APPLICATION_CREDENTIALS environment variable
+    // for authentication, which is automatically set in App Hosting.
     return initializeApp();
 }
 
