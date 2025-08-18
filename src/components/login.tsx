@@ -2,7 +2,7 @@
 "use client";
 
 import { signInWithPopup, AuthError } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
+import { auth, googleProvider } from '@/lib/firebase/client';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { useRouter } from 'next/navigation';

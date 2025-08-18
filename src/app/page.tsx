@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { Login } from '@/components/login';
 import { useRouter } from 'next/navigation';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,

@@ -5,8 +5,7 @@ import {z} from 'zod';
 import {nameFormSchema, type NameResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 import { trackUserSearch } from './user-actions';
-import { auth } from 'firebase-admin';
-import { getApp } from 'firebase-admin/app';
+import { adminAuth } from './firebase/admin';
 import { cookies } from 'next/headers';
 
 const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
@@ -24,8 +23,8 @@ async function getCurrentUser() {
     try {
         const sessionCookie = cookies().get('session')?.value;
         if (sessionCookie) {
-            const decodedToken = await auth(getApp()).verifySessionCookie(sessionCookie, true);
-            return await auth(getApp()).getUser(decodedToken.uid);
+            const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
+            return await adminAuth.getUser(decodedToken.uid);
         }
         return null;
     } catch (error) {

@@ -1,26 +1,13 @@
 
 'use server';
 
-import { auth as adminAuth, initializeApp, getApps, App } from 'firebase-admin';
-import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { adminAuth, adminDb } from './firebase/admin';
+import { FieldValue } from 'firebase-admin/firestore';
 import type { NameFormValues, NameResult } from "./types";
-
-function getAdminApp(): App {
-    if (getApps().length > 0) {
-        return getApps()[0];
-    }
-    // This will use the GOOGLE_APPLICATION_CREDENTIALS environment variable
-    // for authentication, which is automatically set in App Hosting.
-    return initializeApp();
-}
-
-async function getDb() {
-    return getFirestore(getAdminApp());
-}
 
 async function getCurrentUser(uid: string) {
     try {
-        return await adminAuth(getAdminApp()).getUser(uid);
+        return await adminAuth.getUser(uid);
     } catch (error) {
         console.error("Error fetching user:", error);
         return null;
@@ -34,7 +21,7 @@ export async function trackUserSearch(formValues: NameFormValues, results: NameR
         return;
     }
     
-    const db = await getDb();
+    const db = adminDb;
     const userRef = db.collection("users").doc(uid);
 
     try {

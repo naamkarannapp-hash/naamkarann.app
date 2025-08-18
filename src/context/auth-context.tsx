@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase/client';
 import { LoadingSpinner } from '@/components/loading-spinner';
 import type { UserProfile } from '@/lib/types';
 
