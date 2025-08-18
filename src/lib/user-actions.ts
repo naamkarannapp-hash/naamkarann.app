@@ -1,57 +1,62 @@
 
 'use server';
 
-import { auth, db } from "@/lib/firebase";
-import { collection, doc, getDoc, serverTimestamp, setDoc, updateDoc, increment, addDoc, getDocs, query, limit } from "firebase/firestore";
+import { auth as adminAuth } from 'firebase-admin';
+import { getApp } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import type { NameFormValues, NameResult, UserProfile } from "./types";
 
-export async function createUserProfile(user: UserProfile): Promise<void> {
-    const userRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userRef);
+// This function must be called in a server context where firebase-admin is initialized
+async function getDb() {
+    const app = getApp(); // Assumes firebase-admin is initialized elsewhere
+    return getFirestore(app);
+}
 
-    if (!userDoc.exists()) {
-        await setDoc(userRef, {
-            ...user,
-            createdAt: serverTimestamp(),
-            searchCount: 0,
-        });
+async function getCurrentUser(uid: string) {
+    try {
+        const adminAuthInstance = adminAuth(getApp());
+        return await adminAuthInstance.getUser(uid);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return null;
     }
 }
 
-export async function trackUserSearch(formValues: NameFormValues, results: NameResult[]): Promise<void> {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-        // This can happen in server actions. We need to find another way to get the user.
-        // For now, if there is no logged in user, we can't track.
-        // This part of the code might need to be revisited if we need to track anonymous users.
-        console.warn("No authenticated user found. Cannot track search.");
+
+export async function trackUserSearch(formValues: NameFormValues, results: NameResult[], uid: string): Promise<void> {
+    if (!uid) {
+        console.warn("No authenticated user UID provided. Cannot track search.");
         return;
     }
-
-    const userRef = doc(db, "users", currentUser.uid);
-    const searchesRef = collection(userRef, "searches");
+    
+    const db = await getDb();
+    const userRef = db.collection("users").doc(uid);
 
     try {
-        const userDoc = await getDoc(userRef);
+        const userDoc = await userRef.get();
         
-        if (!userDoc.exists()) {
-            await setDoc(userRef, {
-                uid: currentUser.uid,
-                email: currentUser.email,
-                displayName: currentUser.displayName,
-                photoURL: currentUser.photoURL,
-                createdAt: serverTimestamp(),
-                searchCount: 1,
-            });
+        if (!userDoc.exists) {
+            const userRecord = await getCurrentUser(uid);
+            if (userRecord) {
+                 await userRef.set({
+                    uid: userRecord.uid,
+                    email: userRecord.email,
+                    displayName: userRecord.displayName,
+                    photoURL: userRecord.photoURL,
+                    createdAt: FieldValue.serverTimestamp(),
+                    searchCount: 1,
+                });
+            }
         } else {
-            await updateDoc(userRef, {
-                searchCount: increment(1)
+            await userRef.update({
+                searchCount: FieldValue.increment(1)
             });
         }
 
         // Add search details to subcollection
-        await addDoc(searchesRef, {
-            timestamp: serverTimestamp(),
+        const searchesRef = userRef.collection("searches");
+        await searchesRef.add({
+            timestamp: FieldValue.serverTimestamp(),
             formValues: JSON.parse(JSON.stringify(formValues)), // Ensure plain object
             results: JSON.parse(JSON.stringify(results)), // Ensure plain object
         });

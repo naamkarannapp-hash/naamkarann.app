@@ -7,6 +7,7 @@ import {prioritizeNames} from '@/ai/flows/prioritize-names';
 import { trackUserSearch } from './user-actions';
 import { auth } from 'firebase-admin';
 import { getApp } from 'firebase-admin/app';
+import { cookies } from 'next/headers';
 
 const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
 
@@ -21,14 +22,15 @@ interface ApiNameResult {
 
 async function getCurrentUser() {
     try {
-        const adminAuth = auth(getApp());
-        const sessionCookie = require('next/headers').cookies().get('session')?.value;
+        const sessionCookie = cookies().get('session')?.value;
         if (sessionCookie) {
-            const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
-            return await adminAuth.getUser(decodedToken.uid);
+            const decodedToken = await auth(getApp()).verifySessionCookie(sessionCookie, true);
+            return await auth(getApp()).getUser(decodedToken.uid);
         }
         return null;
     } catch (error) {
+        // This is expected if the cookie is expired or invalid.
+        // We can safely ignore this error and proceed as an unauthenticated user.
         return null;
     }
 }
@@ -84,11 +86,10 @@ export async function getAndPrioritizeNames(
       gradient: name.gradient_color,
     }));
     
-    // This is a server action, so we can't rely on client-side auth state.
-    // The tracking logic needs to be revisited to correctly identify the user on the server.
-    // For now, this call will likely not work as intended because auth.currentUser is a client-side concept.
-    // I am commenting this out to prevent crashes, but this functionality needs a proper server-side auth solution.
-    // await trackUserSearch(values, names);
+    const user = await getCurrentUser();
+    if (user) {
+        await trackUserSearch(values, names, user.uid);
+    }
 
 
     if (values.inspirations && values.inspirations.length > 0 && names.length > 0) {
