@@ -122,7 +122,7 @@ export default function Home() {
           </p>
           
           <div className="my-8 flex flex-col items-center h-20">
-              <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">{currentName}</p>
+              <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">Naam{currentName}</p>
               <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
           </div>
 
