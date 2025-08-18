@@ -32,23 +32,90 @@ const namesByTradition = {
 };
 
 const allNames = Object.values(namesByTradition).flat();
+const baseWord = "Naamkarann";
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+const AnimatedName = () => {
+    const [displayedName, setDisplayedName] = useState(baseWord.split(''));
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!hasMounted) return;
+
+        let nameIndex = 0;
+        let intervalId: NodeJS.Timeout;
+
+        const animate = () => {
+            const targetName = allNames[nameIndex % allNames.length];
+            const maxLength = Math.max(baseWord.length, targetName.length);
+            let currentChars = baseWord.split('');
+
+            // Transition to target name
+            for (let i = 0; i < maxLength; i++) {
+                setTimeout(() => {
+                    if (i < targetName.length) {
+                        currentChars[i] = targetName[i];
+                    } else {
+                        currentChars[i] = ' '; // Use space for empty char
+                    }
+                    setDisplayedName([...currentChars.slice(0, targetName.length)]);
+                }, i * 100);
+            }
+            
+            // Hold the name for a bit
+            setTimeout(() => {
+                // Transition back to base word
+                for (let i = 0; i < baseWord.length; i++) {
+                    setTimeout(() => {
+                       currentChars[i] = baseWord[i];
+                       if (i >= targetName.length) {
+                         currentChars[i] = baseWord[i];
+                       }
+                       setDisplayedName([...currentChars.slice(0, baseWord.length)]);
+                    }, i * 100);
+                }
+            }, targetName.length * 100 + 2000);
+
+            nameIndex++;
+        };
+        
+        // Initial animation
+        setTimeout(animate, 1000);
+        // Subsequent animations
+        intervalId = setInterval(animate, baseWord.length * 100 + 3000);
+
+
+        return () => clearInterval(intervalId);
+    }, [hasMounted]);
+
+    if (!hasMounted) {
+      return (
+        <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">
+            {baseWord}
+        </p>
+      );
+    }
+
+    return (
+        <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500" aria-live="polite">
+            {displayedName.map((char, index) => (
+                <span key={index} className="inline-block animate-flip-in">
+                    {char === ' ' ? '\u00A0' : char}
+                </span>
+            ))}
+        </p>
+    );
+};
+
 
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [currentName, setCurrentName] = useState("Gitisha");
-
-  useEffect(() => {
-    // This effect should only run on the client after hydration
-    // to prevent server-client mismatch (hydration error).
-    const intervalId = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * allNames.length);
-      setCurrentName(allNames[randomIndex]);
-    }, 300);
-
-    return () => clearInterval(intervalId);
-  }, []);
   
   const handleGetStartedClick = () => {
     if (user) {
@@ -122,7 +189,7 @@ export default function Home() {
           </p>
           
           <div className="my-8 flex flex-col items-center h-20">
-              <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">Naam{currentName}</p>
+              <AnimatedName />
               <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
           </div>
 
@@ -164,6 +231,19 @@ export default function Home() {
         }
         .animation-delay-2000 {
             animation-delay: 2s;
+        }
+        @keyframes flip-in {
+            0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+        .animate-flip-in {
+            animation: flip-in 0.5s ease-out;
         }
        `}</style>
     </div>
