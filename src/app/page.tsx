@@ -33,7 +33,6 @@ const namesByTradition = {
 
 const allNames = Object.values(namesByTradition).flat();
 const baseWord = "Naamkarann";
-const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 const AnimatedName = () => {
     const [displayedName, setDisplayedName] = useState(baseWord.split(''));
@@ -92,16 +91,23 @@ const AnimatedName = () => {
         return () => clearInterval(intervalId);
     }, [hasMounted]);
 
+    const isBaseWord = displayedName.join('') === baseWord;
+
     if (!hasMounted) {
       return (
-        <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500">
+        <p className="font-headline text-4xl text-primary font-bold transition-colors duration-500">
             {baseWord}
         </p>
       );
     }
 
     return (
-        <p className="font-headline text-4xl text-purple-500 font-bold transition-all duration-500" aria-live="polite">
+        <p className={cn(
+            "font-headline text-4xl font-bold transition-colors duration-500",
+            isBaseWord ? 'text-primary' : 'text-accent'
+          )} 
+          aria-live="polite"
+        >
             {displayedName.map((char, index) => (
                 <span key={index} className="inline-block animate-flip-in">
                     {char === ' ' ? '\u00A0' : char}
