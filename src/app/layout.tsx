@@ -2,9 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import dynamic from 'next/dynamic';
-
-const Providers = dynamic(() => import('@/components/providers'), { ssr: false });
+import Providers from '@/components/providers';
 
 
 export const metadata: Metadata = {
