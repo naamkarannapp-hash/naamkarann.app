@@ -39,13 +39,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, [hasMounted]);
 
-  if (!hasMounted || loading) {
+  if (!hasMounted) {
+    return null;
+  }
+  
+  if (loading) {
     return <LoadingSpinner />;
   }
 
 
   return (
-    <AuthContext.Provider value={{ user, loading: false }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
