@@ -10,11 +10,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
+import { nameFormSchema } from "@/lib/types";
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Lightbulb, BookHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
+import { ChipButton } from "@/components/chip-button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+
 
 const allCulturalRoots = ["Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati", "Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];
@@ -27,16 +32,6 @@ const moreInspirationsList = [
     { name: "Flowers", gradient: "from-pink-200 to-rose-300" },
 ];
 
-const ChipButton = ({ label, isSelected, onSelect, className }: { label: string; isSelected: boolean; onSelect: () => void, className?: string }) => (
-    <Button
-      type="button"
-      variant={isSelected ? "default" : "secondary"}
-      onClick={onSelect}
-      className={cn("rounded-full", isSelected ? 'text-primary-foreground' : 'text-foreground', className)}
-    >
-      {label}
-    </Button>
-);
 
 export default function InspirationsPage() {
   const { state, setState } = useAppState();
@@ -48,15 +43,15 @@ export default function InspirationsPage() {
   const [showMoreInspirations, setShowMoreInspirations] = useState(false);
   const [showLanguageRoots, setShowLanguageRoots] = useState(!!state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0);
 
-  const { handleSubmit, watch, setValue, control } = useForm<Pick<NameFormValues, 'regionalRoots' | 'inspirations'>>({
-    defaultValues: {
-      regionalRoots: state.formValues.regionalRoots || [],
-      inspirations: state.formValues.inspirations || [],
-    },
+  const form = useForm<NameFormValues>({
+    resolver: zodResolver(nameFormSchema),
+    defaultValues: state.formValues,
   });
 
-  const selectedRoots = useWatch({ control, name: 'regionalRoots' }) || [];
-  const selectedInspirations = useWatch({ control, name: 'inspirations' }) || [];
+  const { control, handleSubmit, watch, setValue, trigger } = form;
+
+  const selectedRoots = watch('regionalRoots') || [];
+  const selectedInspirations = watch('inspirations') || [];
 
   const handleLanguageToggle = (checked: boolean) => {
     setShowLanguageRoots(checked);
@@ -68,9 +63,7 @@ export default function InspirationsPage() {
   };
 
   const handleChipSelection = (value: string) => {
-    let newValues: string[];
-    newValues = [value];
-    setValue('regionalRoots', newValues, { shouldDirty: true });
+    setValue('regionalRoots', [value], { shouldDirty: true });
   };
   
   const addCustomRoot = () => {
@@ -85,20 +78,13 @@ export default function InspirationsPage() {
     if (newInspirations.includes(inspiration)) {
       newInspirations = newInspirations.filter((i) => i !== inspiration);
     } else {
-      if (newInspirations.length < 5) {
-        newInspirations.push(inspiration);
-      } else {
-        toast({
-            variant: "default",
-            title: "Up to 5 vibes",
-            description: "You can select a maximum of 5 vibes.",
-        });
-      }
+      newInspirations.push(inspiration);
     }
     setValue('inspirations', newInspirations, { shouldDirty: true });
+    trigger('inspirations');
   };
   
-  async function onSubmit(data: Pick<NameFormValues, 'regionalRoots' | 'inspirations'>) {
+  async function onSubmit(data: NameFormValues) {
     if(data.regionalRoots?.includes('Surprise Me')) {
       data.regionalRoots = [];
     }
@@ -131,6 +117,7 @@ export default function InspirationsPage() {
         <CardDescription>Select language roots and vibes to find the perfect name.</CardDescription>
       </CardHeader>
       <CardContent>
+        <Form {...form}>
         <form id="inspirations-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg">
                 <div className="flex items-center justify-between">
@@ -145,23 +132,37 @@ export default function InspirationsPage() {
                 </div>
                 {showLanguageRoots && (
                     <div className="pt-2 space-y-3">
-                        <div className="flex flex-wrap gap-3">
-                            <ChipButton 
-                                label="Surprise Me"
-                                isSelected={selectedRoots.includes("Surprise Me")}
-                                onSelect={() => handleChipSelection("Surprise Me")}
-                            />
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            {visibleRoots.map((root) => (
-                                <ChipButton 
-                                    key={root}
-                                    label={root}
-                                    isSelected={selectedRoots.includes(root)}
-                                    onSelect={() => handleChipSelection(root)}
-                                />
-                            ))}
-                        </div>
+                         <FormField
+                            control={control}
+                            name="regionalRoots"
+                            render={() => (
+                                <FormItem>
+                                    <FormControl>
+                                        <>
+                                        <div className="flex flex-wrap gap-3">
+                                            <ChipButton 
+                                                label="Surprise Me"
+                                                isSelected={selectedRoots.includes("Surprise Me")}
+                                                onSelect={() => handleChipSelection("Surprise Me")}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                            {visibleRoots.map((root) => (
+                                                <ChipButton 
+                                                    key={root}
+                                                    label={root}
+                                                    isSelected={selectedRoots.includes(root)}
+                                                    onSelect={() => handleChipSelection(root)}
+                                                />
+                                            ))}
+                                        </div>
+                                        </>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
 
                         {!showMoreRoots && allCulturalRoots.length > 6 && (
                             <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
@@ -184,44 +185,58 @@ export default function InspirationsPage() {
             </div>
 
             <div className="space-y-4 p-4 border rounded-lg">
-                <div className="flex items-center mb-4">
-                    <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
-                    <div className="flex flex-col">
-                        <span className="font-semibold">Vibes (select up to 5)</span>
-                        <span className="text-sm text-muted-foreground">(Optional)</span>
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {inspirationsList.map((inspiration) => (
-                    <ChipButton
-                      key={inspiration}
-                      label={inspiration}
-                      isSelected={selectedInspirations.includes(inspiration)}
-                      onSelect={() => handleInspirationToggle(inspiration)}
-                    />
-                  ))}
-                </div>
-                {!showMoreInspirations ? (
-                    <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
+                 <FormField
+                    control={control}
+                    name="inspirations"
+                    render={() => (
+                        <FormItem>
+                            <div className="flex items-center mb-4">
+                                <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">Vibes (select up to 5)</span>
+                                    <span className="text-sm text-muted-foreground">(Optional)</span>
+                                </div>
+                            </div>
+                             <FormControl>
+                                <>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                {inspirationsList.map((inspiration) => (
+                                    <ChipButton
+                                    key={inspiration}
+                                    label={inspiration}
+                                    isSelected={selectedInspirations.includes(inspiration)}
+                                    onSelect={() => handleInspirationToggle(inspiration)}
+                                    />
+                                ))}
+                                </div>
+                                {!showMoreInspirations ? (
+                                    <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
 
-                ) : (
-                    <div className="mt-4 space-y-3">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            {moreInspirationsList.map((item) => (
-                            <ChipButton
-                                key={item.name}
-                                label={item.name}
-                                isSelected={selectedInspirations.includes(item.name)}
-                                onSelect={() => handleInspirationToggle(item.name)}
-                                className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
-                            />
-                            ))}
-                        </div>
-                         <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
-                    </div>
-                )}
+                                ) : (
+                                    <div className="mt-4 space-y-3">
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                            {moreInspirationsList.map((item) => (
+                                            <ChipButton
+                                                key={item.name}
+                                                label={item.name}
+                                                isSelected={selectedInspirations.includes(item.name)}
+                                                onSelect={() => handleInspirationToggle(item.name)}
+                                                className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
+                                            />
+                                            ))}
+                                        </div>
+                                        <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
+                                    </div>
+                                )}
+                                </>
+                            </FormControl>
+                            <FormMessage className="pt-2" />
+                        </FormItem>
+                    )}
+                />
             </div>
         </form>
+        </Form>
       </CardContent>
     </Card>
   );

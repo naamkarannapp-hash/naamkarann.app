@@ -29,17 +29,9 @@ export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
 
-  const form = useForm<Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>>({
+  const form = useForm<NameFormValues>({
     resolver: zodResolver(personalizePageSchema),
-    defaultValues: {
-      gender: state.formValues.gender || 'Neutral',
-      startingLetters: state.formValues.startingLetters || "",
-      blendParents: state.formValues.blendParents || false,
-      parent1Name: state.formValues.parent1Name || "",
-      parent2Name: state.formValues.parent2Name || "",
-      matchSibling: state.formValues.matchSibling || false,
-      siblingName: state.formValues.siblingName || "",
-    },
+    defaultValues: state.formValues,
   });
 
   const { control, handleSubmit, watch, setValue } = form;
@@ -60,7 +52,7 @@ export default function PersonalizePage() {
   }, [matchSibling, setValue]);
 
 
-  function onSubmit(data: Pick<NameFormValues, 'gender' | 'startingLetters' | 'blendParents' | 'parent1Name' | 'parent2Name' | 'matchSibling' | 'siblingName'>) {
+  function onSubmit(data: NameFormValues) {
     setState({ formValues: data });
     router.push("/form/inspirations");
   }

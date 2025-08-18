@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const nameFormSchemaBase = z.object({
+export const nameFormSchema = z.object({
   gender: z.enum(["Boy", "Girl", "Neutral"]).optional(),
   regionalRoots: z.array(z.string()).optional(),
   startingLetters: z.string().max(3, "Only up to 3 characters are allowed.").optional(),
@@ -9,17 +9,7 @@ export const nameFormSchemaBase = z.object({
   parent2Name: z.string().optional(),
   matchSibling: z.boolean().optional(),
   siblingName: z.string().optional(),
-  inspirations: z.array(z.string()).optional(),
-});
-
-export const personalizePageSchema = nameFormSchemaBase.pick({
-    gender: true,
-    startingLetters: true,
-    blendParents: true,
-    parent1Name: true,
-    parent2Name: true,
-    matchSibling: true,
-    siblingName: true,
+  inspirations: z.array(z.string()).max(5, "You can select a maximum of 5 vibes.").optional(),
 }).superRefine((data, ctx) => {
   if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
     ctx.addIssue({
@@ -37,9 +27,18 @@ export const personalizePageSchema = nameFormSchemaBase.pick({
   }
 });
 
-export const nameFormSchema = nameFormSchemaBase.merge(personalizePageSchema);
 
-export type NameFormValues = z.infer<typeof nameFormSchemaBase>;
+export const personalizePageSchema = nameFormSchema.pick({
+    gender: true,
+    startingLetters: true,
+    blendParents: true,
+    parent1Name: true,
+    parent2Name: true,
+    matchSibling: true,
+    siblingName: true,
+});
+
+export type NameFormValues = z.infer<typeof nameFormSchema>;
 
 export interface NameResult {
   id: string;
