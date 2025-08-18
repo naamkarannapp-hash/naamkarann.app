@@ -1,9 +1,11 @@
 
 import type { Metadata } from 'next';
-import { AppStateProvider } from '@/context/app-state-context';
-import { AuthProvider } from '@/context/auth-context';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
+import dynamic from 'next/dynamic';
+
+const Providers = dynamic(() => import('@/components/providers'), { ssr: false });
+
 
 export const metadata: Metadata = {
   title: 'Naamkarann',
@@ -23,12 +25,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
-        <AuthProvider>
-          <AppStateProvider>
-            {children}
-            <Toaster />
-          </AppStateProvider>
-        </AuthProvider>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
