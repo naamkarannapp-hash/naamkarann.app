@@ -138,25 +138,25 @@ export default function InspirationsPage() {
                             render={() => (
                                 <FormItem>
                                     <FormControl>
-                                        <>
-                                        <div className="flex flex-wrap gap-3">
-                                            <ChipButton 
-                                                label="Surprise Me"
-                                                isSelected={selectedRoots.includes("Surprise Me")}
-                                                onSelect={() => handleChipSelection("Surprise Me")}
-                                            />
-                                        </div>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                            {visibleRoots.map((root) => (
+                                        <div>
+                                            <div className="flex flex-wrap gap-3">
                                                 <ChipButton 
-                                                    key={root}
-                                                    label={root}
-                                                    isSelected={selectedRoots.includes(root)}
-                                                    onSelect={() => handleChipSelection(root)}
+                                                    label="Surprise Me"
+                                                    isSelected={selectedRoots.includes("Surprise Me")}
+                                                    onSelect={() => handleChipSelection("Surprise Me")}
                                                 />
-                                            ))}
+                                            </div>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                                                {visibleRoots.map((root) => (
+                                                    <ChipButton 
+                                                        key={root}
+                                                        label={root}
+                                                        isSelected={selectedRoots.includes(root)}
+                                                        onSelect={() => handleChipSelection(root)}
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
-                                        </>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -198,37 +198,37 @@ export default function InspirationsPage() {
                                 </div>
                             </div>
                              <FormControl>
-                                <>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                {inspirationsList.map((inspiration) => (
-                                    <ChipButton
-                                    key={inspiration}
-                                    label={inspiration}
-                                    isSelected={selectedInspirations.includes(inspiration)}
-                                    onSelect={() => handleInspirationToggle(inspiration)}
-                                    />
-                                ))}
-                                </div>
-                                {!showMoreInspirations ? (
-                                    <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
-
-                                ) : (
-                                    <div className="mt-4 space-y-3">
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                            {moreInspirationsList.map((item) => (
-                                            <ChipButton
-                                                key={item.name}
-                                                label={item.name}
-                                                isSelected={selectedInspirations.includes(item.name)}
-                                                onSelect={() => handleInspirationToggle(item.name)}
-                                                className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
-                                            />
-                                            ))}
-                                        </div>
-                                        <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
+                                <div>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    {inspirationsList.map((inspiration) => (
+                                        <ChipButton
+                                        key={inspiration}
+                                        label={inspiration}
+                                        isSelected={selectedInspirations.includes(inspiration)}
+                                        onSelect={() => handleInspirationToggle(inspiration)}
+                                        />
+                                    ))}
                                     </div>
-                                )}
-                                </>
+                                    {!showMoreInspirations ? (
+                                        <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
+
+                                    ) : (
+                                        <div className="mt-4 space-y-3">
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                                {moreInspirationsList.map((item) => (
+                                                <ChipButton
+                                                    key={item.name}
+                                                    label={item.name}
+                                                    isSelected={selectedInspirations.includes(item.name)}
+                                                    onSelect={() => handleInspirationToggle(item.name)}
+                                                    className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
+                                                />
+                                                ))}
+                                            </div>
+                                            <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
+                                        </div>
+                                    )}
+                                </div>
                             </FormControl>
                             <FormMessage className="pt-2" />
                         </FormItem>
