@@ -1,23 +1,24 @@
 
 'use server';
 
-import { auth as adminAuth, initializeApp, getApps } from 'firebase-admin';
+import { auth as adminAuth, initializeApp, getApps, App } from 'firebase-admin';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import type { NameFormValues, NameResult } from "./types";
 
-// Initialize firebase-admin
-if (getApps().length === 0) {
-    initializeApp();
+function getAdminApp(): App {
+    if (getApps().length > 0) {
+        return getApps()[0];
+    }
+    return initializeApp();
 }
 
-// This function must be called in a server context where firebase-admin is initialized
 async function getDb() {
-    return getFirestore();
+    return getFirestore(getAdminApp());
 }
 
 async function getCurrentUser(uid: string) {
     try {
-        return await adminAuth().getUser(uid);
+        return await adminAuth(getAdminApp()).getUser(uid);
     } catch (error) {
         console.error("Error fetching user:", error);
         return null;
