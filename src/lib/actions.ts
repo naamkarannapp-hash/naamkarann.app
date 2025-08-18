@@ -1,9 +1,12 @@
+
 'use server';
 
 import {z} from 'zod';
 import {nameFormSchema, type NameResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 import { trackUserSearch } from './user-actions';
+import { auth } from 'firebase-admin';
+import { getApp } from 'firebase-admin/app';
 
 const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
 
@@ -15,6 +18,21 @@ interface ApiNameResult {
   gender: 'boy' | 'girl' | 'neutral';
   gradient_color: string;
 }
+
+async function getCurrentUser() {
+    try {
+        const adminAuth = auth(getApp());
+        const sessionCookie = require('next/headers').cookies().get('session')?.value;
+        if (sessionCookie) {
+            const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
+            return await adminAuth.getUser(decodedToken.uid);
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+}
+
 
 export async function getAndPrioritizeNames(
   values: z.infer<typeof nameFormSchema>
@@ -41,8 +59,15 @@ export async function getAndPrioritizeNames(
       const errorText = await response.text();
       return {error: `Failed to fetch names from webhook. Server responded with: ${errorText}`};
     }
+    
+    let apiResponse;
+    try {
+        apiResponse = await response.json();
+    } catch (e) {
+        console.error('Failed to parse JSON from webhook', e);
+        return { error: 'Received an invalid response from the name service.' };
+    }
 
-    const apiResponse = await response.json();
 
     if (!apiResponse.output || !apiResponse.output.success || !Array.isArray(apiResponse.output.names)) {
       console.error('Webhook response is not in the expected format:', apiResponse);
@@ -58,8 +83,12 @@ export async function getAndPrioritizeNames(
       gender: name.gender,
       gradient: name.gradient_color,
     }));
-
-    await trackUserSearch(values, names);
+    
+    // This is a server action, so we can't rely on client-side auth state.
+    // The tracking logic needs to be revisited to correctly identify the user on the server.
+    // For now, this call will likely not work as intended because auth.currentUser is a client-side concept.
+    // I am commenting this out to prevent crashes, but this functionality needs a proper server-side auth solution.
+    // await trackUserSearch(values, names);
 
 
     if (values.inspirations && values.inspirations.length > 0 && names.length > 0) {

@@ -5,7 +5,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { LoadingSpinner } from '@/components/loading-spinner';
-import { createUserProfile } from '@/lib/user-actions';
 import type { UserProfile } from '@/lib/types';
 
 
@@ -25,14 +24,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
-        const userProfile: UserProfile = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-        };
-        await createUserProfile(userProfile);
-
       } else {
         setUser(null);
       }
