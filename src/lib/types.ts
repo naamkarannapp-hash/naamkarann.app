@@ -1,6 +1,7 @@
+
 import { z } from "zod";
 
-export const nameFormSchema = z.object({
+const baseNameFormSchema = z.object({
   gender: z.enum(["Boy", "Girl", "Neutral"]).optional(),
   regionalRoots: z.array(z.string()).optional(),
   startingLetters: z.string().max(3, "Only up to 3 characters are allowed.").optional(),
@@ -10,7 +11,9 @@ export const nameFormSchema = z.object({
   matchSibling: z.boolean().optional(),
   siblingName: z.string().optional(),
   inspirations: z.array(z.string()).max(5, "You can select a maximum of 5 vibes.").optional(),
-}).superRefine((data, ctx) => {
+});
+
+export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
   if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -27,8 +30,7 @@ export const nameFormSchema = z.object({
   }
 });
 
-
-export const personalizePageSchema = nameFormSchema.pick({
+export const personalizePageSchema = baseNameFormSchema.pick({
     gender: true,
     startingLetters: true,
     blendParents: true,
@@ -36,7 +38,23 @@ export const personalizePageSchema = nameFormSchema.pick({
     parent2Name: true,
     matchSibling: true,
     siblingName: true,
+}).superRefine((data, ctx) => {
+    if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "First parent's name is required.",
+        path: ["parent1Name"],
+      });
+    }
+    if (data.matchSibling && (!data.siblingName || data.siblingName.trim() === '')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Sibling's name is required.",
+        path: ["siblingName"],
+      });
+    }
 });
+
 
 export type NameFormValues = z.infer<typeof nameFormSchema>;
 
