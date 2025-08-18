@@ -39,9 +39,7 @@ export function Login({ isOpen, onOpenChange }: LoginProps) {
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
-      if ((error as AuthError).code !== 'auth/popup-closed-by-user') {
         console.error("Error signing in with Google: ", error);
-      }
     }
   };
 
