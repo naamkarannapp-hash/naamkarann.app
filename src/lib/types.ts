@@ -62,6 +62,7 @@ export interface NameResult {
   id: string;
   name: string;
   meaning: string;
+  pronunciation: string;
   origin: string;
   category: string;
   gender: string;

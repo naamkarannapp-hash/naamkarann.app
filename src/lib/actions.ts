@@ -10,6 +10,7 @@ const WEBHOOK_URL = process.env.WEBHOOK_URL;
 interface ApiNameResult {
   name: string;
   meaning: string;
+  pronunciation: string;
   origin: string;
   category_tag: string;
   gender: 'boy' | 'girl' | 'neutral';
@@ -64,6 +65,7 @@ export async function getAndPrioritizeNames(
       id: `${name.name}-${index}`,
       name: name.name,
       meaning: name.meaning,
+      pronunciation: name.pronunciation,
       origin: name.origin,
       category: name.category_tag,
       gender: name.gender,

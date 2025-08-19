@@ -41,7 +41,8 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
                 <Volume2 className="h-4 w-4 text-white" />
             </Button>
         </div>
-        <p className="mt-2 text-lg italic opacity-90" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.meaning}</p>
+        <p className="mt-1 text-xl opacity-80" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.pronunciation}</p>
+        <p className="mt-4 text-lg italic opacity-90" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.meaning}</p>
         
         <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Badge variant="secondary" className="capitalize bg-white/20 border-none">{name.origin}</Badge>
