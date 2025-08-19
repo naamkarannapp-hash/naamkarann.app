@@ -4,9 +4,6 @@
 import {z} from 'zod';
 import {nameFormSchema, type NameResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
-import { trackUserSearch } from './user-actions';
-import { adminAuth } from './firebase/admin';
-import { cookies } from 'next/headers';
 
 const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
 
@@ -18,22 +15,6 @@ interface ApiNameResult {
   gender: 'boy' | 'girl' | 'neutral';
   gradient_color: string;
 }
-
-async function getCurrentUser() {
-    try {
-        const sessionCookie = cookies().get('session')?.value;
-        if (sessionCookie) {
-            const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
-            return await adminAuth.getUser(decodedToken.uid);
-        }
-        return null;
-    } catch (error) {
-        // This is expected if the cookie is expired or invalid.
-        // We can safely ignore this error and proceed as an unauthenticated user.
-        return null;
-    }
-}
-
 
 export async function getAndPrioritizeNames(
   values: z.infer<typeof nameFormSchema>
@@ -85,12 +66,6 @@ export async function getAndPrioritizeNames(
       gradient: name.gradient_color,
     }));
     
-    const user = await getCurrentUser();
-    if (user) {
-        await trackUserSearch(values, names, user.uid);
-    }
-
-
     if (values.inspirations && values.inspirations.length > 0 && names.length > 0) {
       try {
         const nameStrings = names.map(n => n.name);

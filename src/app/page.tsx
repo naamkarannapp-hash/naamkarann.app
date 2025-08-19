@@ -3,23 +3,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, LogOut } from "lucide-react";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
-import { useAuth } from '@/context/auth-context';
-import { Login } from '@/components/login';
-import { useRouter } from 'next/navigation';
-import { auth } from '@/lib/firebase/client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
 
 const namesByTradition = {
   "Hindu": [ "Aaranya", "Tejas", "Mandara", "Varnika", "Sarasangi", "Chandrakant", "Gitisha", "Nilay", "Dhruv", "Pushkar" ],
@@ -119,68 +105,8 @@ const AnimatedName = () => {
 
 
 export default function Home() {
-  const { user } = useAuth();
-  const router = useRouter();
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  
-  const handleGetStartedClick = () => {
-    if (user) {
-      router.push("/form/personalize");
-    } else {
-      setIsLoginOpen(true);
-    }
-  };
-
-  const handleLogout = async () => {
-    await auth.signOut();
-  };
-  
-  const getInitials = () => {
-    if (!user) return '';
-    const name = user.displayName;
-    const email = user.email;
-
-    if (name) {
-      return name.charAt(0).toUpperCase();
-    }
-    if (email) {
-      return email.charAt(0).toUpperCase();
-    }
-    return 'U';
-  };
-
-
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-       <header className="absolute top-0 right-0 p-4">
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={user.photoURL ?? undefined} alt={user.displayName ?? 'User'} />
-                  <AvatarFallback>{getInitials()}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.displayName}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : null}
-      </header>
       <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12">
           <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
           <div className="relative my-4 md:my-6">
@@ -215,14 +141,14 @@ export default function Home() {
           </div>
 
            <div className="w-full max-w-md mt-8">
+            <Link href="/form/personalize" passHref>
               <Button
-                  onClick={handleGetStartedClick}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
               >
                   Get Started
               </Button>
+            </Link>
           </div>
-          <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
       </main>
       
        <style jsx>{`
