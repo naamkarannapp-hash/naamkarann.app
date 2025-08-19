@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { NameResult } from "@/lib/types";
@@ -37,7 +38,7 @@ export function NameCard({ name, onSave, isSaved }: NameCardProps) {
        <div className="flex-grow flex flex-col justify-center items-center text-center z-10">
         <div className="relative">
             <h2 className="font-headline text-6xl font-bold tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{name.name}</h2>
-            <Button variant="ghost" size="icon" className="absolute -top-1 -right-8 bg-white/20 hover:bg-white/30 rounded-full h-8 w-8">
+            <Button variant="ghost" size="icon" className="absolute -top-1 -right-12 bg-white/20 hover:bg-white/30 rounded-full h-8 w-8">
                 <Volume2 className="h-4 w-4 text-white" />
             </Button>
         </div>
