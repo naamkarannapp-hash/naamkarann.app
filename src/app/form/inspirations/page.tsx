@@ -89,10 +89,12 @@ export default function InspirationsPage() {
       data.regionalRoots = [];
     }
     const finalFormValues = { ...state.formValues, ...data };
-    setState({ formValues: finalFormValues, isLoading: true });
     
+    // Set loading state and navigate immediately
+    setState({ formValues: finalFormValues, isLoading: true });
     router.push('/results');
 
+    // Fetch and process names in the background
     const result = await getAndPrioritizeNames(finalFormValues);
     
     if ("error" in result) {
@@ -101,9 +103,12 @@ export default function InspirationsPage() {
         title: "An error occurred",
         description: result.error,
       });
+      // Set loading to false and clear results on error
       setState({ isLoading: false, nameResults: [], error: result.error });
+      // Go back to the form if there was an error
       router.back();
     } else {
+      // Update state with new names and set loading to false
       setState({ nameResults: result.names, isLoading: false, error: null });
     }
   }
