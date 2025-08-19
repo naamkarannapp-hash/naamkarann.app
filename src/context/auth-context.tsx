@@ -18,22 +18,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showLoader, setShowLoader] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hasMounted) return;
-
-    const timer = setTimeout(() => {
-      if (loading) {
-        setShowLoader(true);
-      }
-    }, 500); // Only show loader if auth takes more than 500ms
-
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
@@ -41,26 +27,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
       }
       setLoading(false);
-      setShowLoader(false); 
     });
 
-    return () => {
-      clearTimeout(timer);
-      unsubscribe();
-    };
-  }, [hasMounted, loading]);
-
-  if (!hasMounted) {
-    return null;
-  }
+    return () => unsubscribe();
+  }, []);
   
-  if (showLoader) {
-    return <LoadingSpinner />;
-  }
-  
-  // Render children immediately if loading is finished, to avoid blank screen
   if (loading) {
-    return null; // Render nothing initially, wait for loader logic
+    return null;
   }
 
   return (
