@@ -5,7 +5,7 @@ import {z} from 'zod';
 import {nameFormSchema, type NameResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 
-const WEBHOOK_URL = 'https://n8n-vabues.onrender.com/webhook/getnames';
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 interface ApiNameResult {
   name: string;
@@ -19,6 +19,10 @@ interface ApiNameResult {
 export async function getAndPrioritizeNames(
   values: z.infer<typeof nameFormSchema>
 ): Promise<{names: NameResult[]} | {error: string}> {
+  if (!WEBHOOK_URL) {
+    console.error('WEBHOOK_URL is not set in environment variables');
+    return { error: 'Application is not configured correctly. Missing WEBHOOK_URL.' };
+  }
   try {
     // Transform the array values into comma-separated strings for the API
     const apiValues = {
