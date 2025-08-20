@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center text-white indian-gradient">
-          <div className="flex-grow flex flex-col items-center justify-center p-4 pt-8 md:pt-12">
+          <div className="flex-grow flex flex-col items-center justify-center p-4">
             <h2 className="text-4xl font-bold pb-8">Naamkarann<sup className="text-sm">&trade;</sup></h2>
             <div className="relative my-4 md:my-6">
                 <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
@@ -97,7 +97,7 @@ export default function Home() {
                     </Button>
                 </Link>
                 <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
-                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-white/10 rounded-lg border border-white/20 text-muted-foreground">
+                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-white/10 rounded-lg border border-white/20">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
@@ -105,11 +105,11 @@ export default function Home() {
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
                     </div>
-                    <span>4.8</span>
+                    <span className="text-white/80">4.8</span>
                     <span className="text-white/40" aria-hidden="true">•</span>
-                    <span>2,300+ names chosen</span>
+                    <span className="text-white/80">2,300+ names chosen</span>
                     <span className="text-white/40" aria-hidden="true">•</span>
-                    <span>Linguist-verified</span>
+                    <span className="text-white/80">Linguist-verified</span>
                 </div>
             </div>
           </div>
