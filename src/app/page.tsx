@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Link from 'next/link';
 
 const namesByTradition = {
@@ -21,7 +20,7 @@ const allNames = Object.values(namesByTradition).flat();
 const baseWord = "Naamkarann";
 
 const AnimatedName = () => {
-    const [displayedName, setDisplayedName] = useState(baseWord.split(''));
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
@@ -31,75 +30,40 @@ const AnimatedName = () => {
     useEffect(() => {
         if (!hasMounted) return;
 
-        let nameIndex = 0;
-        let intervalId: NodeJS.Timeout;
-
-        const animate = () => {
-            const targetName = allNames[nameIndex % allNames.length];
-            const maxLength = Math.max(baseWord.length, targetName.length);
-            let currentChars = baseWord.split('');
-
-            // Transition to target name
-            for (let i = 0; i < maxLength; i++) {
-                setTimeout(() => {
-                    if (i < targetName.length) {
-                        currentChars[i] = targetName[i];
-                    } else {
-                        currentChars[i] = ' '; // Use space for empty char
-                    }
-                    setDisplayedName([...currentChars.slice(0, targetName.length)]);
-                }, i * 100);
-            }
-            
-            // Hold the name for a bit
-            setTimeout(() => {
-                // Transition back to base word
-                for (let i = 0; i < baseWord.length; i++) {
-                    setTimeout(() => {
-                       currentChars[i] = baseWord[i];
-                       if (i >= targetName.length) {
-                         currentChars[i] = baseWord[i];
-                       }
-                       setDisplayedName([...currentChars.slice(0, baseWord.length)]);
-                    }, i * 100);
-                }
-            }, targetName.length * 100 + 2000);
-
-            nameIndex++;
-        };
-        
-        // Initial animation
-        setTimeout(animate, 1000);
-        // Subsequent animations
-        intervalId = setInterval(animate, baseWord.length * 100 + 3000);
-
+        const intervalId = setInterval(() => {
+            setCurrentIndex(prevIndex => (prevIndex + 1) % (allNames.length + 1));
+        }, 3000); 
 
         return () => clearInterval(intervalId);
     }, [hasMounted]);
 
-    const isBaseWord = displayedName.join('') === baseWord;
-
     if (!hasMounted) {
       return (
-        <p className="font-headline text-4xl text-primary font-bold transition-colors duration-500">
-            {baseWord}
+        <p className="font-headline text-4xl text-amber-300 font-bold transition-colors duration-500">
+            {allNames[0]}
         </p>
       );
     }
 
+    const isBaseWord = currentIndex === allNames.length;
+    const nameToShow = isBaseWord ? baseWord : allNames[currentIndex];
+
     return (
-        <p className={cn(
-            "font-headline text-4xl font-bold transition-colors duration-500",
-            isBaseWord ? 'text-white' : 'text-amber-300'
-          )} 
-          aria-live="polite"
-        >
-            {displayedName.map((char, index) => (
-                <span key={index} className="inline-block animate-flip-in">
-                    {char === ' ' ? ' ' : char}
-                </span>
-            ))}
-        </p>
+        <div className="relative h-12 w-64 overflow-hidden">
+            <div
+                className="absolute left-0 top-0 w-full transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
+            >
+                {allNames.map((name) => (
+                    <p key={name} className="font-headline text-4xl text-amber-300 font-bold h-12 flex items-center justify-center">
+                        {name}
+                    </p>
+                ))}
+                 <p key={baseWord} className="font-headline text-4xl text-white font-bold h-12 flex items-center justify-center">
+                    {baseWord}
+                </p>
+            </div>
+        </div>
     );
 };
 
@@ -165,19 +129,6 @@ export default function Home() {
         }
         .animation-delay-2000 {
             animation-delay: 2s;
-        }
-        @keyframes flip-in {
-            0% {
-                transform: rotateX(90deg);
-                opacity: 0;
-            }
-            100% {
-                transform: rotateX(0deg);
-                opacity: 1;
-            }
-        }
-        .animate-flip-in {
-            animation: flip-in 0.5s ease-out;
         }
        `}</style>
     </div>
