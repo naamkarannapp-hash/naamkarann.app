@@ -95,7 +95,6 @@ body {
 @layer utilities {
   .pattern-background {
     background-color: #F8F9FE;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'%3E%3Crect fill='%23d9e3ff' width='80' height='80'%3E%3C/rect%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='%23d9e3ff' cx='40' cy='40' r='60'/%3E%3Ccircle fill='%23e0e9fa' cx='0' cy='0' r='50'/%3E%3Ccircle fill='%23e8eef6' cx='80' cy='0' r='50'/%3E%3Ccircle fill='%23f0f3f2' cx='0' cy='80' r='50'/%3E%3Ccircle fill='%23f7f8ee' cx='80' cy='80' r='50'/%3E%3Ccircle fill='%23ffffff' cx='40' cy='40' r='40'/%3E%3Ccircle fill='%23f7f8ee' cx='20' cy='20' r='30'/%3E%3Ccircle fill='%23f0f3f2' cx='60' cy='20' r='30'/%3E%3Ccircle fill='%23e8eef6' cx='20' cy='60' r='30'/%3E%3Ccircle fill='%23e0e9fa' cx='60' cy='60' r='30'/%3E%3Ccircle fill='%23d9e3ff' cx='40' cy='40' r='20'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 80px 80px;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d9e3ff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 }
