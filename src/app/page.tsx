@@ -90,7 +90,7 @@ const AnimatedName = () => {
     return (
         <p className={cn(
             "font-headline text-4xl font-bold transition-colors duration-500",
-            isBaseWord ? 'text-primary' : 'text-accent'
+            isBaseWord ? 'text-white' : 'text-amber-300'
           )} 
           aria-live="polite"
         >
@@ -106,9 +106,9 @@ const AnimatedName = () => {
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12">
-          <h2 className="text-xl font-bold text-primary">Naamkarann</h2>
+    <div className="flex flex-col min-h-screen bg-background text-foreground indian-gradient">
+      <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12 text-white">
+          <h2 className="text-xl font-bold">Naamkarann</h2>
           <div className="relative my-4 md:my-6">
               <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight">
                   The perfect name <br /> awaits.
@@ -116,17 +116,17 @@ export default function Home() {
               <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
               <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
           </div>
-          <p className="mt-2 text-base text-foreground/70 max-w-sm">
+          <p className="mt-2 text-base text-white/80 max-w-sm">
             Thousands of meaningful names, one swipe at a time.
           </p>
           
           <div className="my-8 flex flex-col items-center h-20">
               <AnimatedName />
-              <p className="text-sm text-muted-foreground mt-1">Perfect baby names</p>
+              <p className="text-sm text-white/70 mt-1">Perfect baby names</p>
           </div>
 
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground my-2 p-3 bg-card rounded-lg border">
-              <div className="flex items-center text-yellow-500" aria-label="4.8 out of 5 stars">
+          <div className="flex items-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
+              <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                   <Star className="w-4 h-4 fill-current" />
                   <Star className="w-4 h-4 fill-current" />
                   <Star className="w-4 h-4 fill-current" />
@@ -134,16 +134,16 @@ export default function Home() {
                   <Star className="w-4 h-4 fill-current" />
               </div>
               <span>4.8</span>
-              <span className="text-muted-foreground/50" aria-hidden="true">•</span>
+              <span className="text-white/40" aria-hidden="true">•</span>
               <span>2,300+ names chosen</span>
-              <span className="text-muted-foreground/50" aria-hidden="true">•</span>
+              <span className="text-white/40" aria-hidden="true">•</span>
               <span>Linguist-verified</span>
           </div>
 
            <div className="w-full max-w-md mt-8">
             <Link href="/form/personalize" passHref>
               <Button
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
+                  className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
               >
                   Get Started
               </Button>
