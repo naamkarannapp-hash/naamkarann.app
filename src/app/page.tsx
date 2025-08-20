@@ -87,8 +87,11 @@ export default function Home() {
                 <AnimatedName />
             </div>
 
-            <div className="w-full">
-              <div className="flex items-center justify-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
+          </div>
+           {/* Sticky CTA for Mobile */}
+          <div className="sticky bottom-0 w-full md:static bg-gradient-to-t from-background via-background/80 to-transparent pt-4 pb-4 md:bg-none md:p-0">
+             <div className="w-full max-w-md mx-auto px-4 md:px-0">
+               <div className="flex items-center justify-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
                   <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                       <Star className="w-4 h-4 fill-current" />
                       <Star className="w-4 h-4 fill-current" />
@@ -102,14 +105,9 @@ export default function Home() {
                   <span className="text-white/40" aria-hidden="true">•</span>
                   <span>Linguist-verified</span>
               </div>
-            </div>
-          </div>
-           {/* Sticky CTA for Mobile */}
-          <div className="sticky bottom-0 w-full md:static bg-gradient-to-t from-background via-background/80 to-transparent pt-4 pb-4 md:bg-none md:p-0">
-             <div className="w-full max-w-md mx-auto px-4 md:px-0">
               <Link href="/form/personalize" passHref>
                 <Button
-                    className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
+                    className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg mt-2"
                 >
                     Get Started
                 </Button>
