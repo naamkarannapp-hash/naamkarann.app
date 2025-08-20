@@ -125,7 +125,7 @@ export default function Home() {
               <p className="text-sm text-white/70 mt-1">Perfect baby names</p>
           </div>
 
-          <div className="mt-auto flex flex-col items-center w-full">
+          <div className="flex flex-col items-center w-full mt-16">
             <div className="flex items-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
                 <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                     <Star className="w-4 h-4 fill-current" />
