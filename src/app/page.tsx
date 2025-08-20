@@ -82,7 +82,7 @@ export default function Home() {
             Thousands of meaningful names, one swipe at a time.
           </p>
           
-          <div className="my-8 flex-grow flex items-center justify-center">
+          <div className="my-8 flex items-center justify-center">
               <AnimatedName />
           </div>
 
