@@ -93,12 +93,12 @@ export default function Home() {
              <div className="w-full max-w-md mx-auto px-4 md:px-0">
                 <Link href="/form/personalize" passHref>
                     <Button
-                        className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg mt-2"
+                        className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
                     >
                         Start Naming
                     </Button>
                 </Link>
-                <p className="text-xs text-white/70 mt-2 md:text-muted-foreground">See your next favorite names—no signup needed.</p>
+                <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
                 <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground my-2 p-3 bg-white/10 rounded-lg border border-white/20">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
