@@ -4,7 +4,6 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
@@ -21,6 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { ClientInput } from "@/components/client-input";
+import { Input } from "@/components/ui/input";
 
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
@@ -106,7 +107,7 @@ export default function PersonalizePage() {
                              <p className="text-sm text-muted-foreground whitespace-nowrap">(1-3 characters, Optional)</p>
                         </div>
                         <FormControl>
-                            <Input 
+                            <ClientInput
                                 id="startingLetters" 
                                 placeholder="e.g., A, Ra" {...field} 
                                 className="mt-0 w-28"
