@@ -69,52 +69,54 @@ const AnimatedName = () => {
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12 text-white indian-gradient">
-          <h2 className="text-4xl font-bold">Naamkarann<sup className="text-sm">&trade;</sup></h2>
-          <div className="relative my-4 md:my-6">
-              <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
-                  The perfect name <br /> awaits.
-              </h1>
-              <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
-              <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
-          </div>
-          <p className="mt-2 text-base text-white/80 max-w-sm">
-            Thousands of meaningful names, one swipe at a time.
-          </p>
-          
-          <div className="my-8 flex items-center justify-center">
-              <AnimatedName />
-          </div>
-
-          <div className="w-full">
-            <div className="flex items-center justify-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
-                <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                </div>
-                <span>4.8</span>
-                <span className="text-white/40" aria-hidden="true">•</span>
-                <span>2,300+ names chosen</span>
-                <span className="text-white/40" aria-hidden="true">•</span>
-                <span>Linguist-verified</span>
+      <main className="flex flex-col items-center text-center text-white indian-gradient">
+          <div className="flex-grow flex flex-col items-center justify-center p-4 pt-8 md:pt-12">
+            <h2 className="text-4xl font-bold">Naamkarann<sup className="text-sm">&trade;</sup></h2>
+            <div className="relative my-4 md:my-6">
+                <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                    The perfect name <br /> awaits.
+                </h1>
+                <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
+                <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
+            </div>
+            <p className="mt-2 text-base text-white/80 max-w-sm">
+              Thousands of meaningful names, one swipe at a time.
+            </p>
+            
+            <div className="my-8 flex items-center justify-center">
+                <AnimatedName />
             </div>
 
-            <div className="w-full max-w-md mt-8 mx-auto">
-              <Link href="/form/personalize" passHref>
-                <Button
-                    className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
-                >
-                    Get Started
-                </Button>
-              </Link>
+            <div className="w-full">
+              <div className="flex items-center justify-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
+                  <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                      <Star className="w-4 h-4 fill-current" />
+                  </div>
+                  <span>4.8</span>
+                  <span className="text-white/40" aria-hidden="true">•</span>
+                  <span>2,300+ names chosen</span>
+                  <span className="text-white/40" aria-hidden="true">•</span>
+                  <span>Linguist-verified</span>
+              </div>
+
+              <div className="w-full max-w-md mt-8 mx-auto">
+                <Link href="/form/personalize" passHref>
+                  <Button
+                      className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
+                  >
+                      Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
       </main>
       
-       <footer className="w-full p-4 text-center text-foreground">
+       <footer className="w-full p-4 text-center text-foreground bg-background">
         <div className="flex justify-center space-x-4 text-sm">
           <Link href="/legal/privacy-policy" className="hover:underline">Privacy Policy</Link>
           <Link href="/legal/terms-of-service" className="hover:underline">Terms of Service</Link>
