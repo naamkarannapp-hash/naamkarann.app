@@ -5,6 +5,8 @@
 
 body {
   font-family: "PT Sans", sans-serif;
+  min-height: calc(var(--vh, 1vh) * 100);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @layer base {
@@ -42,6 +44,7 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --vh: 1vh;
   }
   .dark {
     --background: 222 84% 5%;
