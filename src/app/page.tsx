@@ -96,7 +96,7 @@ const AnimatedName = () => {
         >
             {displayedName.map((char, index) => (
                 <span key={index} className="inline-block animate-flip-in">
-                    {char === ' ' ? '\u00A0' : char}
+                    {char === ' ' ? ' ' : char}
                 </span>
             ))}
         </p>
@@ -108,7 +108,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground indian-gradient">
       <main className="flex-1 flex flex-col items-center text-center p-4 pt-8 md:pt-12 text-white">
-          <h2 className="text-xl font-bold">Naamkarann</h2>
+          <h2 className="text-2xl font-bold">Naamkarann<sup className="text-xs">&trade;</sup></h2>
           <div className="relative my-4 md:my-6">
               <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight">
                   The perfect name <br /> awaits.
