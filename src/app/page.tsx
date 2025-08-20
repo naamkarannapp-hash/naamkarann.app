@@ -39,13 +39,11 @@ const AnimatedName = () => {
 
     if (!hasMounted) {
       return (
-        <p className="font-headline text-4xl text-amber-300 font-bold transition-colors duration-500" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+        <p className="font-headline text-4xl text-white font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
             {allNames[0]}
         </p>
       );
     }
-    
-    const nameToShow = currentIndex === allNames.length ? baseWord : allNames[currentIndex];
     
     const allDisplayNames = [...allNames, baseWord];
 
@@ -56,7 +54,7 @@ const AnimatedName = () => {
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
                 {allDisplayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-amber-300 font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-white font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
                         {name}
                     </p>
                 ))}
@@ -99,7 +97,7 @@ export default function Home() {
                     </Button>
                 </Link>
                 <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground my-2 p-3 bg-white/10 rounded-lg border border-white/20">
+                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-white/10 rounded-lg border border-white/20 text-muted-foreground">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
