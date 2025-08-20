@@ -69,7 +69,7 @@ const AnimatedName = () => {
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex flex-col items-center text-center text-white indian-gradient">
+      <main className="flex-grow flex flex-col items-center text-center text-white indian-gradient">
           <div className="flex-grow flex flex-col items-center justify-center p-4 pt-8 md:pt-12">
             <h2 className="text-4xl font-bold">Naamkarann<sup className="text-sm">&trade;</sup></h2>
             <div className="relative my-4 md:my-6">
@@ -102,16 +102,19 @@ export default function Home() {
                   <span className="text-white/40" aria-hidden="true">•</span>
                   <span>Linguist-verified</span>
               </div>
-
-              <div className="w-full max-w-md mt-8 mx-auto">
-                <Link href="/form/personalize" passHref>
-                  <Button
-                      className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
-                  >
-                      Get Started
-                  </Button>
-                </Link>
-              </div>
+            </div>
+          </div>
+           {/* Sticky CTA for Mobile */}
+          <div className="sticky bottom-0 w-full md:static bg-gradient-to-t from-background via-background/80 to-transparent pt-4 pb-4 md:bg-none md:p-0">
+             <div className="w-full max-w-md mx-auto px-4 md:px-0">
+              <Link href="/form/personalize" passHref>
+                <Button
+                    className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
+                >
+                    Get Started
+                </Button>
+              </Link>
+              <p className="text-xs text-white/70 mt-2 md:text-muted-foreground">See your next favorite names—no signup needed.</p>
             </div>
           </div>
       </main>
