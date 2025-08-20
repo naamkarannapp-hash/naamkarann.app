@@ -44,24 +44,22 @@ const AnimatedName = () => {
         </p>
       );
     }
-
-    const isBaseWord = currentIndex === allNames.length;
-    const nameToShow = isBaseWord ? baseWord : allNames[currentIndex];
+    
+    const nameToShow = currentIndex === allNames.length ? baseWord : allNames[currentIndex];
+    
+    const allDisplayNames = [...allNames, baseWord];
 
     return (
         <div className="relative h-12 w-64 overflow-hidden">
             <div
-                className="absolute left-0 top-0 w-full transition-transform duration-500 ease-in-out"
+                className="absolute left-0 w-full transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
-                {allNames.map((name) => (
-                    <p key={name} className="font-headline text-4xl text-amber-300 font-bold h-12 flex items-center justify-center">
+                {allDisplayNames.map((name, index) => (
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-amber-300 font-bold h-12 flex items-center justify-center">
                         {name}
                     </p>
                 ))}
-                 <p key={baseWord} className="font-headline text-4xl text-white font-bold h-12 flex items-center justify-center">
-                    {baseWord}
-                </p>
             </div>
         </div>
     );
@@ -84,9 +82,8 @@ export default function Home() {
             Thousands of meaningful names, one swipe at a time.
           </p>
           
-          <div className="my-8 flex flex-col items-center h-20">
+          <div className="my-8 flex-grow flex items-center justify-center">
               <AnimatedName />
-              <p className="text-sm text-white/70 mt-1">Perfect baby names</p>
           </div>
 
           <div className="flex flex-col items-center w-full mt-16">
