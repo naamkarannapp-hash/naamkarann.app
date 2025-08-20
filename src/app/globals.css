@@ -89,6 +89,6 @@ body {
 
 @layer utilities {
   .indian-gradient {
-    @apply bg-gradient-to-b from-[#1A52E1] via-[#9C27B0] to-background;
+    @apply bg-gradient-to-b from-blue-200 via-pink-200 to-background;
   }
 }
