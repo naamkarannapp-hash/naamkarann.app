@@ -98,6 +98,7 @@ export default function Home() {
                         Start Naming
                     </Button>
                 </Link>
+                <p className="text-xs text-white/70 mt-2 md:text-muted-foreground">See your next favorite names—no signup needed.</p>
                 <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground my-2 p-3 bg-white/10 rounded-lg border border-white/20">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
@@ -112,7 +113,6 @@ export default function Home() {
                     <span className="text-white/40" aria-hidden="true">•</span>
                     <span>Linguist-verified</span>
                 </div>
-                <p className="text-xs text-white/70 mt-2 md:text-muted-foreground">See your next favorite names—no signup needed.</p>
             </div>
           </div>
       </main>
