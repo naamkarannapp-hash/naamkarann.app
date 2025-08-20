@@ -86,8 +86,8 @@ export default function Home() {
               <AnimatedName />
           </div>
 
-          <div className="flex flex-col items-center w-full mt-16">
-            <div className="flex items-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
+          <div className="w-full mt-16">
+            <div className="flex items-center justify-center space-x-2 text-sm text-white/80 my-2 p-3 bg-white/10 rounded-lg border border-white/20">
                 <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                     <Star className="w-4 h-4 fill-current" />
                     <Star className="w-4 h-4 fill-current" />
@@ -102,7 +102,7 @@ export default function Home() {
                 <span>Linguist-verified</span>
             </div>
 
-            <div className="w-full max-w-md mt-8">
+            <div className="w-full max-w-md mt-8 mx-auto">
               <Link href="/form/personalize" passHref>
                 <Button
                     className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
@@ -114,6 +114,13 @@ export default function Home() {
           </div>
       </main>
       
+       <footer className="w-full p-4 text-center text-white">
+        <div className="flex justify-center space-x-4 text-sm">
+          <Link href="/legal/privacy-policy" className="hover:underline">Privacy Policy</Link>
+          <Link href="/legal/terms-of-service" className="hover:underline">Terms of Service</Link>
+        </div>
+      </footer>
+
        <style jsx>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
