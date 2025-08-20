@@ -93,7 +93,7 @@ export default function Home() {
              <div className="w-full max-w-md mx-auto px-4 md:px-0">
                 <Link href="/form/personalize" passHref>
                     <Button
-                        className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
                     >
                         Start Naming
                     </Button>
