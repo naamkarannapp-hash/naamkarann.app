@@ -109,7 +109,7 @@ export default function Home() {
                 <Button
                     className="w-full bg-white hover:bg-white/90 text-primary font-bold py-6 text-lg rounded-xl shadow-lg mt-2"
                 >
-                    Get Started
+                    Start Naming
                 </Button>
               </Link>
               <p className="text-xs text-white/70 mt-2 md:text-muted-foreground">See your next favorite names—no signup needed.</p>
