@@ -39,7 +39,7 @@ const AnimatedName = () => {
 
     if (!hasMounted) {
       return (
-        <p className="font-headline text-4xl text-white font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+        <p className="font-headline text-4xl text-primary font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             {allNames[0]}
         </p>
       );
@@ -54,7 +54,7 @@ const AnimatedName = () => {
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
                 {allDisplayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-white font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-primary font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                         {name}
                     </p>
                 ))}
@@ -67,17 +67,17 @@ const AnimatedName = () => {
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <main className="flex-grow flex flex-col items-center text-center text-white indian-gradient">
+      <main className="flex-grow flex flex-col items-center text-center pattern-background">
           <div className="flex-grow flex flex-col items-center justify-center p-4">
-            <h2 className="text-4xl font-bold pb-8">Naamkarann<sup className="text-sm">&trade;</sup></h2>
-            <div className="relative my-4 md:my-6">
-                <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+            <h2 className="text-4xl font-bold pb-8 text-foreground">Naamkarann<sup className="text-sm">&trade;</sup></h2>
+            <div className="relative">
+                <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     The perfect baby name awaits.
                 </h1>
                 <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
                 <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
             </div>
-            <p className="mt-2 text-base text-white/80 max-w-sm">
+            <p className="mt-2 text-base text-foreground/70 max-w-sm">
               Thousands of meaningful baby names, one swipe at a time.
             </p>
             
@@ -97,7 +97,7 @@ export default function Home() {
                     </Button>
                 </Link>
                 <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
-                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-white/10 rounded-lg border border-white/20">
+                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-foreground/5 rounded-lg border border-foreground/10">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
@@ -105,11 +105,11 @@ export default function Home() {
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
                     </div>
-                    <span className="text-white/80">4.8</span>
-                    <span className="text-white/40" aria-hidden="true">•</span>
-                    <span className="text-white/80">2,300+ names chosen</span>
-                    <span className="text-white/40" aria-hidden="true">•</span>
-                    <span className="text-white/80">Linguist-verified</span>
+                    <span className="text-foreground/80">4.8</span>
+                    <span className="text-foreground/40" aria-hidden="true">•</span>
+                    <span className="text-foreground/80">2,300+ names chosen</span>
+                    <span className="text-foreground/40" aria-hidden="true">•</span>
+                    <span className="text-foreground/80">Linguist-verified</span>
                 </div>
             </div>
           </div>
