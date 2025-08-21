@@ -4,7 +4,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useAppState } from "@/context/app-state-context";
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
