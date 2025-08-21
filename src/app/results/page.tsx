@@ -25,10 +25,12 @@ export default function ResultsPage() {
   const [count, setCount] = React.useState(0);
   const router = useRouter();
   const { toast } = useToast();
+  const hasFetched = React.useRef(false);
 
   React.useEffect(() => {
-    // Only fetch names if we are in the loading state and have no results yet.
-    if (isLoading && nameResults.length === 0) {
+    // Only fetch names if we are in the loading state, have no results yet, and haven't already fetched.
+    if (isLoading && nameResults.length === 0 && !hasFetched.current) {
+      hasFetched.current = true;
       const fetchNames = async () => {
         const result = await getAndPrioritizeNames(formValues);
 
