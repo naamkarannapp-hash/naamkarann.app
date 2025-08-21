@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { useAppState } from "@/context/app-state-context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
@@ -13,13 +14,41 @@ import type { NameResult } from "@/lib/types";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import Link from 'next/link';
 import { cn } from "@/lib/utils";
+import { getAndPrioritizeNames } from "@/lib/actions";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
-  const { isLoading, nameResults, savedNames } = state;
+  const { isLoading, nameResults, savedNames, formValues } = state;
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  React.useEffect(() => {
+    // Only fetch names if we are in the loading state and have no results yet.
+    if (isLoading && nameResults.length === 0) {
+      const fetchNames = async () => {
+        const result = await getAndPrioritizeNames(formValues);
+
+        if ("error" in result) {
+          toast({
+            variant: "destructive",
+            title: "An error occurred",
+            description: result.error,
+          });
+          setState({ isLoading: false, nameResults: [], error: result.error });
+          // Go back to the form if there was an error
+          router.back();
+        } else {
+          setState({ nameResults: result.names, isLoading: false, error: null });
+        }
+      };
+
+      fetchNames();
+    }
+  }, [isLoading, nameResults.length, formValues, setState, toast, router]);
 
   React.useEffect(() => {
     if (!api) {
@@ -32,7 +61,7 @@ export default function ResultsPage() {
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1)
     })
-  }, [api]);
+  }, [api, nameResults]);
 
 
   const handleSaveName = (name: NameResult) => {

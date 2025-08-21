@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +11,6 @@ import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 import { nameFormSchema } from "@/lib/types";
-import { getAndPrioritizeNames } from "@/lib/actions";
-import { useToast } from "@/hooks/use-toast";
 import { Lightbulb, BookHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
@@ -36,7 +34,6 @@ const moreInspirationsList = [
 export default function InspirationsPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
-  const { toast } = useToast();
   
   const [showMoreRoots, setShowMoreRoots] = useState(false);
   const [customRoot, setCustomRoot] = useState("");
@@ -91,26 +88,8 @@ export default function InspirationsPage() {
     const finalFormValues = { ...state.formValues, ...data };
     
     // Set loading state and navigate immediately
-    setState({ formValues: finalFormValues, isLoading: true });
+    setState({ formValues: finalFormValues, isLoading: true, nameResults: [], error: null });
     router.push('/results');
-
-    // Fetch and process names in the background
-    const result = await getAndPrioritizeNames(finalFormValues);
-    
-    if ("error" in result) {
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: result.error,
-      });
-      // Set loading to false and clear results on error
-      setState({ isLoading: false, nameResults: [], error: result.error });
-      // Go back to the form if there was an error
-      router.back();
-    } else {
-      // Update state with new names and set loading to false
-      setState({ nameResults: result.names, isLoading: false, error: null });
-    }
   }
   
   const visibleRoots = showMoreRoots ? allCulturalRoots : allCulturalRoots.slice(0, 6);
