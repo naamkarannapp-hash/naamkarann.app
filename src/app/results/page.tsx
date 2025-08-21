@@ -7,20 +7,16 @@ import { useAppState } from "@/context/app-state-context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Bookmark, X, ArrowLeft } from "lucide-react";
-import type { NameResult } from "@/lib/types";
+import { ArrowLeft } from "lucide-react";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import Link from 'next/link';
-import { cn } from "@/lib/utils";
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
-  const { isLoading, nameResults, savedNames, formValues } = state;
+  const { isLoading, nameResults, formValues } = state;
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -61,57 +57,12 @@ export default function ResultsPage() {
     });
   }, [api, nameResults]);
 
-  const handleSaveName = (name: NameResult) => {
-    setState(prevState => {
-      const isSaved = prevState.savedNames.some(saved => saved.id === name.id);
-      if (isSaved) {
-        return { savedNames: prevState.savedNames.filter(saved => saved.id !== name.id) };
-      } else {
-        return { savedNames: [...prevState.savedNames, name] };
-      }
-    });
-  };
-
-  const isNameSaved = (id: string) => savedNames.some(n => n.id === id);
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pattern-background">
-       <div className="fixed bottom-4 right-4 z-50">
-          <Sheet>
-              <SheetTrigger asChild>
-                  <Button variant="secondary" className="rounded-full shadow-lg h-14 w-14 p-0">
-                      <Bookmark className={cn("h-6 w-6", savedNames.length > 0 && "text-primary fill-primary/20")} />
-                  </Button>
-              </SheetTrigger>
-              <SheetContent>
-                  <SheetHeader>
-                      <SheetTitle>Your Saved Names ({savedNames.length})</SheetTitle>
-                  </SheetHeader>
-                  <div className="mt-4 space-y-4">
-                      {savedNames.length > 0 ? (
-                          savedNames.map(name => (
-                              <Card key={name.id} className="p-4 flex justify-between items-center">
-                                  <div>
-                                      <p className="font-bold">{name.name}</p>
-                                      <p className="text-sm text-muted-foreground">{name.meaning}</p>
-                                  </div>
-                                  <Button variant="ghost" size="icon" onClick={() => handleSaveName(name)}>
-                                      <X className="h-4 w-4"/>
-                                  </Button>
-                              </Card>
-                          ))
-                      ) : (
-                          <p className="text-center text-muted-foreground mt-8">You haven't saved any names yet.</p>
-                      )}
-                  </div>
-              </SheetContent>
-          </Sheet>
-      </div>
-
       <main className="flex-grow flex flex-col justify-center container mx-auto px-4 md:px-8 pb-32">
           {nameResults.length > 0 ? (
             <>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, useState } from 'react';
@@ -6,7 +7,6 @@ import type { NameFormValues, NameResult } from '@/lib/types';
 interface AppState {
   formValues: Partial<NameFormValues>;
   nameResults: NameResult[];
-  savedNames: NameResult[];
   isLoading: boolean;
   error: string | null;
 }
@@ -24,7 +24,6 @@ const defaultState: AppState = {
     matchSibling: false,
   },
   nameResults: [],
-  savedNames: [],
   isLoading: false,
   error: null,
 };
