@@ -82,7 +82,7 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-foreground pattern-background">
       <div className="container mx-auto p-4 md:p-8 flex-grow">
         <header className="relative flex items-center justify-center my-4 h-10">
           <div className="text-center absolute left-1/2 -translate-x-1/2">
