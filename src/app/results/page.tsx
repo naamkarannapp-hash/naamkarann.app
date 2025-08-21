@@ -84,13 +84,13 @@ export default function ResultsPage() {
                   <CarouselNext className="text-primary -right-2 md:-right-4 bg-background/50 border-primary" />
               </Carousel>
               <div className="mt-6 text-center">
-                   <p className="text-xs text-muted-foreground">Swipe left or right to see more names</p>
+                   <p className="text-xs text-muted-foreground">Swipe to browse names</p>
               </div>
             </>
           ) : (
               <div className="text-center my-20">
                   <h2 className="font-headline text-3xl font-bold text-destructive">No Names Found</h2>
-                  <p className="mt-4 text-lg text-foreground/80 max-w-sm mx-auto">We couldn't find any names matching your criteria. Not finding your vibe? Try tweaking preferences!</p>
+                  <p className="mt-4 text-lg text-foreground/80 max-w-sm mx-auto">Not finding your vibe? Try tweaking preferences!</p>
               </div>
           )}
       </main>
@@ -98,7 +98,7 @@ export default function ResultsPage() {
       {nameResults.length > 0 ? (
            <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-sm border-t border-border/20 p-4 z-40">
                 <div className="w-full max-w-md mx-auto text-center">
-                    <p className="text-muted-foreground text-sm mb-2">Not feeling these names?</p>
+                    <p className="text-muted-foreground text-sm mb-2">Want different names?</p>
                     <Link href="/form/personalize" passHref>
                         <Button variant="outline" className="font-bold">
                             <ArrowLeft className="mr-2 h-4 w-4"/>

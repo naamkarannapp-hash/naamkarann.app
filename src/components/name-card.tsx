@@ -22,14 +22,14 @@ export function NameCard({ name }: NameCardProps) {
             <h2 className="font-headline text-6xl font-bold tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{name.name}</h2>
         </div>
         
-        <div className="mt-2 w-1/2">
+        <div className="mt-4 w-1/2">
             <p className="text-base italic opacity-80" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.pronunciation}</p>
             <Separator className="my-2 bg-white/20" />
         </div>
         
-        <p className="mt-2 text-lg opacity-90 max-w-xs" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.meaning}</p>
+        <p className="mt-4 text-lg opacity-90 max-w-xs" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{name.meaning}</p>
         
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
             <Badge variant="secondary" className="capitalize bg-black/10 hover:bg-black/10 text-white/80 border-none font-normal">{name.origin}</Badge>
             {name.category && <Badge variant="secondary" className="capitalize bg-black/10 hover:bg-black/10 text-white/80 border-none font-normal">{name.category}</Badge>}
         </div>
