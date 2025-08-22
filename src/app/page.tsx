@@ -39,7 +39,7 @@ const AnimatedName = () => {
 
     if (!hasMounted) {
       return (
-        <p className="font-headline text-4xl text-primary font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+        <p className="font-headline text-4xl text-accent font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             {allNames[0]}
         </p>
       );
@@ -54,7 +54,7 @@ const AnimatedName = () => {
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
                 {allDisplayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-primary font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-accent font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                         {name}
                     </p>
                 ))}
@@ -69,7 +69,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center pattern-background">
           <div className="flex-grow flex flex-col items-center justify-center p-4">
-            <h2 className="text-4xl font-bold pb-8 text-foreground">Naamkarann<sup className="text-sm">&trade;</sup></h2>
+            <h2 className="text-5xl font-bold pb-8 text-foreground">Naamkarann<sup className="text-sm">&trade;</sup></h2>
             <div className="relative">
                 <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     The perfect baby name awaits.
