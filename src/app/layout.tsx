@@ -32,11 +32,8 @@ export default function RootLayout({
             setVh();
           `}
         </Script>
-         <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2944289032966757"
-          crossOrigin="anonymous"
-        />
+         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2944289032966757"
+     crossOrigin="anonymous"></script>
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <Providers>
