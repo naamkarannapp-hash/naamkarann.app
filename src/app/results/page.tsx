@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
+import { LoadingSpinner } from "@/components/loading-spinner";
+
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
