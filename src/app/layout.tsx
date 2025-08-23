@@ -37,6 +37,11 @@ export default function RootLayout({
             setVh();
           `}
         </Script>
+         <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-2944289032966757`}
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <Providers>

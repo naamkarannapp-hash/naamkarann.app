@@ -8,7 +8,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { NameCard } from "@/components/name-card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { LoadingSpinner } from "@/components/loading-spinner";
+import AdBanner from "@/components/ad-banner";
 import Link from 'next/link';
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -58,7 +58,7 @@ export default function ResultsPage() {
   }, [api, nameResults]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <AdBanner />;
   }
 
   return (
