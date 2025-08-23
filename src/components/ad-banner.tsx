@@ -13,7 +13,7 @@ declare global {
 const AdBanner = () => {
   const isMobile = useIsMobile();
   const adSlot = "7577038771";
-  const publisherId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+  const publisherId = "ca-pub-2944289032966757";
   const adPushed = useRef(false);
 
   useEffect(() => {
