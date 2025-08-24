@@ -122,7 +122,7 @@ export default function InspirationsPage() {
                     <BookHeart className="w-5 h-5 mr-2 text-primary"/>
                     <div className="flex flex-col">
                         <Label className="font-semibold">Language Roots</Label>
-                        <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
+                        <span className="text-sm text-muted-foreground">(Optional, default is Random. Select up to 3)</span>
                     </div>
                 </div>
                 <div className="pt-2 space-y-3">
@@ -179,7 +179,7 @@ export default function InspirationsPage() {
                                 <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
                                 <div className="flex flex-col">
                                     <span className="font-semibold">Vibes</span>
-                                    <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
+                                    <span className="text-sm text-muted-foreground">(Optional, default is Random. Select up to 5)</span>
                                 </div>
                             </div>
                              <FormControl>
