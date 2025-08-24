@@ -118,15 +118,17 @@ export default function PersonalizePage() {
                              <FormLabel htmlFor="startingLetters" className="font-semibold whitespace-nowrap">Starts with</FormLabel>
                              <p className="text-sm text-muted-foreground whitespace-nowrap">(1-3 characters, Optional)</p>
                         </div>
-                        <FormControl>
-                            <ClientInput
-                                id="startingLetters" 
-                                placeholder="e.g., A, Ra" {...field} 
-                                className="mt-0 w-28"
-                                maxLength={3}
-                            />
-                        </FormControl>
-                         <FormMessage />
+                        <div className="flex flex-col">
+                            <FormControl>
+                                <ClientInput
+                                    id="startingLetters" 
+                                    placeholder="e.g., A, Ra" {...field} 
+                                    className="mt-0 w-28"
+                                    maxLength={3}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </div>
                     </FormItem>
                 )}
             />
