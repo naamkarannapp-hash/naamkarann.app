@@ -1,15 +1,18 @@
 
 import { z } from "zod";
 
+const onlyAlphabets = /^[a-zA-Z]*$/;
+const alphabetMessage = "Only alphabets are allowed.";
+
 const baseNameFormSchema = z.object({
   gender: z.enum(["Boy", "Girl", "Neutral"]).optional(),
   regionalRoots: z.array(z.string()).max(3, "You can select a maximum of 3 roots.").optional(),
-  startingLetters: z.string().max(3, "Only up to 3 characters are allowed.").optional(),
+  startingLetters: z.string().max(3, "Only up to 3 characters are allowed.").regex(onlyAlphabets, alphabetMessage).optional(),
   blendParents: z.boolean().optional(),
-  parent1Name: z.string().optional(),
-  parent2Name: z.string().optional(),
+  parent1Name: z.string().regex(onlyAlphabets, alphabetMessage).optional(),
+  parent2Name: z.string().regex(onlyAlphabets, alphabetMessage).optional(),
   matchSibling: z.boolean().optional(),
-  siblingName: z.string().optional(),
+  siblingName: z.string().regex(onlyAlphabets, alphabetMessage).optional(),
   inspirations: z.array(z.string()).max(5, "You can select a maximum of 5 vibes.").optional(),
 });
 
