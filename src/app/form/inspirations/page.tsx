@@ -50,22 +50,17 @@ export default function InspirationsPage() {
 
   const handleChipSelection = (value: string) => {
     let newSelection = [...selectedRoots];
-    if (value === 'Surprise Me') {
-      newSelection = ['Surprise Me'];
+    if (newSelection.includes(value)) {
+      newSelection = newSelection.filter((i) => i !== value);
     } else {
-      newSelection = newSelection.filter(r => r !== 'Surprise Me');
-      if (newSelection.includes(value)) {
-        newSelection = newSelection.filter((i) => i !== value);
-      } else {
-        newSelection.push(value);
-      }
+      newSelection.push(value);
     }
     setValue('regionalRoots', newSelection, { shouldDirty: true });
   };
   
   const addCustomRoot = () => {
     if (customRoot && !selectedRoots.includes(customRoot)) {
-       const newRoots = [...selectedRoots.filter(r => r !== 'Surprise Me'), customRoot];
+       const newRoots = [...selectedRoots, customRoot];
        setValue('regionalRoots', newRoots, { shouldDirty: true });
        setCustomRoot("");
     }
@@ -83,9 +78,6 @@ export default function InspirationsPage() {
   };
   
   async function onSubmit(data: NameFormValues) {
-    if(data.regionalRoots?.includes('Surprise Me')) {
-      data.regionalRoots = [];
-    }
     const finalFormValues = { ...state.formValues, ...data };
     
     setState({ formValues: finalFormValues, isLoading: true, nameResults: [], error: null });
@@ -107,8 +99,8 @@ export default function InspirationsPage() {
                 <div className="flex items-center">
                     <BookHeart className="w-5 h-5 mr-2 text-primary"/>
                     <div className="flex flex-col">
-                        <Label className="font-semibold">Indian Language Roots</Label>
-                        <span className="text-sm text-muted-foreground">(Optional, select one or more)</span>
+                        <Label className="font-semibold">Language Roots</Label>
+                        <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                     </div>
                 </div>
                 <div className="pt-2 space-y-3">
@@ -119,13 +111,6 @@ export default function InspirationsPage() {
                             <FormItem>
                                 <FormControl>
                                     <div>
-                                        <div className="flex flex-wrap gap-3">
-                                            <ChipButton 
-                                                label="Surprise Me"
-                                                isSelected={selectedRoots.includes("Surprise Me")}
-                                                onSelect={() => handleChipSelection("Surprise Me")}
-                                            />
-                                        </div>
                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
                                             {visibleRoots.map((root) => (
                                                 <ChipButton 
