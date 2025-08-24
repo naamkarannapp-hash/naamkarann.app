@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { ChipButton } from "@/components/chip-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 
 const allCulturalRoots = ["Sanskrit", "Hindi", "Tamil", "Marathi", "Kannada", "Telugu", "Bengali", "Gujarati", "Punjabi", "Malayalam", "Odia", "Urdu"];
@@ -33,6 +34,7 @@ const moreInspirationsList = [
 export default function InspirationsPage() {
   const { state, setState } = useAppState();
   const router = useRouter();
+  const { toast } = useToast();
   
   const [showMoreRoots, setShowMoreRoots] = useState(false);
   const [customRoot, setCustomRoot] = useState("");
@@ -53,15 +55,29 @@ export default function InspirationsPage() {
     if (newSelection.includes(value)) {
       newSelection = newSelection.filter((i) => i !== value);
     } else {
+      if (newSelection.length >= 3) {
+        toast({
+          description: "You can only select up to 3 roots.",
+          variant: "destructive"
+        });
+        return;
+      }
       newSelection.push(value);
     }
-    setValue('regionalRoots', newSelection, { shouldDirty: true });
+    setValue('regionalRoots', newSelection, { shouldDirty: true, shouldValidate: true });
   };
   
   const addCustomRoot = () => {
+    if (selectedRoots.length >= 3) {
+      toast({
+        description: "You can only select up to 3 roots.",
+        variant: "destructive"
+      });
+      return;
+    }
     if (customRoot && !selectedRoots.includes(customRoot)) {
        const newRoots = [...selectedRoots, customRoot];
-       setValue('regionalRoots', newRoots, { shouldDirty: true });
+       setValue('regionalRoots', newRoots, { shouldDirty: true, shouldValidate: true });
        setCustomRoot("");
     }
   };
@@ -71,10 +87,16 @@ export default function InspirationsPage() {
     if (newInspirations.includes(inspiration)) {
       newInspirations = newInspirations.filter((i) => i !== inspiration);
     } else {
+       if (newInspirations.length >= 5) {
+        toast({
+          description: "You can only select up to 5 vibes.",
+          variant: "destructive"
+        });
+        return;
+      }
       newInspirations.push(inspiration);
     }
-    setValue('inspirations', newInspirations, { shouldDirty: true });
-    trigger('inspirations');
+    setValue('inspirations', newInspirations, { shouldDirty: true, shouldValidate: true });
   };
   
   async function onSubmit(data: NameFormValues) {

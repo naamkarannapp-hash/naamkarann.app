@@ -3,7 +3,7 @@ import { z } from "zod";
 
 const baseNameFormSchema = z.object({
   gender: z.enum(["Boy", "Girl", "Neutral"]).optional(),
-  regionalRoots: z.array(z.string()).optional(),
+  regionalRoots: z.array(z.string()).max(3, "You can select a maximum of 3 roots.").optional(),
   startingLetters: z.string().max(3, "Only up to 3 characters are allowed.").optional(),
   blendParents: z.boolean().optional(),
   parent1Name: z.string().optional(),
