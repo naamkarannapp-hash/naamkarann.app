@@ -111,7 +111,7 @@ export default function InspirationsPage() {
                             <FormItem>
                                 <FormControl>
                                     <div>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                                        <div className="grid grid-cols-3 gap-3 mt-3">
                                             {visibleRoots.map((root) => (
                                                 <ChipButton 
                                                     key={root}
@@ -162,7 +162,7 @@ export default function InspirationsPage() {
                             </div>
                              <FormControl>
                                 <div>
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <div className="grid grid-cols-3 gap-3">
                                     {inspirationsList.map((inspiration) => (
                                         <ChipButton
                                         key={inspiration}
@@ -177,7 +177,7 @@ export default function InspirationsPage() {
 
                                     ) : (
                                         <div className="mt-4 space-y-3">
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                            <div className="grid grid-cols-3 gap-3">
                                                 {moreInspirationsList.map((item) => (
                                                 <ChipButton
                                                     key={item.name}
