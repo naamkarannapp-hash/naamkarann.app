@@ -60,7 +60,7 @@ export default function ResultsPage() {
   }, [api, nameResults]);
 
   if (isLoading) {
-    return <AdBanner />;
+    return <LoadingSpinner />;
   }
 
   return (
