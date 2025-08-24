@@ -44,10 +44,14 @@ export default function InspirationsPage() {
     defaultValues: state.formValues,
   });
 
-  const { control, handleSubmit, watch, setValue } = form;
+  const { control, handleSubmit, watch, setValue, getValues, reset } = form;
 
   const selectedRoots = watch('regionalRoots') || [];
   const selectedInspirations = watch('inspirations') || [];
+
+  useEffect(() => {
+    reset(state.formValues);
+  }, [state.formValues, reset]);
 
   useEffect(() => {
     const subscription = watch((value) => {
