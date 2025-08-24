@@ -9,4 +9,4 @@ runConfig:
 # Environment variables available at RUNTIME.
 env:
   - variable: WEBHOOK_URL
-    value: "https://n8n-vabues.onrender.com/webhook/getnames"
+    value: "https://n8n.srv973313.hstgr.cloud/webhook/getnames"
