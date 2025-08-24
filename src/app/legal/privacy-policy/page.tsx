@@ -17,27 +17,12 @@ export default function PrivacyPolicyPage() {
           </p>
           <h2 className="text-2xl font-semibold pt-4">Information We Collect</h2>
           <p>
-            We may collect information about you in a variety of ways. The
-            information we may collect via the Application includes personal
-            data, such as your name and email address, that you voluntarily
-            give to us when you register with the Application.
+            We do not collect any personal data, such as your name or email address, because this application does not include user registration or accounts. The information you provide to generate names is processed in real-time and is not stored or linked to you.
           </p>
           <h2 className="text-2xl font-semibold pt-4">Use of Your Information</h2>
           <p>
-            Having accurate information about you permits us to provide you with
-            a smooth, efficient, and customized experience. Specifically, we may
-            use information collected about you via the Application to:
+            The information you provide (such as gender, starting letters, or inspirations) is used solely for the purpose of generating name suggestions for you within your current session. We do not use this information for any other purpose, nor do we save it.
           </p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>Create and manage your account.</li>
-            <li>
-              Email you regarding your account or order.
-            </li>
-            <li>
-              Generate a personal profile about you to make future visits to the
-              Application more personalized.
-            </li>
-          </ul>
           <h2 className="text-2xl font-semibold pt-4">Contact Us</h2>
           <p>
             If you have questions or comments about this Privacy Policy, please

@@ -17,7 +17,7 @@ export default function TermsOfServicePage() {
           <p>
             We will provide their services to you, which are subject to the
             conditions stated below in this document. Every time you visit this
-            website, use its services or make a purchase, you accept the
+            website or use its services, you accept the
             following conditions. This is why we urge you to read them
             carefully.
           </p>

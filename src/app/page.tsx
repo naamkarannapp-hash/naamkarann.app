@@ -69,7 +69,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center pattern-background">
           <div className="flex-grow flex flex-col items-center justify-center p-4">
-            <h2 className="text-5xl font-bold pb-8 text-foreground">Naamkarann<sup className="text-sm">&trade;</sup></h2>
+            <h2 className="text-5xl font-bold pb-8 text-foreground">Naamkarann</h2>
             <div className="relative">
                 <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     The perfect baby name awaits.
@@ -107,7 +107,7 @@ export default function Home() {
                     </div>
                     <span className="text-foreground/80">4.8</span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
-                    <span className="text-foreground/80">2,300+ names chosen</span>
+                    <span className="text-foreground/80">1000+ names chosen</span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
                     <span className="text-foreground/80">Linguist-verified</span>
                 </div>
