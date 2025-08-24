@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import Link from 'next/link';
 import { namesByTradition } from '@/lib/name-data';
+import { motion } from "framer-motion";
 
 const baseWord = "Naamkarann";
 
@@ -70,12 +71,24 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center pattern-background">
           <div className="flex-grow flex flex-col items-center justify-center p-4">
-            <h2 className="text-4xl md:text-5xl font-bold pb-8 text-foreground">Naamkarann</h2>
+            <motion.h2 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="text-4xl md:text-5xl font-bold pb-8 text-foreground"
+            >
+              Naamkarann
+            </motion.h2>
             <div className="my-4 h-px w-24 bg-foreground/20" />
             <div className="relative">
-                <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                  className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
+                >
                     The perfect baby name awaits.
-                </h1>
+                </motion.h1>
                 <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
                 <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
             </div>
