@@ -107,9 +107,9 @@ export default function Home() {
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
                     </div>
-                    <span className="text-foreground/80">4.8</span>
+                    <span className="text-foreground/80"><strong className="font-semibold">4.8</strong></span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
-                    <span className="text-foreground/80">1000+ names chosen</span>
+                    <span className="text-foreground/80"><strong className="font-semibold">1000+</strong> names chosen</span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
                     <span className="text-foreground/80">Linguist-verified</span>
                 </div>
