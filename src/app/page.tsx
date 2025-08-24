@@ -43,7 +43,7 @@ const AnimatedName = () => {
 
     if (!hasMounted || displayNames.length === 0) {
       return (
-        <p className="font-headline text-4xl text-purple-400/80 font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+        <p className="font-headline text-4xl text-purple-400/80 transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             Naamkarann
         </p>
       );
@@ -56,7 +56,7 @@ const AnimatedName = () => {
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
                 {displayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-purple-400/80 font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-purple-400/80 h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                         {name}
                     </p>
                 ))}
@@ -75,7 +75,7 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="text-4xl md:text-5xl font-bold pb-8 text-foreground"
+              className="text-4xl md:text-5xl font-bold pb-8 text-primary"
             >
               Naamkarann
             </motion.h2>
@@ -85,7 +85,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                  className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
+                  className="font-headline text-5xl md:text-6xl leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
                 >
                     The perfect baby name awaits.
                 </motion.h1>
@@ -96,7 +96,7 @@ export default function Home() {
               Thousands of meaningful baby names, one swipe at a time.
             </p>
             
-            <div className="my-4 md:my-6 pt-16 flex items-center justify-center">
+            <div className="my-6 pt-16 flex items-center justify-center">
                 <AnimatedName />
             </div>
 
