@@ -71,6 +71,7 @@ export default function Home() {
       <main className="flex-grow flex flex-col items-center text-center pattern-background">
           <div className="flex-grow flex flex-col items-center justify-center p-4">
             <h2 className="text-5xl font-bold pb-8 text-foreground">Naamkarann</h2>
+            <div className="my-4 h-px w-24 bg-foreground/20" />
             <div className="relative">
                 <h1 className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     The perfect baby name awaits.
@@ -78,7 +79,6 @@ export default function Home() {
                 <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
                 <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
             </div>
-            <div className="my-4 h-px w-24 bg-foreground/20" />
             <p className="mt-2 text-base text-foreground/70 max-w-sm">
               Thousands of meaningful baby names, one swipe at a time.
             </p>
