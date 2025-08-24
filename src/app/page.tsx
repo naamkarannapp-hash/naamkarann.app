@@ -78,6 +78,7 @@ export default function Home() {
                 <div className="absolute top-0 left-0 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
                 <div className="absolute bottom-0 right-0 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
             </div>
+            <div className="my-4 h-px w-24 bg-foreground/20" />
             <p className="mt-2 text-base text-foreground/70 max-w-sm">
               Thousands of meaningful baby names, one swipe at a time.
             </p>
