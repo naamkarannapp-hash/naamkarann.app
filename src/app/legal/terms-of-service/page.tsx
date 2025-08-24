@@ -45,7 +45,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-2xl font-semibold pt-4">Contact Us</h2>
           <p>
             If you have any questions or concerns about these Terms, please
-            contact us.
+            contact us at <a href="mailto:naamkarann.app@gmail.com" className="text-primary hover:underline">naamkarann.app@gmail.com</a>.
           </p>
         </CardContent>
       </Card>

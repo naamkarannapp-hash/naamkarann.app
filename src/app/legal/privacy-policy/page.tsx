@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold pt-4">Contact Us</h2>
           <p>
             If you have questions or comments about this Privacy Policy, please
-            contact us.
+            contact us at <a href="mailto:naamkarann.app@gmail.com" className="text-primary hover:underline">naamkarann.app@gmail.com</a>.
           </p>
         </CardContent>
       </Card>
