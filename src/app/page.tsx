@@ -42,7 +42,7 @@ const AnimatedName = () => {
 
     if (!hasMounted || displayNames.length === 0) {
       return (
-        <p className="font-headline text-4xl text-accent font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+        <p className="font-headline text-4xl text-purple-400/80 font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             Naamkarann
         </p>
       );
@@ -55,7 +55,7 @@ const AnimatedName = () => {
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
                 {displayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-accent font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <p key={`${name}-${index}`} className="font-headline text-4xl text-purple-400/80 font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                         {name}
                     </p>
                 ))}
