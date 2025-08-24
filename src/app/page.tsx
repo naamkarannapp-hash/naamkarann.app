@@ -5,37 +5,48 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import Link from 'next/link';
-import { allNames } from '@/lib/name-data';
+import { namesByTradition } from '@/lib/name-data';
 
 const baseWord = "Naamkarann";
 
 const AnimatedName = () => {
+    const [displayNames, setDisplayNames] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
         setHasMounted(true);
+        
+        // Create a randomized list of names on the client
+        const traditions = Object.values(namesByTradition);
+        const randomized = traditions.map(names => names[Math.floor(Math.random() * names.length)]);
+        
+        // Shuffle the randomized names
+        for (let i = randomized.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [randomized[i], randomized[j]] = [randomized[j], randomized[i]];
+        }
+        
+        setDisplayNames([...randomized, baseWord]);
     }, []);
 
     useEffect(() => {
-        if (!hasMounted) return;
+        if (!hasMounted || displayNames.length === 0) return;
 
         const intervalId = setInterval(() => {
-            setCurrentIndex(prevIndex => (prevIndex + 1) % (allNames.length + 1));
+            setCurrentIndex(prevIndex => (prevIndex + 1) % displayNames.length);
         }, 3000); 
 
         return () => clearInterval(intervalId);
-    }, [hasMounted]);
+    }, [hasMounted, displayNames]);
 
-    if (!hasMounted) {
+    if (!hasMounted || displayNames.length === 0) {
       return (
         <p className="font-headline text-4xl text-accent font-bold transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            {allNames[0]}
+            Naamkarann
         </p>
       );
     }
-    
-    const allDisplayNames = [...allNames, baseWord];
 
     return (
         <div className="relative h-12 w-64 overflow-hidden">
@@ -43,7 +54,7 @@ const AnimatedName = () => {
                 className="absolute left-0 w-full transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
             >
-                {allDisplayNames.map((name, index) => (
+                {displayNames.map((name, index) => (
                     <p key={`${name}-${index}`} className="font-headline text-4xl text-accent font-bold h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                         {name}
                     </p>
