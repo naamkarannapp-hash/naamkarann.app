@@ -35,10 +35,19 @@ export default function PersonalizePage() {
     defaultValues: state.formValues,
   });
 
-  const { control, handleSubmit, watch, setValue } = form;
+  const { control, handleSubmit, watch, setValue, getValues } = form;
 
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
+  const watchedValues = watch();
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setState({ formValues: value as NameFormValues });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setState]);
+
 
   useEffect(() => {
       if (blendParents) {

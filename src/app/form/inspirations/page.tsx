@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -48,6 +48,13 @@ export default function InspirationsPage() {
 
   const selectedRoots = watch('regionalRoots') || [];
   const selectedInspirations = watch('inspirations') || [];
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setState({ formValues: value as NameFormValues });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setState]);
 
   const handleChipSelection = (value: string) => {
     let newSelection = [...selectedRoots];
