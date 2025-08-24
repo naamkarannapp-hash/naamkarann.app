@@ -156,8 +156,8 @@ export default function InspirationsPage() {
                             <div className="flex items-center mb-4">
                                 <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
                                 <div className="flex flex-col">
-                                    <span className="font-semibold">Vibes (select up to 5)</span>
-                                    <span className="text-sm text-muted-foreground">(Optional)</span>
+                                    <span className="font-semibold">Vibes</span>
+                                    <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                                 </div>
                             </div>
                              <FormControl>
