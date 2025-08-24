@@ -13,21 +13,20 @@ import type { NameFormValues } from "@/lib/types";
 import { nameFormSchema } from "@/lib/types";
 import { Lightbulb, BookHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Switch } from "@/components/ui/switch";
 import { ChipButton } from "@/components/chip-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 
-const allCulturalRoots = ["Hindi", "Sanskrit", "Tamil", "Telugu", "Bengali", "Gujarati", "Marathi", "Punjabi", "Kannada", "Malayalam", "Odia", "Urdu"];
+const allCulturalRoots = ["Sanskrit", "Hindi", "Tamil", "Marathi", "Kannada", "Telugu", "Bengali", "Gujarati", "Punjabi", "Malayalam", "Odia", "Urdu"];
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];
 const moreInspirationsList = [
-    { name: "Mythology", gradient: "from-amber-200 to-yellow-300" },
-    { name: "Animals", gradient: "from-lime-200 to-green-300" },
-    { name: "River", gradient: "from-cyan-200 to-blue-300" },
-    { name: "Mountains", gradient: "from-slate-300 to-gray-400" },
-    { name: "History", gradient: "from-orange-200 to-amber-300" },
-    { name: "Flowers", gradient: "from-pink-200 to-rose-300" },
+    { name: "Mythology" },
+    { name: "Animals" },
+    { name: "River" },
+    { name: "Mountains" },
+    { name: "History" },
+    { name: "Flowers" },
 ];
 
 
@@ -38,7 +37,6 @@ export default function InspirationsPage() {
   const [showMoreRoots, setShowMoreRoots] = useState(false);
   const [customRoot, setCustomRoot] = useState("");
   const [showMoreInspirations, setShowMoreInspirations] = useState(false);
-  const [showLanguageRoots, setShowLanguageRoots] = useState(!!state.formValues.regionalRoots && state.formValues.regionalRoots.length > 0);
 
   const form = useForm<NameFormValues>({
     resolver: zodResolver(nameFormSchema),
@@ -50,23 +48,26 @@ export default function InspirationsPage() {
   const selectedRoots = watch('regionalRoots') || [];
   const selectedInspirations = watch('inspirations') || [];
 
-  const handleLanguageToggle = (checked: boolean) => {
-    setShowLanguageRoots(checked);
-    if (checked) {
-        setValue('regionalRoots', ['Surprise Me'], { shouldDirty: true });
-    } else {
-        setValue('regionalRoots', [], { shouldDirty: true });
-    }
-  };
-
   const handleChipSelection = (value: string) => {
-    setValue('regionalRoots', [value], { shouldDirty: true });
+    let newSelection = [...selectedRoots];
+    if (value === 'Surprise Me') {
+      newSelection = ['Surprise Me'];
+    } else {
+      newSelection = newSelection.filter(r => r !== 'Surprise Me');
+      if (newSelection.includes(value)) {
+        newSelection = newSelection.filter((i) => i !== value);
+      } else {
+        newSelection.push(value);
+      }
+    }
+    setValue('regionalRoots', newSelection, { shouldDirty: true });
   };
   
   const addCustomRoot = () => {
     if (customRoot && !selectedRoots.includes(customRoot)) {
-      setValue('regionalRoots', [customRoot], { shouldDirty: true });
-      setCustomRoot("");
+       const newRoots = [...selectedRoots.filter(r => r !== 'Surprise Me'), customRoot];
+       setValue('regionalRoots', newRoots, { shouldDirty: true });
+       setCustomRoot("");
     }
   };
   
@@ -87,7 +88,6 @@ export default function InspirationsPage() {
     }
     const finalFormValues = { ...state.formValues, ...data };
     
-    // Set loading state and navigate immediately
     setState({ formValues: finalFormValues, isLoading: true, nameResults: [], error: null });
     router.push('/results');
   }
@@ -104,68 +104,62 @@ export default function InspirationsPage() {
         <Form {...form}>
         <form id="inspirations-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        <BookHeart className="w-5 h-5 mr-2 text-primary"/>
-                        <div className="flex flex-col">
-                            <Label htmlFor="language-toggle" className="font-semibold cursor-pointer">Indian Language Roots</Label>
-                            <span className="text-sm text-muted-foreground">(Optional)</span>
-                        </div>
+                <div className="flex items-center">
+                    <BookHeart className="w-5 h-5 mr-2 text-primary"/>
+                    <div className="flex flex-col">
+                        <Label className="font-semibold">Indian Language Roots</Label>
+                        <span className="text-sm text-muted-foreground">(Optional, select one or more)</span>
                     </div>
-                    <Switch id="language-toggle" checked={showLanguageRoots} onCheckedChange={handleLanguageToggle} />
                 </div>
-                {showLanguageRoots && (
-                    <div className="pt-2 space-y-3">
-                         <FormField
-                            control={control}
-                            name="regionalRoots"
-                            render={() => (
-                                <FormItem>
-                                    <FormControl>
-                                        <div>
-                                            <div className="flex flex-wrap gap-3">
-                                                <ChipButton 
-                                                    label="Surprise Me"
-                                                    isSelected={selectedRoots.includes("Surprise Me")}
-                                                    onSelect={() => handleChipSelection("Surprise Me")}
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
-                                                {visibleRoots.map((root) => (
-                                                    <ChipButton 
-                                                        key={root}
-                                                        label={root}
-                                                        isSelected={selectedRoots.includes(root)}
-                                                        onSelect={() => handleChipSelection(root)}
-                                                    />
-                                                ))}
-                                            </div>
+                <div className="pt-2 space-y-3">
+                     <FormField
+                        control={control}
+                        name="regionalRoots"
+                        render={() => (
+                            <FormItem>
+                                <FormControl>
+                                    <div>
+                                        <div className="flex flex-wrap gap-3">
+                                            <ChipButton 
+                                                label="Surprise Me"
+                                                isSelected={selectedRoots.includes("Surprise Me")}
+                                                onSelect={() => handleChipSelection("Surprise Me")}
+                                            />
                                         </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-                        {!showMoreRoots && allCulturalRoots.length > 6 && (
-                            <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                                            {visibleRoots.map((root) => (
+                                                <ChipButton 
+                                                    key={root}
+                                                    label={root}
+                                                    isSelected={selectedRoots.includes(root)}
+                                                    onSelect={() => handleChipSelection(root)}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )}
-                         {showMoreRoots && (
-                            <div className="space-y-3 pt-2">
-                                <div className="flex items-center gap-2">
-                                <Input 
-                                    placeholder="Add your own root" 
-                                    value={customRoot} 
-                                    onChange={(e) => setCustomRoot(e.target.value)}
-                                />
-                                <Button type="button" onClick={addCustomRoot}>Add</Button>
-                                </div>
-                                <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
+                    />
+
+                    {!showMoreRoots && allCulturalRoots.length > 6 && (
+                        <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                    )}
+                     {showMoreRoots && (
+                        <div className="space-y-3 pt-2">
+                            <div className="flex items-center gap-2">
+                            <Input 
+                                placeholder="Add your own root" 
+                                value={customRoot} 
+                                onChange={(e) => setCustomRoot(e.target.value)}
+                            />
+                            <Button type="button" onClick={addCustomRoot}>Add</Button>
                             </div>
-                        )}
-                    </div>
-                )}
+                            <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="space-y-4 p-4 border rounded-lg">
@@ -205,7 +199,6 @@ export default function InspirationsPage() {
                                                     label={item.name}
                                                     isSelected={selectedInspirations.includes(item.name)}
                                                     onSelect={() => handleInspirationToggle(item.name)}
-                                                    className={cn(!selectedInspirations.includes(item.name) && `bg-gradient-to-br ${item.gradient} border-none`)}
                                                 />
                                                 ))}
                                             </div>
