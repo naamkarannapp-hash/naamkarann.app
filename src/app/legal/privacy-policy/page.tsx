@@ -19,6 +19,15 @@ export default function PrivacyPolicyPage() {
           <p>
             We do not collect any personal data, such as your name or email address, because this application does not include user registration or accounts. The information you provide to generate names is processed in real-time and is not stored or linked to you.
           </p>
+          <h2 className="text-2xl font-semibold pt-4">Third-Party Advertising</h2>
+          <p>
+            We use Google AdSense to serve advertisements on our website. Our third-party advertising partners may use cookies or similar technologies to serve you advertisements that are more relevant to your interests.
+          </p>
+           <ul className="list-disc pl-6 space-y-2">
+                <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites.</li>
+                <li>Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.</li>
+                <li>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ads Settings</a>.</li>
+            </ul>
           <h2 className="text-2xl font-semibold pt-4">Use of Your Information</h2>
           <p>
             The information you provide (such as gender, starting letters, or inspirations) is used solely for the purpose of generating name suggestions for you within your current session. We do not use this information for any other purpose, nor do we save it.

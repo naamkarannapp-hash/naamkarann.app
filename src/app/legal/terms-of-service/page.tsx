@@ -27,6 +27,10 @@ export default function TermsOfServicePage() {
             privacy policy regarding our user data collection. It will help you
             better understand our practices.
           </p>
+          <h2 className="text-2xl font-semibold pt-4">Third-Party Links and Ads</h2>
+            <p>
+                The Application may contain links to third-party websites and services, and/or display advertisements for third-parties (collectively, "Third-Party Links & Ads"). Such Third-Party Links & Ads are not under the control of the Application, and the Application is not responsible for any Third-Party Links & Ads.
+            </p>
           <h2 className="text-2xl font-semibold pt-4">Applicable Law</h2>
           <p>
             By visiting this website, you agree that the laws of the, without
