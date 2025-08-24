@@ -28,8 +28,8 @@ export async function getAndPrioritizeNames(
     // Transform the array values into comma-separated strings for the API
     const apiValues = {
       ...values,
-      regionalRoots: values.regionalRoots?.join(','),
-      inspirations: values.inspirations?.join(','),
+      regionalRoots: values.regionalRoots && values.regionalRoots.length > 0 ? values.regionalRoots.join(',') : null,
+      inspirations: values.inspirations && values.inspirations.length > 0 ? values.inspirations.join(',') : null,
     };
 
 
