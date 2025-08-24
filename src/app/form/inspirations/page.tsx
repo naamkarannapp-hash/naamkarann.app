@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ import { useAppState } from "@/context/app-state-context";
 import type { NameFormValues } from "@/lib/types";
 import { nameFormSchema } from "@/lib/types";
 import { Lightbulb, BookHeart } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { ChipButton } from "@/components/chip-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -36,16 +35,16 @@ export default function InspirationsPage() {
   const router = useRouter();
   const { toast } = useToast();
   
-  const [showMoreRoots, setShowMoreRoots] = useState(false);
-  const [customRoot, setCustomRoot] = useState("");
-  const [showMoreInspirations, setShowMoreInspirations] = useState(false);
+  const [showMoreRoots, setShowMoreRoots] = React.useState(false);
+  const [customRoot, setCustomRoot] = React.useState("");
+  const [showMoreInspirations, setShowMoreInspirations] = React.useState(false);
 
   const form = useForm<NameFormValues>({
     resolver: zodResolver(nameFormSchema),
     defaultValues: state.formValues,
   });
 
-  const { control, handleSubmit, watch, setValue, trigger } = form;
+  const { control, handleSubmit, watch, setValue } = form;
 
   const selectedRoots = watch('regionalRoots') || [];
   const selectedInspirations = watch('inspirations') || [];
@@ -121,8 +120,11 @@ export default function InspirationsPage() {
                 <div className="flex items-center">
                     <BookHeart className="w-5 h-5 mr-2 text-primary"/>
                     <div className="flex flex-col">
-                        <Label className="font-semibold">Language Roots</Label>
-                        <span className="text-sm text-muted-foreground">(Optional, default is Random. Select up to 3)</span>
+                        <div className="flex items-baseline gap-2">
+                           <Label className="font-semibold">Language Roots</Label>
+                           <span className="text-sm text-muted-foreground">(Select up to 3)</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                     </div>
                 </div>
                 <div className="pt-2 space-y-3">
@@ -178,8 +180,11 @@ export default function InspirationsPage() {
                             <div className="flex items-center mb-4">
                                 <Lightbulb className="w-5 h-5 mr-2 text-primary"/>
                                 <div className="flex flex-col">
-                                    <span className="font-semibold">Vibes</span>
-                                    <span className="text-sm text-muted-foreground">(Optional, default is Random. Select up to 5)</span>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="font-semibold">Vibes</span>
+                                        <span className="text-sm text-muted-foreground">(Select up to 5)</span>
+                                    </div>
+                                    <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                                 </div>
                             </div>
                              <FormControl>
