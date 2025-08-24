@@ -99,7 +99,7 @@ export default function Home() {
                     </Button>
                 </Link>
                 <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
-                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-foreground/5 rounded-lg border border-foreground/10">
+                <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-muted rounded-lg border">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
                         <Star className="w-4 h-4 fill-current" />
