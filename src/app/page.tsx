@@ -85,7 +85,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                  className="font-headline text-5xl md:text-6xl leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
+                  className="font-headline text-5xl md:text-6xl font-bold leading-tight text-foreground" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
                 >
                     The perfect baby name awaits.
                 </motion.h1>
@@ -106,7 +106,7 @@ export default function Home() {
              <div className="w-full max-w-md mx-auto px-4 md:px-0">
                 <Link href="/form/personalize" passHref>
                     <Button
-                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg transition-shadow hover:shadow-2xl"
                     >
                         Start Naming
                     </Button>
@@ -122,9 +122,9 @@ export default function Home() {
                     </div>
                     <span className="text-foreground/80"><strong className="font-semibold">4.8</strong></span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
-                    <span className="text-foreground/80"><strong className="font-semibold">1000+</strong> names chosen</span>
+                    <span className="text-foreground/70"><strong className="font-semibold">1000+</strong> names chosen</span>
                     <span className="text-foreground/40" aria-hidden="true">•</span>
-                    <span className="text-foreground/80">Linguist-verified</span>
+                    <span className="text-foreground/70">Linguist-verified</span>
                 </div>
             </div>
           </div>
