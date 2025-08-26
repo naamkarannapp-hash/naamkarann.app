@@ -159,47 +159,47 @@ export default function InspirationsPage() {
                           <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                       </div>
                   </div>
-                  <div>
-                       <FormField
-                          control={control}
-                          name="regionalRoots"
-                          render={() => (
-                              <FormItem>
-                                  <FormControl>
-                                      <div>
-                                          <div className="grid grid-cols-3 gap-3">
-                                              {visibleRoots.map((root) => (
-                                                  <ChipButton 
-                                                      key={root}
-                                                      label={root}
-                                                      isSelected={selectedRoots.includes(root)}
-                                                      onSelect={() => handleChipSelection(root)}
-                                                  />
-                                              ))}
-                                          </div>
-                                           {!showMoreRoots && allCulturalRoots.length > 6 && (
-                                              <Button type="button" variant="ghost" className="text-primary mt-3" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
-                                          )}
-                                           {showMoreRoots && (
-                                              <div className="pt-2">
-                                                  <div className="flex items-center gap-2 mt-3">
-                                                  <Input 
-                                                      placeholder="Add your own root" 
-                                                      value={customRoot} 
-                                                      onChange={(e) => setCustomRoot(e.target.value)}
-                                                  />
-                                                  <Button type="button" onClick={addCustomRoot}>Add</Button>
-                                                  </div>
-                                                  <Button type="button" variant="ghost" className="text-primary mt-3" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
-                                              </div>
-                                          )}
+                  
+                  <FormField
+                      control={control}
+                      name="regionalRoots"
+                      render={() => (
+                          <FormItem>
+                              <FormControl>
+                                  <div>
+                                      <div className="grid grid-cols-3 gap-3">
+                                          {visibleRoots.map((root) => (
+                                              <ChipButton 
+                                                  key={root}
+                                                  label={root}
+                                                  isSelected={selectedRoots.includes(root)}
+                                                  onSelect={() => handleChipSelection(root)}
+                                              />
+                                          ))}
                                       </div>
-                                  </FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                          )}
-                      />
-                  </div>
+                                       {!showMoreRoots && allCulturalRoots.length > 6 && (
+                                          <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                                      )}
+                                       {showMoreRoots && (
+                                          <div>
+                                              <div className="flex items-center gap-2 mt-3">
+                                              <Input 
+                                                  placeholder="Add your own root" 
+                                                  value={customRoot} 
+                                                  onChange={(e) => setCustomRoot(e.target.value)}
+                                              />
+                                              <Button type="button" onClick={addCustomRoot}>Add</Button>
+                                              </div>
+                                              <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
+                                          </div>
+                                      )}
+                                  </div>
+                              </FormControl>
+                              <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+                  
               </div>
 
               <div className="space-y-4 p-4 border rounded-lg">
@@ -231,7 +231,7 @@ export default function InspirationsPage() {
                                       ))}
                                       </div>
                                       {!showMoreInspirations ? (
-                                          <Button type="button" variant="ghost" className="text-primary mt-3" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
+                                          <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
 
                                       ) : (
                                           <div>
@@ -245,7 +245,7 @@ export default function InspirationsPage() {
                                                   />
                                                   ))}
                                               </div>
-                                              <Button type="button" variant="ghost" className="text-primary mt-3" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
+                                              <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(false)}>- Less inspirations</Button>
                                           </div>
                                       )}
                                   </div>
