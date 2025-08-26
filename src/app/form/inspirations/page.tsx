@@ -41,7 +41,6 @@ export default function InspirationsPage() {
   const [showMoreInspirations, setShowMoreInspirations] = React.useState(false);
   
   const [showReminderToast, setShowReminderToast] = useState(false);
-  const navigationTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const form = useForm<NameFormValues>({
     resolver: zodResolver(nameFormSchema),
@@ -123,22 +122,15 @@ export default function InspirationsPage() {
     const hasSelections = (data.regionalRoots && data.regionalRoots.length > 0) || (data.inspirations && data.inspirations.length > 0);
     const reminderCount = parseInt(sessionStorage.getItem('reminderToastCount') || '0');
 
-    if (!hasSelections && reminderCount < 2) {
+    if (!hasSelections && reminderCount < 1) {
       sessionStorage.setItem('reminderToastCount', (reminderCount + 1).toString());
       setShowReminderToast(true);
-
-      navigationTimerRef.current = setTimeout(() => {
-        proceedToResults(data);
-      }, 2000);
     } else {
       proceedToResults(data);
     }
   }
 
   const handleToastTap = () => {
-    if (navigationTimerRef.current) {
-        clearTimeout(navigationTimerRef.current);
-    }
     setShowReminderToast(false);
     const chipTray = document.getElementById('InspirationChips');
     chipTray?.scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -2,8 +2,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import React,
-{ useEffect } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 
 interface InspirationReminderToastProps {
@@ -13,15 +12,6 @@ interface InspirationReminderToastProps {
 }
 
 export function InspirationReminderToast({ show, onDismiss, onTap }: InspirationReminderToastProps) {
-    useEffect(() => {
-        if (show) {
-            const timer = setTimeout(() => {
-                onDismiss();
-            }, 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [show, onDismiss]);
-
 
   return (
     <AnimatePresence>
