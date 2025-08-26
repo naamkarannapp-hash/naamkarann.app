@@ -1,5 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /api/
 
-Sitemap: /sitemap.xml
+Sitemap: https://naamkarann.in/sitemap.xml
