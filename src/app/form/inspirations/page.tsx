@@ -185,7 +185,7 @@ export default function InspirationsPage() {
                       />
 
                       {!showMoreRoots && allCulturalRoots.length > 6 && (
-                          <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                          <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
                       )}
                        {showMoreRoots && (
                           <div className="space-y-3 pt-2">
