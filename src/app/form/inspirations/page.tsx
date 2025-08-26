@@ -177,29 +177,28 @@ export default function InspirationsPage() {
                                                   />
                                               ))}
                                           </div>
+                                           {!showMoreRoots && allCulturalRoots.length > 6 && (
+                                              <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
+                                          )}
+                                           {showMoreRoots && (
+                                              <div className="space-y-3 pt-2">
+                                                  <div className="flex items-center gap-2">
+                                                  <Input 
+                                                      placeholder="Add your own root" 
+                                                      value={customRoot} 
+                                                      onChange={(e) => setCustomRoot(e.target.value)}
+                                                  />
+                                                  <Button type="button" onClick={addCustomRoot}>Add</Button>
+                                                  </div>
+                                                  <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
+                                              </div>
+                                          )}
                                       </div>
                                   </FormControl>
                                   <FormMessage />
                               </FormItem>
                           )}
                       />
-
-                      {!showMoreRoots && allCulturalRoots.length > 6 && (
-                          <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
-                      )}
-                       {showMoreRoots && (
-                          <div className="space-y-3 pt-2">
-                              <div className="flex items-center gap-2">
-                              <Input 
-                                  placeholder="Add your own root" 
-                                  value={customRoot} 
-                                  onChange={(e) => setCustomRoot(e.target.value)}
-                              />
-                              <Button type="button" onClick={addCustomRoot}>Add</Button>
-                              </div>
-                              <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
-                          </div>
-                      )}
                   </div>
               </div>
 
