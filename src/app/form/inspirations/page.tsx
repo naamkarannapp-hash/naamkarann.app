@@ -159,7 +159,7 @@ export default function InspirationsPage() {
                           <span className="text-sm text-muted-foreground">(Optional, default is Random)</span>
                       </div>
                   </div>
-                  <div className="pt-2 space-y-3">
+                  <div className="space-y-3">
                        <FormField
                           control={control}
                           name="regionalRoots"
