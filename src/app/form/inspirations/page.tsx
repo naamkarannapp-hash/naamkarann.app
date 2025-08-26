@@ -181,8 +181,8 @@ export default function InspirationsPage() {
                                               <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(true)}>+ More roots</Button>
                                           )}
                                            {showMoreRoots && (
-                                              <div className="space-y-3 pt-2">
-                                                  <div className="flex items-center gap-2">
+                                              <div className="pt-2">
+                                                  <div className="flex items-center gap-2 mt-2">
                                                   <Input 
                                                       placeholder="Add your own root" 
                                                       value={customRoot} 
@@ -190,7 +190,7 @@ export default function InspirationsPage() {
                                                   />
                                                   <Button type="button" onClick={addCustomRoot}>Add</Button>
                                                   </div>
-                                                  <Button type="button" variant="ghost" className="text-primary" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
+                                                  <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreRoots(false)}>- Less roots</Button>
                                               </div>
                                           )}
                                       </div>
@@ -234,7 +234,7 @@ export default function InspirationsPage() {
                                           <Button type="button" variant="ghost" className="text-primary mt-2" onClick={() => setShowMoreInspirations(true)}>+ More inspirations</Button>
 
                                       ) : (
-                                          <div className="mt-4 space-y-3">
+                                          <div className="mt-4">
                                               <div className="grid grid-cols-3 gap-3">
                                                   {moreInspirationsList.map((item) => (
                                                   <ChipButton
