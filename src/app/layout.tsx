@@ -4,6 +4,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import Providers from '@/components/providers';
 import Script from 'next/script';
+import { ptSans } from './fonts';
+import { cn } from '@/lib/utils';
 
 
 export const metadata: Metadata = {
@@ -20,9 +22,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
          <Script id="vh-fix">
           {`
             function setVh() {
@@ -33,10 +32,14 @@ export default function RootLayout({
             setVh();
           `}
         </Script>
-         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2944289032966757"
-     crossOrigin="anonymous"></script>
+         <Script 
+            id="adsbygoogle-init"
+            strategy="lazyOnload"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2944289032966757"
+            crossOrigin="anonymous"
+          />
       </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+      <body className={cn("font-body antialiased", ptSans.variable)} suppressHydrationWarning>
         <Providers>
           {children}
           <Toaster />

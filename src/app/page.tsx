@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import Link from 'next/link';
 import { namesByTradition } from '@/lib/name-data';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const baseWord = "Naamkarann";
 
@@ -18,11 +18,9 @@ const AnimatedName = () => {
     useEffect(() => {
         setHasMounted(true);
         
-        // Create a randomized list of names on the client
         const traditions = Object.values(namesByTradition);
         const randomized = traditions.map(names => names[Math.floor(Math.random() * names.length)]);
         
-        // Shuffle the randomized names
         for (let i = randomized.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [randomized[i], randomized[j]] = [randomized[j], randomized[i]];
@@ -32,7 +30,7 @@ const AnimatedName = () => {
     }, []);
 
     useEffect(() => {
-        if (!hasMounted || displayNames.length === 0) return;
+        if (!hasMounted || displayNames.length <= 1) return;
 
         const intervalId = setInterval(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % displayNames.length);
@@ -41,26 +39,31 @@ const AnimatedName = () => {
         return () => clearInterval(intervalId);
     }, [hasMounted, displayNames]);
 
-    if (!hasMounted || displayNames.length === 0) {
+    if (!hasMounted) {
       return (
         <p className="font-headline text-4xl text-purple-400/80 transition-colors duration-500" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             Naamkarann
         </p>
       );
     }
+    
+    const currentName = displayNames[currentIndex] || baseWord;
 
     return (
         <div className="relative h-12 w-64 overflow-hidden">
-            <div
-                className="absolute left-0 w-full transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateY(-${currentIndex * 3}rem)` }}
-            >
-                {displayNames.map((name, index) => (
-                    <p key={`${name}-${index}`} className="font-headline text-4xl text-purple-400/80 h-12 flex items-center justify-center" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                        {name}
-                    </p>
-                ))}
-            </div>
+            <AnimatePresence mode="wait">
+                <motion.p
+                    key={currentName}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 font-headline text-4xl text-purple-400/80 h-12 flex items-center justify-center"
+                    style={{ textShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                >
+                    {currentName}
+                </motion.p>
+            </AnimatePresence>
         </div>
     );
 };
