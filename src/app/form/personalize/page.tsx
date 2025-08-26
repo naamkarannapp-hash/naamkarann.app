@@ -22,6 +22,9 @@ import {
 import { cn } from "@/lib/utils";
 import { ClientInput } from "@/components/client-input";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import { Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
@@ -211,6 +214,28 @@ export default function PersonalizePage() {
                   />
               )}
             </div>
+
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center space-x-2 pt-2"
+            >
+              <p className="text-xs text-muted-foreground">About 43% of parents blend or match their kids’ names.</p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button type="button" className="text-muted-foreground hover:text-foreground">
+                      <Info className="w-3.5 h-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>It helps create family name harmony</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </motion.div>
+
           </form>
         </Form>
       </CardContent>
