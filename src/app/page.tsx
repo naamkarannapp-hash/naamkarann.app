@@ -135,6 +135,8 @@ export default function Home() {
       
        <footer className="w-full p-4 text-center text-foreground bg-background flex-shrink-0">
         <div className="flex justify-center space-x-4 text-sm">
+          <Link href="/legal/about-us" className="hover:underline">About Us</Link>
+          <Link href="/legal/contact-us" className="hover:underline">Contact Us</Link>
           <Link href="/legal/privacy-policy" className="hover:underline">Privacy Policy</Link>
           <Link href="/legal/terms-of-service" className="hover:underline">Terms of Service</Link>
         </div>
