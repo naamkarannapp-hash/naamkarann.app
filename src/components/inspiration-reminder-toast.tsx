@@ -26,7 +26,7 @@ export function InspirationReminderToast({ show, onDismiss, onTap }: Inspiration
   return (
     <AnimatePresence>
       {show && (
-        <div className="fixed inset-0 z-[60] flex items-end justify-center md:hidden">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center md:hidden">
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -44,7 +44,7 @@ export function InspirationReminderToast({ show, onDismiss, onTap }: Inspiration
                 role="status"
                 aria-live="polite"
                 className={cn(
-                    "relative z-50 w-auto max-w-[90%] rounded-lg mb-[calc(24px+env(safe-area-inset-bottom))] px-4 py-3",
+                    "relative z-50 w-auto max-w-[90%] rounded-lg px-4 py-3",
                     "bg-popover text-popover-foreground shadow-lg"
                 )}
              >
