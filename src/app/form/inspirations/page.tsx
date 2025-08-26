@@ -167,7 +167,7 @@ export default function InspirationsPage() {
                               <FormItem>
                                   <FormControl>
                                       <div>
-                                          <div className="grid grid-cols-3 gap-3 mt-3">
+                                          <div className="grid grid-cols-3 gap-3">
                                               {visibleRoots.map((root) => (
                                                   <ChipButton 
                                                       key={root}
