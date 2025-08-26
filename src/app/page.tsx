@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
+import { Star, Wand2, Users, BookOpen } from "lucide-react";
 import Link from 'next/link';
 import { namesByTradition } from '@/lib/name-data';
 import { motion, AnimatePresence } from "framer-motion";
@@ -68,6 +68,23 @@ const AnimatedName = () => {
     );
 };
 
+const features = [
+    {
+        icon: <Wand2 className="h-8 w-8 text-primary" />,
+        title: "Personalized by You",
+        description: "Filter by gender, starting letters, and even blend with parents' or siblings' names for a truly personal touch.",
+    },
+    {
+        icon: <BookOpen className="h-8 w-8 text-primary" />,
+        title: "Inspired by Tradition",
+        description: "Choose from a rich tapestry of cultural and linguistic roots, from Sanskrit to Tamil, to find a name with deep meaning.",
+    },
+    {
+        icon: <Users className="h-8 w-8 text-primary" />,
+        title: "AI-Powered Suggestions",
+        description: "Our smart AI helps you discover unique and meaningful names you might not have found otherwise.",
+    },
+];
 
 export default function Home() {
   return (
@@ -104,6 +121,26 @@ export default function Home() {
             </div>
 
           </div>
+
+          <section className="w-full bg-white py-16 md:py-24">
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Discover the Perfect Name</h2>
+                <p className="text-lg text-muted-foreground max-w-3xl mx-auto text-center mb-12">
+                    Finding the right name is a special journey. Our AI-powered name generator helps you explore a vast world of meaningful baby names, grounded in cultural heritage. Get personalized suggestions that resonate with your family's story and values.
+                </p>
+                <div className="grid md:grid-cols-3 gap-8 text-center">
+                    {features.map((feature, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                            {feature.icon}
+                            <h3 className="text-xl font-semibold mt-4 mb-2">{feature.title}</h3>
+                            <p className="text-muted-foreground">{feature.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+          </section>
+
+
            {/* Sticky CTA for Mobile */}
           <div className="sticky bottom-0 w-full md:static bg-gradient-to-t from-background via-background/80 to-transparent pt-4 pb-4 md:bg-none md:p-0">
              <div className="w-full max-w-md mx-auto px-4 md:px-0">

@@ -9,8 +9,9 @@ import { cn } from '@/lib/utils';
 
 
 export const metadata: Metadata = {
-  title: 'Naamkarann',
-  description: 'Find the perfect name for your little one.',
+  title: 'Naamkarann: The Perfect AI Baby Name Generator',
+  description: 'Discover thousands of meaningful and unique baby names. Personalize your search by gender, origin, and inspiration to find the perfect name for your little one.',
+  keywords: ['baby names', 'name generator', 'indian baby names', 'unique baby names', 'naamkarann', 'baby name suggestions', 'ai name generator', 'hindu baby names'],
 };
 
 export default function RootLayout({
