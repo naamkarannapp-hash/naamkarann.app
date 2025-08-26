@@ -129,7 +129,7 @@ export default function InspirationsPage() {
 
       navigationTimerRef.current = setTimeout(() => {
         proceedToResults(data);
-      }, 600);
+      }, 2000);
     } else {
       proceedToResults(data);
     }

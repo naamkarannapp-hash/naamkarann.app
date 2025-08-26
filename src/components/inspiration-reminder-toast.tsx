@@ -17,7 +17,7 @@ export function InspirationReminderToast({ show, onDismiss, onTap }: Inspiration
         if (show) {
             const timer = setTimeout(() => {
                 onDismiss();
-            }, 600);
+            }, 2000);
             return () => clearTimeout(timer);
         }
     }, [show, onDismiss]);
