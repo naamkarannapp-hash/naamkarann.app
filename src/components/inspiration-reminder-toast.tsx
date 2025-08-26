@@ -38,7 +38,7 @@ export function InspirationReminderToast({ show, onDismiss, onTap }: Inspiration
                     "bg-popover text-popover-foreground shadow-lg"
                 )}
              >
-                <p className="text-sm text-center">Looking for rarer gems? Add a language root or vibe first.</p>
+                <p className="text-sm text-center">Want rarer names? Add a language root or vibe for richer suggestions.</p>
             </motion.div>
         </div>
       )}
