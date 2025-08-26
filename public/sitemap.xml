@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://your-domain.com/</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>1.00</priority>
-  </url>
-  <url>
-    <loc>https://your-domain.com/form/personalize</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.80</priority>
-  </url>
-   <url>
-    <loc>https://your-domain.com/form/inspirations</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://your-domain.com/legal/about-us</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.50</priority>
-  </url>
-  <url>
-    <loc>https://your-domain.com/legal/contact-us</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.50</priority>
-  </url>
-  <url>
-    <loc>https://your-domain.com/legal/privacy-policy</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.50</priority>
-  </url>
-  <url>
-    <loc>https://your-domain.com/legal/terms-of-service</loc>
-    <lastmod>2024-01-01</lastmod>
-    <priority>0.50</priority>
-  </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>https://naamkarann.in/</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/form/personalize</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/form/inspirations</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/results</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/legal/about-us</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/legal/contact-us</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/legal/privacy-policy</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://naamkarann.in/legal/terms-of-service</loc>
+  <lastmod>2024-01-01</lastmod>
+  <priority>0.80</priority>
+</url>
+
 </urlset>
