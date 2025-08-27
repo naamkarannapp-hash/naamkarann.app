@@ -77,10 +77,13 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="text-4xl md:text-5xl font-bold pb-8 text-primary"
+              className="text-4xl md:text-5xl font-bold pb-4 text-primary"
             >
               Naamkarann
             </motion.h2>
+            <div className="mb-8">
+              <a href="https://www.producthunt.com/products/naamkarann?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-naamkarann" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009980&theme=light&t=1756293005883" alt="Naamkarann - Culturally aware Indian baby-name assistant. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" /></a>
+            </div>
             <div className="my-4 h-px w-24 bg-foreground/20" />
             <div className="relative">
                 <motion.h1 
