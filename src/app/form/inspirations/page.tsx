@@ -17,7 +17,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { InspirationReminderToast } from "@/components/inspiration-reminder-toast";
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+    title: 'Choose Inspirations for Your Baby Name | Naamkarann',
+    description: 'Select language roots and vibes like nature, music, or literature to find the perfect and meaningful baby name.',
+};
 
 const allCulturalRoots = ["Sanskrit", "Hindi", "Tamil", "Marathi", "Kannada", "Telugu", "Bengali", "Gujarati", "Punjabi", "Malayalam", "Odia", "Urdu"];
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];

@@ -1,5 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Contact Us | Naamkarann',
+    description: 'Get in touch with the Naamkarann team. We\'d love to hear your questions, feedback, or suggestions about our baby name generator.',
+};
 
 export default function ContactUsPage() {
   return (

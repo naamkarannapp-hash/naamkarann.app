@@ -1,5 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Privacy Policy | Naamkarann',
+    description: 'Read the Privacy Policy for Naamkarann to understand how we handle your data when you use our AI baby name generator.',
+};
 
 export default function PrivacyPolicyPage() {
   return (
