@@ -24,7 +24,7 @@ const chipColorClasses = [
 ];
 
 interface Selection {
-  type: 'gender' | 'startingLetters' | 'blendParents' | 'matchSibling' | 'regionalRoot' | 'inspiration';
+  type: 'gender' | 'startingLetters' | 'blendParents' | 'matchSibling' | 'astrologyMode' | 'regionalRoot' | 'inspiration';
   value: string;
   displayValue: string;
 }
@@ -47,6 +47,9 @@ export function FormHeader() {
       case 'matchSibling':
         setState({ formValues: { ...formValues, matchSibling: false, siblingName: "" }});
         break;
+      case 'astrologyMode':
+        setState({ formValues: { ...formValues, astrologyMode: false, dateOfBirth: undefined, timeOfBirth: "", placeOfBirth: "" }});
+        break;
       case 'regionalRoot':
         const newRoots = formValues.regionalRoots?.filter(r => r !== selection.value);
         setState({ formValues: { ...formValues, regionalRoots: newRoots }});
@@ -67,6 +70,9 @@ export function FormHeader() {
 
     if (formValues.gender) {
         selections.push({ type: 'gender', value: formValues.gender, displayValue: formValues.gender });
+    }
+    if (formValues.astrologyMode) {
+      selections.push({ type: 'astrologyMode', value: 'astrology', displayValue: 'Astrology Mode' });
     }
     if (formValues.startingLetters) {
         selections.push({ type: 'startingLetters', value: formValues.startingLetters, displayValue: `Starts with: ${formValues.startingLetters}` });

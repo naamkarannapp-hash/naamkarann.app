@@ -135,7 +135,7 @@ export default function PersonalizePage() {
                       render={({ field }) => (
                         <FormItem className="flex items-center justify-between">
                           <FormLabel htmlFor="astrology-mode-switch" className="font-semibold mb-0 cursor-pointer flex items-center gap-2">
-                            Enable Astrology Mode <span className="text-sm font-normal text-muted-foreground">(Vedic horoscope)</span>
+                            Astrology Mode <span className="text-sm font-normal text-muted-foreground">(Vedic horoscope)</span>
                           </FormLabel>
                           <FormControl>
                             <Switch id="astrology-mode-switch" checked={field.value} onCheckedChange={field.onChange} />
