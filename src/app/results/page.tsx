@@ -18,7 +18,7 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
-  const { isLoading, nameResults, formValues } = state;
+  const { isLoading, nameResults, formValues, error } = state;
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -33,13 +33,7 @@ export default function ResultsPage() {
         const result = await getAndPrioritizeNames(formValues);
 
         if ("error" in result) {
-          toast({
-            variant: "destructive",
-            title: "An error occurred",
-            description: result.error,
-          });
-          setState({ isLoading: false, nameResults: [], error: result.error });
-          router.back();
+          setState({ isLoading: false, nameResults: [], error: "Too many people are discovering names right now. Please try again in a few minutes." });
         } else {
           setState({ nameResults: result.names, isLoading: false, error: null });
         }
@@ -66,7 +60,12 @@ export default function ResultsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pattern-background">
       <main className="flex-grow flex flex-col justify-center container mx-auto px-4 md:px-8 pb-32">
-          {nameResults.length > 0 ? (
+          {error ? (
+              <div className="text-center my-20">
+                  <h2 className="font-headline text-3xl font-bold text-destructive">An Error Occurred</h2>
+                  <p className="mt-4 text-lg text-foreground/80 max-w-sm mx-auto">{error}</p>
+              </div>
+          ) : nameResults.length > 0 ? (
             <>
               <div className="w-full max-w-md mx-auto space-y-2 mb-4">
                   <p className="text-center text-xs text-muted-foreground">{current} of {count}</p>
@@ -97,7 +96,7 @@ export default function ResultsPage() {
           )}
       </main>
 
-      {nameResults.length > 0 ? (
+      {nameResults.length > 0 && !error ? (
            <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-sm border-t border-border/20 p-4 z-40">
                 <div className="w-full max-w-md mx-auto text-center">
                     <p className="text-muted-foreground text-sm mb-2">Want different names?</p>
