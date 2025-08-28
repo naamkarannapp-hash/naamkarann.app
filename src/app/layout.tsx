@@ -6,6 +6,7 @@ import Providers from '@/components/providers';
 import Script from 'next/script';
 import { ptSans } from './fonts';
 import { cn } from '@/lib/utils';
+import { GoogleAnalytics } from '@/components/google-analytics';
 
 
 export const metadata: Metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({
           />
       </head>
       <body className={cn("font-body antialiased", ptSans.variable)} suppressHydrationWarning>
+        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
         <Providers>
           {children}
           <Toaster />
