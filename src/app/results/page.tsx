@@ -14,12 +14,6 @@ import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { LoadingSpinner } from "@/components/loading-spinner";
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Your AI-Generated Baby Names | Naamkarann',
-    description: 'Browse your personalized list of AI-generated baby names. Swipe through meaningful and unique names to find the perfect one.',
-};
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();

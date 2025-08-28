@@ -23,12 +23,6 @@ import { cn } from "@/lib/utils";
 import { ClientInput } from "@/components/client-input";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Personalize Your Name Search | Naamkarann',
-    description: 'Start by personalizing your baby name search. Select gender, starting letters, or even blend with parent or sibling names.',
-};
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
