@@ -115,23 +115,23 @@ export default function Home() {
                   <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
                     Naamkarann is more than just a name generator. It's a journey into the heart of culture and language to find a name that resonates with your family's heritage and aspirations. Whether you're looking for a name inspired by nature, mythology, or ancient scriptures, our AI-powered assistant helps you discover unique and meaningful options from a variety of Indian linguistic roots.
                   </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div className="p-6 bg-muted rounded-lg">
-                  <Wand2 className="w-8 h-8 mb-3 text-accent" />
-                  <h4 className="font-semibold text-xl mb-2">AI-Powered Suggestions</h4>
-                  <p className="text-foreground/70">Our smart AI gets to know your preferences—like gender, starting letters, and vibes—to provide personalized and high-quality name suggestions.</p>
-                </div>
-                <div className="p-6 bg-muted rounded-lg">
-                  <BookOpen className="w-8 h-8 mb-3 text-accent" />
-                  <h4 className="font-semibold text-xl mb-2">Rich Cultural Roots</h4>
-                  <p className="text-foreground/70">Explore names from diverse linguistic origins like Sanskrit, Tamil, Hindi, and more, each with its own beautiful meaning and pronunciation.</p>
-                </div>
-                <div className="p-6 bg-muted rounded-lg">
-                  <Users className="w-8 h-8 mb-3 text-accent" />
-                  <h4 className="font-semibold text-xl mb-2">Family-Centric Features</h4>
-                  <p className="text-foreground/70">Create harmony by blending names with those of parents or matching the vibe of a sibling’s name, making the choice a true family affair.</p>
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                    <div className="p-6 bg-muted rounded-lg">
+                      <Wand2 className="w-8 h-8 mb-3 text-accent" />
+                      <h4 className="font-semibold text-xl mb-2">AI-Powered Suggestions</h4>
+                      <p className="text-foreground/70">Our smart AI gets to know your preferences—like gender, starting letters, and vibes—to provide personalized and high-quality name suggestions.</p>
+                    </div>
+                    <div className="p-6 bg-muted rounded-lg">
+                      <BookOpen className="w-8 h-8 mb-3 text-accent" />
+                      <h4 className="font-semibold text-xl mb-2">Rich Cultural Roots</h4>
+                      <p className="text-foreground/70">Explore names from diverse linguistic origins like Sanskrit, Tamil, Hindi, and more, each with its own beautiful meaning and pronunciation.</p>
+                    </div>
+                    <div className="p-6 bg-muted rounded-lg">
+                      <Users className="w-8 h-8 mb-3 text-accent" />
+                      <h4 className="font-semibold text-xl mb-2">Family-Centric Features</h4>
+                      <p className="text-foreground/70">Create harmony by blending names with those of parents or matching the vibe of a sibling’s name, making the choice a true family affair.</p>
+                    </div>
+                  </div>
               </div>
             </div>
           </section>
