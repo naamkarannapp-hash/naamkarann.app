@@ -32,7 +32,7 @@ export default function ResultsPage() {
         const result = await getAndPrioritizeNames(formValues);
 
         if ("error" in result) {
-          setState({ isLoading: false, nameResults: [], error: "Name discovery is very popular right now. Please try again in a few minutes." });
+          setState({ isLoading: false, nameResults: [], error: "Sorry, Naamkarann is experiencing a lot of traffic right now. Thank you for your patience—please try again in a few minutes." });
         } else {
           setState({ nameResults: result.names, isLoading: false, error: null });
         }
