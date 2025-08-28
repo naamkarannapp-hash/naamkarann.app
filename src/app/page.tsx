@@ -111,23 +111,23 @@ export default function Home() {
           <div className="visually-hidden">
               <h3 className="text-3xl font-bold text-primary mb-4">Find a Name with Soul and Story</h3>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Naamkarann is more than just a name generator. It's a journey into the heart of culture and language to find a name that resonates with your family's heritage and aspirations. Whether you're looking for a name inspired by nature, mythology, or ancient scriptures, our AI-powered assistant helps you discover unique and meaningful options from a variety of Indian linguistic roots.
+                Naamkarann is more than just a name generator. It's your companion for finding the perfect Indian baby name, whether you are looking for a traditional Hindu name or a modern, unique name. Discover the perfect Indian boy baby name or Indian girl baby name that resonates with your family's heritage and aspirations. Our AI-powered assistant helps you discover meaningful options from a variety of Indian linguistic roots, including Sanskrit, Tamil, and more.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div className="p-6 bg-muted rounded-lg">
                   <Wand2 className="w-8 h-8 mb-3 text-accent" />
                   <h4 className="font-semibold text-xl mb-2">AI-Powered Suggestions</h4>
-                  <p className="text-foreground/70">Our smart AI gets to know your preferences—like gender, starting letters, and vibes—to provide personalized and high-quality name suggestions.</p>
+                  <p className="text-foreground/70">Our smart AI gets to know your preferences—like gender, starting letters, and vibes—to provide personalized and high-quality name suggestions for boys, girls, and gender-neutral options.</p>
                 </div>
                 <div className="p-6 bg-muted rounded-lg">
                   <BookOpen className="w-8 h-8 mb-3 text-accent" />
                   <h4 className="font-semibold text-xl mb-2">Rich Cultural Roots</h4>
-                  <p className="text-foreground/70">Explore names from diverse linguistic origins like Sanskrit, Tamil, Hindi, and more, each with its own beautiful meaning and pronunciation.</p>
+                  <p className="text-foreground/70">Explore a vast collection of names from diverse linguistic origins. Find beautiful Hindu baby boy names from Sanskrit, classic Tamil baby girl names, or modern Hindi names.</p>
                 </div>
                 <div className="p-6 bg-muted rounded-lg">
                   <Users className="w-8 h-8 mb-3 text-accent" />
                   <h4 className="font-semibold text-xl mb-2">Family-Centric Features</h4>
-                  <p className="text-foreground/70">Create harmony by blending names with those of parents or matching the vibe of a sibling’s name, making the choice a true family affair.</p>
+                  <p className="text-foreground/70">Create family harmony by blending your name with your child's, or find a name that matches the vibe of a sibling’s name. This makes the choice a true family affair, whether you're searching for a boy's name or a girl's name.</p>
                 </div>
               </div>
           </div>
