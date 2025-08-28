@@ -110,10 +110,12 @@ export default function Home() {
            {/* SEO Content Section */}
           <section className="w-full bg-background py-12 md:py-16">
             <div className="container mx-auto max-w-4xl text-center">
-              <h3 className="text-3xl font-bold text-primary mb-4">Find a Name with Soul and Story</h3>
-              <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Naamkarann is more than just a name generator. It's a journey into the heart of culture and language to find a name that resonates with your family's heritage and aspirations. Whether you're looking for a name inspired by nature, mythology, or ancient scriptures, our AI-powered assistant helps you discover unique and meaningful options from a variety of Indian linguistic roots.
-              </p>
+              <div className="visually-hidden">
+                  <h3 className="text-3xl font-bold text-primary mb-4">Find a Name with Soul and Story</h3>
+                  <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
+                    Naamkarann is more than just a name generator. It's a journey into the heart of culture and language to find a name that resonates with your family's heritage and aspirations. Whether you're looking for a name inspired by nature, mythology, or ancient scriptures, our AI-powered assistant helps you discover unique and meaningful options from a variety of Indian linguistic roots.
+                  </p>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div className="p-6 bg-muted rounded-lg">
                   <Wand2 className="w-8 h-8 mb-3 text-accent" />
