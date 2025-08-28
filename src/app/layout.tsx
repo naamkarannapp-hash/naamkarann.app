@@ -42,7 +42,7 @@ export default function RootLayout({
           />
       </head>
       <body className={cn("font-body antialiased", ptSans.variable)} suppressHydrationWarning>
-        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
+        <GoogleAnalytics gaId="G-1B4ZW0LFW2" />
         <Providers>
           {children}
           <Toaster />

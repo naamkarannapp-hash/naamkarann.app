@@ -1,10 +1,11 @@
+
 "use client"
 
 import Script from 'next/script'
 import * as React from 'react'
 
 export function GoogleAnalytics({ gaId }: { gaId: string }) {
-  if (!gaId) {
+  if (!gaId || gaId === "G-XXXXXXXXXX") {
     return null
   }
 
