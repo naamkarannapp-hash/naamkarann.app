@@ -7,7 +7,7 @@ import { useAppState } from "@/context/app-state-context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import AdBanner from "@/components/ad-banner";
 import Link from 'next/link';
 import { getAndPrioritizeNames } from "@/lib/actions";
@@ -61,8 +61,8 @@ export default function ResultsPage() {
     <div className="flex flex-col min-h-screen bg-background text-foreground pattern-background">
       <main className="flex-grow flex flex-col justify-center container mx-auto px-4 md:px-8 pb-32">
           {error ? (
-              <div className="text-center my-20">
-                  <h2 className="font-headline text-3xl font-bold text-destructive">An Error Occurred</h2>
+              <div className="text-center my-20 flex flex-col items-center">
+                  <Users className="w-16 h-16 mb-4 text-primary opacity-50" />
                   <p className="mt-4 text-lg text-foreground/80 max-w-sm mx-auto">{error}</p>
               </div>
           ) : nameResults.length > 0 ? (
