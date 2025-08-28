@@ -219,18 +219,9 @@ export default function PersonalizePage() {
                           name="placeOfBirth"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="flex items-center gap-2">
+                              <FormLabel className="flex items-baseline gap-2">
                                 Place of Birth
-                                <TooltipProvider>
-                                   <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Info className="h-3 w-3 cursor-pointer" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Required to calculate the star positions at birth.</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
+                                <span className="text-sm font-normal text-muted-foreground">(to calculate star positions)</span>
                               </FormLabel>
                               <FormControl>
                                 <Input placeholder="e.g., Mumbai, India" {...field} />
@@ -376,3 +367,5 @@ export default function PersonalizePage() {
     </Card>
   );
 }
+
+    
