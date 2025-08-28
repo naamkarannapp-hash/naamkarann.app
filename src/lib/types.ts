@@ -14,6 +14,10 @@ const baseNameFormSchema = z.object({
   matchSibling: z.boolean().optional(),
   siblingName: z.string().regex(onlyAlphabets, alphabetMessage).optional(),
   inspirations: z.array(z.string()).max(5, "You can select a maximum of 5 vibes.").optional(),
+  astrologyMode: z.boolean().optional(),
+  dateOfBirth: z.date().optional(),
+  timeOfBirth: z.string().optional(),
+  placeOfBirth: z.string().optional(),
 });
 
 export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
@@ -31,6 +35,17 @@ export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
       path: ["siblingName"],
     });
   }
+  if (data.astrologyMode) {
+    if (!data.dateOfBirth) {
+      ctx.addIssue({ code: 'custom', message: 'Date of birth is required.', path: ['dateOfBirth'] });
+    }
+    if (!data.timeOfBirth) {
+        ctx.addIssue({ code: 'custom', message: 'Time of birth is required.', path: ['timeOfBirth'] });
+    }
+    if (!data.placeOfBirth || data.placeOfBirth.trim() === '') {
+      ctx.addIssue({ code: 'custom', message: 'Place of birth is required.', path: ['placeOfBirth'] });
+    }
+  }
 });
 
 export const personalizePageSchema = baseNameFormSchema.pick({
@@ -41,6 +56,10 @@ export const personalizePageSchema = baseNameFormSchema.pick({
     parent2Name: true,
     matchSibling: true,
     siblingName: true,
+    astrologyMode: true,
+    dateOfBirth: true,
+    timeOfBirth: true,
+    placeOfBirth: true,
 }).superRefine((data, ctx) => {
     if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
       ctx.addIssue({
@@ -55,6 +74,17 @@ export const personalizePageSchema = baseNameFormSchema.pick({
         message: "Sibling's name is required.",
         path: ["siblingName"],
       });
+    }
+    if (data.astrologyMode) {
+        if (!data.dateOfBirth) {
+          ctx.addIssue({ code: 'custom', message: 'Date of birth is required.', path: ['dateOfBirth'] });
+        }
+        if (!data.timeOfBirth) {
+            ctx.addIssue({ code: 'custom', message: 'Time of birth is required.', path: ['timeOfBirth'] });
+        }
+        if (!data.placeOfBirth || data.placeOfBirth.trim() === '') {
+          ctx.addIssue({ code: 'custom', message: 'Place of birth is required.', path: ['placeOfBirth'] });
+        }
     }
 });
 
