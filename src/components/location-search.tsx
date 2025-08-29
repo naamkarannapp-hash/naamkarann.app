@@ -22,11 +22,17 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
-  const isSelecting = React.useRef(false);
+
+  React.useEffect(() => {
+    // Sync local query state if external value changes (e.g. form reset)
+    setQuery(value);
+  }, [value]);
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
-      if (debouncedQuery.length > 2 && !isSelecting.current) {
+      // Only search if the debounced query is long enough AND it's different from the final selected value
+      // This prevents re-searching when a value is selected.
+      if (debouncedQuery.length > 2 && debouncedQuery !== value) {
         setIsLoading(true);
         const results = await searchLocations(debouncedQuery);
         setSuggestions(results);
@@ -36,42 +42,31 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
         }
       } else {
         setSuggestions([]);
+        if (isOpen) setIsOpen(false);
       }
     };
 
     fetchSuggestions();
-  }, [debouncedQuery]);
-  
-  React.useEffect(() => {
-    // If the external value is cleared, clear the internal query too
-    if (value === "") {
-      setQuery("");
-    }
-  }, [value]);
+  }, [debouncedQuery, value, isOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    isSelecting.current = false;
     const newValue = e.target.value;
     setQuery(newValue);
-    onValueChange(newValue);
-    if (newValue.length < 3) {
-      setIsOpen(false);
+    // Immediately clear the selected location data if the user types
+    if (value) {
+      onValueChange("");
     }
   };
 
   const handleSelect = (location: LocationSearchResult) => {
-    isSelecting.current = true;
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(", ");
-    setQuery(locationName);
+    // Set final value for the form
     onValueChange(locationName);
     onLocationSelect(location);
+    // Update local query to display selection
+    setQuery(locationName);
     setIsOpen(false);
     setSuggestions([]);
-    
-    // Reset the flag shortly after selection
-    setTimeout(() => {
-        isSelecting.current = false;
-    }, 100);
   };
   
   return (
