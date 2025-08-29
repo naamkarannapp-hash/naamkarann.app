@@ -29,6 +29,7 @@ import { CalendarIcon, MapPin } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { LocationSearch } from "@/components/location-search";
+import { convertToUTCTimestamp } from "@/lib/actions";
 
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
@@ -86,6 +87,7 @@ export default function PersonalizePage() {
         setValue('placeOfBirth', '');
         setValue('lat', undefined);
         setValue('lon', undefined);
+        setValue('utcTimestamp', undefined);
     }
   }, [astrologyMode, setValue]);
 
@@ -95,8 +97,19 @@ export default function PersonalizePage() {
     setValue('lon', location.coordinates[1], { shouldValidate: true, shouldDirty: true });
   }
 
-  function onSubmit(data: NameFormValues) {
-    setState({ formValues: data });
+  async function onSubmit(data: NameFormValues) {
+    let submissionData = { ...data };
+    if (data.astrologyMode && data.dateOfBirth && data.timeOfBirth && data.lat !== undefined && data.lon !== undefined) {
+      const utcTimestamp = await convertToUTCTimestamp({
+        date: data.dateOfBirth,
+        time: data.timeOfBirth,
+        lat: data.lat,
+        lon: data.lon,
+      });
+      submissionData.utcTimestamp = utcTimestamp;
+    }
+    
+    setState({ formValues: submissionData });
     router.push("/form/inspirations");
   }
 
@@ -388,5 +401,3 @@ export default function PersonalizePage() {
     </>
   );
 }
-
-    

@@ -20,6 +20,7 @@ const baseNameFormSchema = z.object({
   placeOfBirth: z.string().optional(),
   lat: z.number().optional(),
   lon: z.number().optional(),
+  utcTimestamp: z.string().optional(),
 });
 
 export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
@@ -67,6 +68,7 @@ export const personalizePageSchema = baseNameFormSchema.pick({
     placeOfBirth: true,
     lat: true,
     lon: true,
+    utcTimestamp: true,
 }).superRefine((data, ctx) => {
     if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
       ctx.addIssue({

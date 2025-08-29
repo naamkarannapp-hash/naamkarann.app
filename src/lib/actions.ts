@@ -4,6 +4,7 @@
 import {z} from 'zod';
 import {nameFormSchema, type NameResult, type LocationSearchResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
+import { find as findTz } from 'geo-tz';
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
@@ -137,5 +138,68 @@ export async function searchLocations(query: string): Promise<LocationSearchResu
   } catch (error) {
     console.error('Error fetching from Photon API:', error);
     return [];
+  }
+}
+
+export async function convertToUTCTimestamp(
+  { date, time, lat, lon }: { date: Date; time: string; lat: number; lon: number }
+): Promise<string> {
+  try {
+    const timezones = findTz(lat, lon);
+    const timezone = timezones[0]; // Get the primary timezone
+
+    if (!timezone) {
+      throw new Error("Could not determine timezone for the given location.");
+    }
+
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Create a date string in ISO format but without the Z (to treat it as local time in the target timezone)
+    const localDateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+    
+    // Create a formatter for the target timezone
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    
+    const dateInTimezone = new Date(localDateString);
+
+    // This is a trick to get the UTC offset.
+    // We format the same local time in UTC and in the target timezone, then calculate the difference.
+    const utcDate = new Date(Date.UTC(
+      date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+      hours, minutes
+    ));
+    
+    const zonedDate = new Date(
+        date.getFullYear(), date.getMonth(), date.getDate(),
+        hours, minutes
+    );
+
+    const formatterForOffset = new Intl.DateTimeFormat([], {
+      timeZone: timezone,
+      timeZoneName: 'shortOffset',
+    });
+
+    const offsetString = formatterForOffset.format(zonedDate).split('GMT')[1];
+    
+    const finalDate = new Date(`${localDateString}${offsetString}`);
+
+    return finalDate.toISOString();
+
+  } catch (error) {
+    console.error("Error converting to UTC:", error);
+    // Fallback to a simple UTC conversion if timezone lookup fails, though it might be inaccurate
+    const fallbackDate = new Date(date);
+    const [hours, minutes] = time.split(':').map(Number);
+    fallbackDate.setUTCHours(hours, minutes, 0, 0);
+    return fallbackDate.toISOString();
   }
 }
