@@ -27,48 +27,25 @@ export async function getAndPrioritizeNames(
     return { error: 'Application is not configured correctly. Missing WEBHOOK_URL.' };
   }
   try {
-    // Construct the new payload based on the user's template
-    const payload: any = {
-      gender: values.gender ? values.gender.toLowerCase() : 'neutral'
+    // Construct the payload based on the user's request to include all fields
+    const payload = {
+      gender: values.gender || "Neutral",
+      regionalRoots: values.regionalRoots || [],
+      startingLetters: values.startingLetters || "",
+      blendParents: values.blendParents || false,
+      parent1Name: values.parent1Name || "",
+      parent2Name: values.parent2Name || "",
+      matchSibling: values.matchSibling || false,
+      siblingName: values.siblingName || "",
+      inspirations: values.inspirations || [],
+      astrologyMode: values.astrologyMode || false,
+      dateOfBirth: values.dateOfBirth || null,
+      timeOfBirth: values.timeOfBirth || "",
+      placeOfBirth: values.placeOfBirth || "",
+      lat: values.lat,
+      lon: values.lon,
+      utcTimestamp: values.utcTimestamp || null
     };
-    
-    if (values.astrologyMode) {
-      payload.astrologyMode = true;
-    }
-
-    if (values.astrologyMode && values.dateOfBirth && values.utcTimestamp && values.placeOfBirth && values.lat !== undefined && values.lon !== undefined) {
-      const utcDate = new Date(values.utcTimestamp);
-      payload.vedic_horoscope = {
-        birthDate: format(values.dateOfBirth, 'dd-MM-yyyy'),
-        birthTime: `${String(utcDate.getUTCHours()).padStart(2, '0')}:${String(utcDate.getUTCMinutes()).padStart(2, '0')} in UTC`,
-        birthPlace: values.placeOfBirth,
-        birthLatitude: values.lat.toString(),
-        birthLongitude: values.lon.toString()
-      };
-    }
-    
-    if (values.startingLetters) {
-      payload.startingLetters = values.startingLetters;
-    }
-
-    if (values.blendParents && values.parent1Name) {
-      payload.blendWithParents = {
-        parent1Name: values.parent1Name,
-        ...(values.parent2Name && { parent2Name: values.parent2Name })
-      };
-    }
-
-    if (values.matchSibling && values.siblingName) {
-      payload.siblingName = values.siblingName;
-    }
-
-    if (values.regionalRoots && values.regionalRoots.length > 0) {
-      payload.regionalRoots = values.regionalRoots.join(',');
-    }
-    
-    if (values.inspirations && values.inspirations.length > 0) {
-      payload.inspirations = values.inspirations.join(',');
-    }
 
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
