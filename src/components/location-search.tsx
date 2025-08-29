@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -7,7 +6,6 @@ import { searchLocations } from "@/lib/actions";
 import type { LocationSearchResult } from "@/lib/types";
 import { MapPin, Loader2 } from "lucide-react";
 import { Input } from "./ui/input";
-import { cn } from "@/lib/utils";
 
 type LocationSearchProps = {
   value: string;
@@ -21,7 +19,6 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
-  
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -38,7 +35,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
 
     fetchSuggestions();
   }, [debouncedQuery]);
-  
+
   const handleSelect = (location: LocationSearchResult) => {
     onLocationSelect(location);
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
@@ -46,16 +43,16 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     setQuery(locationName);
     setShowSuggestions(false);
   };
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setQuery(newValue);
     onValueChange(newValue);
-  }
+  };
   
   const handleInputFocus = () => {
     setShowSuggestions(true);
-  }
+  };
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -68,7 +65,6 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   return (
     <div className="relative w-full" ref={wrapperRef}>
@@ -87,7 +83,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
       </div>
       
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border border-border bg-background shadow-lg">
+        <div className="absolute top-full mt-1 w-full rounded-md border border-border bg-background shadow-lg z-10">
           <ul>
             {suggestions.map((location) => (
               <li
