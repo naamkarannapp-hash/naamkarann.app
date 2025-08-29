@@ -21,7 +21,6 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
-
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -31,8 +30,10 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
         const results = await searchLocations(debouncedQuery);
         setSuggestions(results);
         setIsLoading(false);
+        setShowSuggestions(true);
       } else {
         setSuggestions([]);
+        setShowSuggestions(false);
       }
     };
 
@@ -51,9 +52,8 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     const newValue = e.target.value;
     setQuery(newValue);
     onValueChange(newValue); // Keep form state in sync
-    setShowSuggestions(true);
   }
-
+  
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -66,7 +66,6 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     };
   }, []);
 
-
   return (
     <div className="relative w-full" ref={wrapperRef}>
       <div className="relative">
@@ -76,7 +75,11 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
           placeholder="Search for a location"
           value={query}
           onChange={handleInputChange}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={() => {
+            if (suggestions.length > 0) {
+              setShowSuggestions(true)
+            }
+          }}
           autoComplete="off"
           className="pl-9"
         />
@@ -84,15 +87,15 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
       </div>
       
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-md shadow-lg">
-          <ul className="py-1">
+        <div className="absolute z-10 mt-1 w-full rounded-md border border-border bg-background shadow-lg">
+          <ul>
             {suggestions.map((location) => (
               <li
                 key={location.id}
                 className="px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground text-sm flex items-center gap-2"
                 onMouseDown={(e) => {
-                  e.preventDefault(); // This is crucial to prevent the input from losing focus
-                  handleSelect(location)
+                  e.preventDefault();
+                  handleSelect(location);
                 }}
               >
                 <MapPin className="h-4 w-4 text-muted-foreground" />
