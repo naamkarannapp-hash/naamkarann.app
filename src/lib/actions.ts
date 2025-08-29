@@ -5,6 +5,7 @@ import {z} from 'zod';
 import {nameFormSchema, type NameResult, type LocationSearchResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 import { find as findTz } from 'geo-tz';
+import { format } from 'date-fns';
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
@@ -26,20 +27,51 @@ export async function getAndPrioritizeNames(
     return { error: 'Application is not configured correctly. Missing WEBHOOK_URL.' };
   }
   try {
-    // Transform the array values into comma-separated strings for the API
-    const apiValues = {
-      ...values,
-      regionalRoots: values.regionalRoots && values.regionalRoots.length > 0 ? values.regionalRoots.join(',') : null,
-      inspirations: values.inspirations && values.inspirations.length > 0 ? values.inspirations.join(',') : null,
+    // Construct the new payload based on the user's template
+    const payload: any = {
+      gender: values.gender ? values.gender.toLowerCase() : 'neutral'
     };
 
+    if (values.astrologyMode && values.dateOfBirth && values.utcTimestamp && values.placeOfBirth && values.lat !== undefined && values.lon !== undefined) {
+      const utcDate = new Date(values.utcTimestamp);
+      payload.vedic_horoscope = {
+        birthDate: format(values.dateOfBirth, 'dd-MM-yyyy'),
+        birthTime: `${String(utcDate.getUTCHours()).padStart(2, '0')}:${String(utcDate.getUTCMinutes()).padStart(2, '0')} in UTC`,
+        birthPlace: values.placeOfBirth,
+        birthLatitude: values.lat.toString(),
+        birthLongitude: values.lon.toString()
+      };
+    }
+    
+    if (values.startingLetters) {
+      payload.startingLetters = values.startingLetters;
+    }
+
+    if (values.blendParents && values.parent1Name) {
+      payload.blendWithParents = {
+        parent1Name: values.parent1Name,
+        ...(values.parent2Name && { parent2Name: values.parent2Name })
+      };
+    }
+
+    if (values.matchSibling && values.siblingName) {
+      payload.siblingName = values.siblingName;
+    }
+
+    if (values.regionalRoots && values.regionalRoots.length > 0) {
+      payload.regionalRoots = values.regionalRoots.join(',');
+    }
+    
+    if (values.inspirations && values.inspirations.length > 0) {
+      payload.inspirations = values.inspirations.join(',');
+    }
 
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(apiValues),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -156,27 +188,6 @@ export async function convertToUTCTimestamp(
 
     // Create a date string in ISO format but without the Z (to treat it as local time in the target timezone)
     const localDateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
-    
-    // Create a formatter for the target timezone
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      timeZone: timezone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-    
-    const dateInTimezone = new Date(localDateString);
-
-    // This is a trick to get the UTC offset.
-    // We format the same local time in UTC and in the target timezone, then calculate the difference.
-    const utcDate = new Date(Date.UTC(
-      date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-      hours, minutes
-    ));
     
     const zonedDate = new Date(
         date.getFullYear(), date.getMonth(), date.getDate(),
