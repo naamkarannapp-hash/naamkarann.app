@@ -36,8 +36,7 @@ const genders = ["Boy", "Girl", "Neutral"] as const;
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
-  const [isLocationSearchOpen, setIsLocationSearchOpen] = useState(false);
-
+  
   const form = useForm<NameFormValues>({
     resolver: zodResolver(personalizePageSchema),
     defaultValues: state.formValues,
@@ -48,8 +47,7 @@ export default function PersonalizePage() {
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
   const astrologyMode = watch("astrologyMode");
-  const placeOfBirth = watch("placeOfBirth");
-
+  
   useEffect(() => {
     reset(state.formValues);
   }, [state.formValues, reset]);
@@ -235,21 +233,17 @@ export default function PersonalizePage() {
                           control={control}
                           name="placeOfBirth"
                           render={({ field }) => (
-                            <FormItem className="flex flex-col">
+                            <FormItem>
                                <FormLabel className="flex items-baseline gap-2">
                                 Place of Birth
                                 <span className="text-sm font-normal text-muted-foreground">(to calculate star positions)</span>
                               </FormLabel>
                               <FormControl>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}
-                                    onClick={() => setIsLocationSearchOpen(true)}
-                                >
-                                    <MapPin className="mr-2 h-4 w-4" />
-                                    {field.value ? field.value : "Search for a location"}
-                                </Button>
+                                <LocationSearch
+                                  value={field.value || ""}
+                                  onValueChange={field.onChange}
+                                  onLocationSelect={handleLocationSelect}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -388,11 +382,8 @@ export default function PersonalizePage() {
         </Form>
       </CardContent>
     </Card>
-     <LocationSearch
-        open={isLocationSearchOpen}
-        onOpenChange={setIsLocationSearchOpen}
-        onSelect={handleLocationSelect}
-      />
     </>
   );
 }
+
+    

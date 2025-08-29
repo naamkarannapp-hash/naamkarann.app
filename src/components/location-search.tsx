@@ -3,23 +3,23 @@
 
 import * as React from "react";
 import { useDebounce } from "use-debounce";
-import { Command as CommandPrimitive } from "cmdk";
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { searchLocations } from "@/lib/actions";
 import type { LocationSearchResult } from "@/lib/types";
 import { MapPin, Loader2 } from "lucide-react";
+import { Input } from "./ui/input";
+import { cn } from "@/lib/utils";
 
 type LocationSearchProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSelect: (location: LocationSearchResult) => void;
+  value: string;
+  onValueChange: (value: string) => void;
+  onLocationSelect: (location: LocationSearchResult) => void;
 };
 
-export function LocationSearch({ open, onOpenChange, onSelect }: LocationSearchProps) {
-  const [query, setQuery] = React.useState("");
-  const [debouncedQuery] = useDebounce(query, 300);
+export function LocationSearch({ value, onValueChange, onLocationSelect }: LocationSearchProps) {
+  const [debouncedQuery] = useDebounce(value, 300);
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isFocused, setIsFocused] = React.useState(false);
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
@@ -32,45 +32,61 @@ export function LocationSearch({ open, onOpenChange, onSelect }: LocationSearchP
         setSuggestions([]);
       }
     };
-    fetchSuggestions();
-  }, [debouncedQuery]);
-  
+    if(isFocused) {
+        fetchSuggestions();
+    }
+  }, [debouncedQuery, isFocused]);
+
   const handleSelect = (location: LocationSearchResult) => {
-    onSelect(location);
-    onOpenChange(false);
-    setQuery("");
+    onLocationSelect(location);
+    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
+    onValueChange(locationName);
+    setSuggestions([]);
+    setIsFocused(false);
+  };
+  
+  const handleBlur = () => {
+    // Delay blur to allow click on suggestions
+    setTimeout(() => {
+        setIsFocused(false);
+    }, 200);
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput
-        placeholder="Type a city, state, or country..."
-        value={query}
-        onValueChange={setQuery}
-      />
-      <CommandList>
-        {isLoading && (
-            <div className="p-4 flex items-center justify-center">
-                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-        )}
-        {!isLoading && suggestions.length === 0 && query.length > 2 && (
-          <CommandEmpty>No results found.</CommandEmpty>
-        )}
-        <CommandGroup>
-          {suggestions.map((location) => (
-            <CommandItem
-              key={location.id}
-              value={[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}
-              onSelect={() => handleSelect(location)}
-              className="flex items-center gap-2"
-            >
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span>{[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </CommandDialog>
+    <div className="relative w-full">
+        <div className="relative">
+             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+             <Input
+                type="text"
+                placeholder="Search for a location"
+                value={value}
+                onChange={(e) => onValueChange(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={handleBlur}
+                autoComplete="off"
+                className="pl-9"
+             />
+             {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
+        </div>
+      
+      {isFocused && suggestions.length > 0 && (
+        <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-md shadow-lg">
+          <ul className="py-1">
+            {suggestions.map((location) => (
+              <li
+                key={location.id}
+                className="px-3 py-2 cursor-pointer hover:bg-accent text-sm flex items-center gap-2"
+                onClick={() => handleSelect(location)}
+              >
+                 <MapPin className="h-4 w-4 text-muted-foreground" />
+                <span>{[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
+
+    
