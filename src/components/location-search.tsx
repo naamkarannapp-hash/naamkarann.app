@@ -18,8 +18,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [debouncedQuery] = useDebounce(query, 300);
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [showSuggestions, setShowSuggestions] = React.useState(false);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const dataListId = React.useId();
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
@@ -36,38 +35,22 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     fetchSuggestions();
   }, [debouncedQuery]);
 
-  const handleSelect = (location: LocationSearchResult) => {
-    onLocationSelect(location);
-    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
-    onValueChange(locationName);
-    setQuery(locationName);
-    setShowSuggestions(false);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setQuery(newValue);
     onValueChange(newValue);
-  };
-  
-  const handleInputFocus = () => {
-    setShowSuggestions(true);
-  };
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    // Find the selected location from suggestions and notify the parent
+    const selectedSuggestion = suggestions.find(
+      (s) => [s.name, s.city, s.state, s.country].filter(Boolean).join(", ") === newValue
+    );
+    if (selectedSuggestion) {
+      onLocationSelect(selectedSuggestion);
+    }
+  };
 
   return (
-    <div className="relative w-full" ref={wrapperRef}>
+    <div className="relative w-full">
       <div className="relative">
         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -75,32 +58,21 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
           placeholder="Search for a location"
           value={query}
           onChange={handleInputChange}
-          onFocus={handleInputFocus}
           autoComplete="off"
           className="pl-9"
+          list={dataListId}
         />
         {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
       </div>
       
-      {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute top-full mt-1 w-full rounded-md border border-border bg-background shadow-lg z-10">
-          <ul>
-            {suggestions.map((location) => (
-              <li
-                key={location.id}
-                className="px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground text-sm flex items-center gap-2"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  handleSelect(location);
-                }}
-              >
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span>{[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <datalist id={dataListId}>
+        {suggestions.map((location) => (
+          <option 
+            key={location.id} 
+            value={[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")} 
+          />
+        ))}
+      </datalist>
     </div>
   );
 }

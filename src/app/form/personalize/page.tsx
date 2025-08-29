@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -91,8 +90,8 @@ export default function PersonalizePage() {
   function handleLocationSelect(location: LocationSearchResult) {
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
     setValue('placeOfBirth', locationName, { shouldValidate: true, shouldDirty: true });
-    setValue('lat', location.coordinates[0]);
-    setValue('lon', location.coordinates[1]);
+    setValue('lat', location.coordinates[0], { shouldValidate: true, shouldDirty: true });
+    setValue('lon', location.coordinates[1], { shouldValidate: true, shouldDirty: true });
   }
 
   function onSubmit(data: NameFormValues) {
