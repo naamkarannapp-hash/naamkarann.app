@@ -239,7 +239,7 @@ export default function PersonalizePage() {
                             <FormItem>
                               <FormLabel>Time of Birth</FormLabel>
                               <FormControl>
-                                <ClientInput type="time" {...field} />
+                                <ClientInput type="time" placeholder="HH:MM (24-hour)" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
