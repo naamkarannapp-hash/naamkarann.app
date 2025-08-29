@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -88,8 +89,7 @@ export default function PersonalizePage() {
   }, [astrologyMode, setValue]);
 
   function handleLocationSelect(location: LocationSearchResult) {
-    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
-    setValue('placeOfBirth', locationName, { shouldValidate: true, shouldDirty: true });
+    // This function is now simpler as the location-search component handles setting the name
     setValue('lat', location.coordinates[0], { shouldValidate: true, shouldDirty: true });
     setValue('lon', location.coordinates[1], { shouldValidate: true, shouldDirty: true });
   }

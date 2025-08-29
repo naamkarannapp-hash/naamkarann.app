@@ -1,11 +1,14 @@
+
 "use client";
 
 import * as React from "react";
 import { useDebounce } from "use-debounce";
 import { searchLocations } from "@/lib/actions";
 import type { LocationSearchResult } from "@/lib/types";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, Check } from "lucide-react";
 import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 type LocationSearchProps = {
   value: string;
@@ -18,7 +21,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [debouncedQuery] = useDebounce(query, 300);
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const dataListId = React.useId();
+  const [isOpen, setIsOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
@@ -39,40 +42,75 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     const newValue = e.target.value;
     setQuery(newValue);
     onValueChange(newValue);
-
-    // Find the selected location from suggestions and notify the parent
-    const selectedSuggestion = suggestions.find(
-      (s) => [s.name, s.city, s.state, s.country].filter(Boolean).join(", ") === newValue
-    );
-    if (selectedSuggestion) {
-      onLocationSelect(selectedSuggestion);
+    if (newValue.length > 2) {
+        setIsOpen(true);
+    } else {
+        setIsOpen(false);
     }
   };
 
+  const handleSelect = (location: LocationSearchResult) => {
+    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(", ");
+    setQuery(locationName);
+    onValueChange(locationName);
+    onLocationSelect(location);
+    setSuggestions([]);
+    setIsOpen(false);
+  };
+  
+  const handleOpenChange = (open: boolean) => {
+      setIsOpen(open);
+      if(!open) {
+        setSuggestions([]);
+      }
+  }
+
   return (
-    <div className="relative w-full">
-      <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Search for a location"
-          value={query}
-          onChange={handleInputChange}
-          autoComplete="off"
-          className="pl-9"
-          list={dataListId}
-        />
-        {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
+    <Popover open={isOpen} onOpenChange={handleOpenChange}>
+      <div className="relative w-full">
+         <div className="relative">
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+             <PopoverTrigger asChild>
+                <Input
+                  type="text"
+                  placeholder="Search for a location"
+                  value={query}
+                  onChange={handleInputChange}
+                  onFocus={() => { if(query.length > 2) setIsOpen(true)}}
+                  autoComplete="off"
+                  className="pl-9"
+                />
+             </PopoverTrigger>
+            {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
+          </div>
       </div>
-      
-      <datalist id={dataListId}>
-        {suggestions.map((location) => (
-          <option 
-            key={location.id} 
-            value={[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")} 
-          />
-        ))}
-      </datalist>
-    </div>
+     
+      {suggestions.length > 0 && (
+          <PopoverContent 
+             className="w-[var(--radix-popover-trigger-width)] p-0"
+             align="start"
+             onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus stealing
+           >
+            <div className="flex flex-col space-y-1 p-1">
+                {suggestions.map((location) => {
+                    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(", ");
+                    return (
+                        <button
+                            key={location.id}
+                            type="button"
+                            onClick={() => handleSelect(location)}
+                            className={cn(
+                                "flex items-center rounded-md p-2 text-left text-sm hover:bg-accent w-full"
+                            )}
+                        >
+                           <span className="flex-grow">{locationName}</span>
+                            {value === locationName && <Check className="h-4 w-4" />}
+                        </button>
+                    )
+                })}
+            </div>
+          </PopoverContent>
+      )}
+    </Popover>
   );
 }
