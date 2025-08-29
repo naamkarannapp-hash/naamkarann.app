@@ -32,10 +32,11 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
         setSuggestions([]);
       }
     };
-    if(isFocused) {
+
+    if (isFocused && value === debouncedQuery) {
         fetchSuggestions();
     }
-  }, [debouncedQuery, isFocused]);
+  }, [debouncedQuery, isFocused, value]);
 
   const handleSelect = (location: LocationSearchResult) => {
     onLocationSelect(location);
@@ -76,7 +77,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
               <li
                 key={location.id}
                 className="px-3 py-2 cursor-pointer hover:bg-accent text-sm flex items-center gap-2"
-                onClick={() => handleSelect(location)}
+                onMouseDown={() => handleSelect(location)}
               >
                  <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span>{[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}</span>
@@ -88,5 +89,3 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     </div>
   );
 }
-
-    
