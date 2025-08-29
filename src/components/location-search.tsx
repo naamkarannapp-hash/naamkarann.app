@@ -7,7 +7,7 @@ import { searchLocations } from "@/lib/actions";
 import type { LocationSearchResult } from "@/lib/types";
 import { MapPin, Loader2, Check } from "lucide-react";
 import { Input } from "./ui/input";
-import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 type LocationSearchProps = {
@@ -22,14 +22,18 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const isSelecting = React.useRef(false);
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
-      if (debouncedQuery.length > 2) {
+      if (debouncedQuery.length > 2 && !isSelecting.current) {
         setIsLoading(true);
         const results = await searchLocations(debouncedQuery);
         setSuggestions(results);
         setIsLoading(false);
+        if (results.length > 0) {
+            setIsOpen(true);
+        }
       } else {
         setSuggestions([]);
       }
@@ -37,36 +41,41 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
 
     fetchSuggestions();
   }, [debouncedQuery]);
+  
+  React.useEffect(() => {
+    // If the external value is cleared, clear the internal query too
+    if (value === "") {
+      setQuery("");
+    }
+  }, [value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    isSelecting.current = false;
     const newValue = e.target.value;
     setQuery(newValue);
     onValueChange(newValue);
-    if (newValue.length > 2) {
-        setIsOpen(true);
-    } else {
-        setIsOpen(false);
+    if (newValue.length < 3) {
+      setIsOpen(false);
     }
   };
 
   const handleSelect = (location: LocationSearchResult) => {
+    isSelecting.current = true;
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(", ");
     setQuery(locationName);
     onValueChange(locationName);
     onLocationSelect(location);
-    setSuggestions([]);
     setIsOpen(false);
+    setSuggestions([]);
+    
+    // Reset the flag shortly after selection
+    setTimeout(() => {
+        isSelecting.current = false;
+    }, 100);
   };
   
-  const handleOpenChange = (open: boolean) => {
-      setIsOpen(open);
-      if(!open) {
-        setSuggestions([]);
-      }
-  }
-
   return (
-    <Popover open={isOpen} onOpenChange={handleOpenChange}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="relative w-full">
          <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -76,7 +85,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
                   placeholder="Search for a location"
                   value={query}
                   onChange={handleInputChange}
-                  onFocus={() => { if(query.length > 2) setIsOpen(true)}}
+                  onFocus={() => { if(query.length > 2 && suggestions.length > 0) setIsOpen(true)}}
                   autoComplete="off"
                   className="pl-9"
                 />
@@ -89,7 +98,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
           <PopoverContent 
              className="w-[var(--radix-popover-trigger-width)] p-0"
              align="start"
-             onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus stealing
+             onOpenAutoFocus={(e) => e.preventDefault()}
            >
             <div className="flex flex-col space-y-1 p-1">
                 {suggestions.map((location) => {
