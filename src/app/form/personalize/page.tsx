@@ -36,6 +36,7 @@ const genders = ["Boy", "Girl", "Neutral"] as const;
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   
   const form = useForm<NameFormValues>({
     resolver: zodResolver(personalizePageSchema),
@@ -89,7 +90,7 @@ export default function PersonalizePage() {
   }, [astrologyMode, setValue]);
 
   function handleLocationSelect(location: LocationSearchResult) {
-    // This function is now simpler as the location-search component handles setting the name
+    setValue('placeOfBirth', [location.name, location.city, location.state, location.country].filter(Boolean).join(", "));
     setValue('lat', location.coordinates[0], { shouldValidate: true, shouldDirty: true });
     setValue('lon', location.coordinates[1], { shouldValidate: true, shouldDirty: true });
   }
@@ -180,7 +181,7 @@ export default function PersonalizePage() {
                           render={({ field }) => (
                             <FormItem className="flex flex-col">
                               <FormLabel>Date of Birth</FormLabel>
-                              <Popover>
+                              <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                                 <PopoverTrigger asChild>
                                   <FormControl>
                                     <Button
@@ -203,7 +204,10 @@ export default function PersonalizePage() {
                                   <Calendar
                                     mode="single"
                                     selected={field.value}
-                                    onSelect={field.onChange}
+                                    onSelect={(date) => {
+                                      field.onChange(date);
+                                      setIsDatePickerOpen(false);
+                                    }}
                                     disabled={(date) =>
                                       date > new Date() || date < new Date("1900-01-01")
                                     }
@@ -384,3 +388,5 @@ export default function PersonalizePage() {
     </>
   );
 }
+
+    
