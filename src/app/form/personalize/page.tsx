@@ -386,14 +386,16 @@ export default function PersonalizePage() {
                 </motion.div>
               )}
             </AnimatePresence>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center space-x-2 pt-2"
-            >
-              <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
-            </motion.div>
+            {!astrologyMode && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex items-center space-x-2 pt-2"
+              >
+                <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
+              </motion.div>
+            )}
           </form>
         </Form>
       </CardContent>
