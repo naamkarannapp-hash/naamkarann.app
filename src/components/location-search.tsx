@@ -21,6 +21,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
+  
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -30,16 +31,14 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
         const results = await searchLocations(debouncedQuery);
         setSuggestions(results);
         setIsLoading(false);
-        setShowSuggestions(true);
       } else {
         setSuggestions([]);
-        setShowSuggestions(false);
       }
     };
 
     fetchSuggestions();
   }, [debouncedQuery]);
-
+  
   const handleSelect = (location: LocationSearchResult) => {
     onLocationSelect(location);
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
@@ -51,9 +50,13 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setQuery(newValue);
-    onValueChange(newValue); // Keep form state in sync
+    onValueChange(newValue);
   }
   
+  const handleInputFocus = () => {
+    setShowSuggestions(true);
+  }
+
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -66,6 +69,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
     };
   }, []);
 
+
   return (
     <div className="relative w-full" ref={wrapperRef}>
       <div className="relative">
@@ -75,11 +79,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
           placeholder="Search for a location"
           value={query}
           onChange={handleInputChange}
-          onFocus={() => {
-            if (suggestions.length > 0) {
-              setShowSuggestions(true)
-            }
-          }}
+          onFocus={handleInputFocus}
           autoComplete="off"
           className="pl-9"
         />
