@@ -31,6 +31,10 @@ export async function getAndPrioritizeNames(
     const payload: any = {
       gender: values.gender ? values.gender.toLowerCase() : 'neutral'
     };
+    
+    if (values.astrologyMode) {
+      payload.astrologyMode = true;
+    }
 
     if (values.astrologyMode && values.dateOfBirth && values.utcTimestamp && values.placeOfBirth && values.lat !== undefined && values.lon !== undefined) {
       const utcDate = new Date(values.utcTimestamp);
