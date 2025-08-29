@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
-import type { NameFormValues } from "@/lib/types";
+import type { NameFormValues, LocationSearchResult } from "@/lib/types";
 import { personalizePageSchema } from "@/lib/types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -25,15 +25,18 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Info } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { LocationSearch } from "@/components/location-search";
+
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
+  const [isLocationSearchOpen, setIsLocationSearchOpen] = useState(false);
 
   const form = useForm<NameFormValues>({
     resolver: zodResolver(personalizePageSchema),
@@ -45,6 +48,7 @@ export default function PersonalizePage() {
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
   const astrologyMode = watch("astrologyMode");
+  const placeOfBirth = watch("placeOfBirth");
 
   useEffect(() => {
     reset(state.formValues);
@@ -77,9 +81,21 @@ export default function PersonalizePage() {
       setValue('startingLetters', '');
       setValue('blendParents', false);
       setValue('matchSibling', false);
+    } else {
+        setValue('dateOfBirth', undefined);
+        setValue('timeOfBirth', '');
+        setValue('placeOfBirth', '');
+        setValue('lat', undefined);
+        setValue('lon', undefined);
     }
   }, [astrologyMode, setValue]);
 
+  function handleLocationSelect(location: LocationSearchResult) {
+    const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
+    setValue('placeOfBirth', locationName, { shouldValidate: true, shouldDirty: true });
+    setValue('lat', location.coordinates[0]);
+    setValue('lon', location.coordinates[1]);
+  }
 
   function onSubmit(data: NameFormValues) {
     setState({ formValues: data });
@@ -87,6 +103,7 @@ export default function PersonalizePage() {
   }
 
   return (
+    <>
     <Card className="w-full max-w-2xl shadow-none border-none bg-transparent">
       <CardHeader>
         <CardTitle className="font-headline text-2xl">Personalise the name</CardTitle>
@@ -208,7 +225,7 @@ export default function PersonalizePage() {
                             <FormItem>
                               <FormLabel>Time of Birth</FormLabel>
                               <FormControl>
-                                <Input type="time" {...field} />
+                                <ClientInput type="time" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -218,13 +235,21 @@ export default function PersonalizePage() {
                           control={control}
                           name="placeOfBirth"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="flex items-baseline gap-2">
+                            <FormItem className="flex flex-col">
+                               <FormLabel className="flex items-baseline gap-2">
                                 Place of Birth
                                 <span className="text-sm font-normal text-muted-foreground">(to calculate star positions)</span>
                               </FormLabel>
                               <FormControl>
-                                <Input placeholder="e.g., Mumbai, India" {...field} />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}
+                                    onClick={() => setIsLocationSearchOpen(true)}
+                                >
+                                    <MapPin className="mr-2 h-4 w-4" />
+                                    {field.value ? field.value : "Search for a location"}
+                                </Button>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -239,7 +264,7 @@ export default function PersonalizePage() {
             <AnimatePresence>
             {!astrologyMode && (
                <motion.div
-                initial={{ opacity: 0, height: 0 }}
+                initial={{ opacity: 1, height: "auto" }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -351,7 +376,6 @@ export default function PersonalizePage() {
                 </motion.div>
               )}
             </AnimatePresence>
-
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -360,12 +384,15 @@ export default function PersonalizePage() {
             >
               <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
             </motion.div>
-
           </form>
         </Form>
       </CardContent>
     </Card>
+     <LocationSearch
+        open={isLocationSearchOpen}
+        onOpenChange={setIsLocationSearchOpen}
+        onSelect={handleLocationSelect}
+      />
+    </>
   );
 }
-
-    

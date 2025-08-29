@@ -2,7 +2,7 @@
 'use server';
 
 import {z} from 'zod';
-import {nameFormSchema, type NameResult} from './types';
+import {nameFormSchema, type NameResult, type LocationSearchResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
@@ -107,5 +107,35 @@ export async function getAndPrioritizeNames(
       return {error: `An unexpected error occurred: ${error.message}`};
     }
     return {error: 'An unexpected error occurred.'};
+  }
+}
+
+export async function searchLocations(query: string): Promise<LocationSearchResult[]> {
+  if (!query || query.length < 2) {
+    return [];
+  }
+
+  try {
+    const response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en&limit=5`);
+    if (!response.ok) {
+      console.error('Photon API request failed:', response.statusText);
+      return [];
+    }
+
+    const data = await response.json();
+    if (data && data.features) {
+      return data.features.map((feature: any, index: number) => ({
+        id: `${feature.properties.osm_id}-${index}`,
+        name: feature.properties.name || '',
+        city: feature.properties.city || '',
+        state: feature.properties.state || '',
+        country: feature.properties.country || '',
+        coordinates: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]] // lat, lon
+      }));
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching from Photon API:', error);
+    return [];
   }
 }

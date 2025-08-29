@@ -18,6 +18,8 @@ const baseNameFormSchema = z.object({
   dateOfBirth: z.date().optional(),
   timeOfBirth: z.string().optional(),
   placeOfBirth: z.string().optional(),
+  lat: z.number().optional(),
+  lon: z.number().optional(),
 });
 
 export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
@@ -45,6 +47,9 @@ export const nameFormSchema = baseNameFormSchema.superRefine((data, ctx) => {
     if (!data.placeOfBirth || data.placeOfBirth.trim() === '') {
       ctx.addIssue({ code: 'custom', message: 'Place of birth is required.', path: ['placeOfBirth'] });
     }
+    if (data.lat === undefined || data.lon === undefined) {
+      ctx.addIssue({ code: 'custom', message: 'Please select a valid location from the search.', path: ['placeOfBirth'] });
+    }
   }
 });
 
@@ -60,6 +65,8 @@ export const personalizePageSchema = baseNameFormSchema.pick({
     dateOfBirth: true,
     timeOfBirth: true,
     placeOfBirth: true,
+    lat: true,
+    lon: true,
 }).superRefine((data, ctx) => {
     if (data.blendParents && (!data.parent1Name || data.parent1Name.trim() === '')) {
       ctx.addIssue({
@@ -100,4 +107,13 @@ export interface NameResult {
   category: string;
   gender: string;
   gradient: string;
+}
+
+export interface LocationSearchResult {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  coordinates: [number, number]; // [lat, lon]
 }
