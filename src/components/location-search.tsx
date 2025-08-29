@@ -16,10 +16,13 @@ type LocationSearchProps = {
 };
 
 export function LocationSearch({ value, onValueChange, onLocationSelect }: LocationSearchProps) {
-  const [debouncedQuery] = useDebounce(value, 300);
+  const [query, setQuery] = React.useState(value);
+  const [debouncedQuery] = useDebounce(query, 300);
   const [suggestions, setSuggestions] = React.useState<LocationSearchResult[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isFocused, setIsFocused] = React.useState(false);
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
+
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
@@ -33,53 +36,66 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
       }
     };
 
-    if (isFocused && value === debouncedQuery) {
-        fetchSuggestions();
-    }
-  }, [debouncedQuery, isFocused, value]);
+    fetchSuggestions();
+  }, [debouncedQuery]);
 
   const handleSelect = (location: LocationSearchResult) => {
     onLocationSelect(location);
     const locationName = [location.name, location.city, location.state, location.country].filter(Boolean).join(', ');
     onValueChange(locationName);
-    setSuggestions([]);
-    setIsFocused(false);
+    setQuery(locationName);
+    setShowSuggestions(false);
   };
   
-  const handleBlur = () => {
-    // Delay blur to allow click on suggestions
-    setTimeout(() => {
-        setIsFocused(false);
-    }, 200);
-  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setQuery(newValue);
+    onValueChange(newValue); // Keep form state in sync
+    setShowSuggestions(true);
+  }
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
-    <div className="relative w-full">
-        <div className="relative">
-             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-             <Input
-                type="text"
-                placeholder="Search for a location"
-                value={value}
-                onChange={(e) => onValueChange(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={handleBlur}
-                autoComplete="off"
-                className="pl-9"
-             />
-             {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
-        </div>
+    <div className="relative w-full" ref={wrapperRef}>
+      <div className="relative">
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Search for a location"
+          value={query}
+          onChange={handleInputChange}
+          onFocus={() => setShowSuggestions(true)}
+          autoComplete="off"
+          className="pl-9"
+        />
+        {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />}
+      </div>
       
-      {isFocused && suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && (
         <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-md shadow-lg">
           <ul className="py-1">
             {suggestions.map((location) => (
               <li
                 key={location.id}
-                className="px-3 py-2 cursor-pointer hover:bg-accent text-sm flex items-center gap-2"
-                onMouseDown={() => handleSelect(location)}
+                className="px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground text-sm flex items-center gap-2"
+                onMouseDown={(e) => {
+                  e.preventDefault(); // This is crucial to prevent the input from losing focus
+                  handleSelect(location)
+                }}
               >
-                 <MapPin className="h-4 w-4 text-muted-foreground" />
+                <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span>{[location.name, location.city, location.state, location.country].filter(Boolean).join(", ")}</span>
               </li>
             ))}

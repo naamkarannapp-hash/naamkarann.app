@@ -241,7 +241,7 @@ export default function PersonalizePage() {
                               <FormControl>
                                 <LocationSearch
                                   value={field.value || ""}
-                                  onValueChange={field.onChange}
+                                  onValueChange={(value) => field.onChange(value)}
                                   onLocationSelect={handleLocationSelect}
                                 />
                               </FormControl>
