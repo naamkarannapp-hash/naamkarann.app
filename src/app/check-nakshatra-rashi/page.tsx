@@ -50,6 +50,10 @@ export default function CheckNakshatraRashiPage() {
   
   const form = useForm<NakshatraFormValues>({
     resolver: zodResolver(nakshatraSchema),
+    defaultValues: {
+      timeOfBirth: "",
+      placeOfBirth: "",
+    },
   });
 
   const { control, handleSubmit, setValue } = form;
