@@ -135,24 +135,24 @@ export default function Home() {
            {/* Sticky CTA for Mobile */}
           <div className="sticky bottom-0 w-full md:static bg-gradient-to-t from-background via-background/80 to-transparent pt-4 pb-4 md:bg-none md:p-0">
              <div className="w-full max-w-md mx-auto px-4 md:px-0">
-                <Link href="/form/personalize" passHref>
-                    <Button
-                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg transition-shadow hover:shadow-2xl"
-                    >
-                        Start Naming
-                    </Button>
-                </Link>
-                <div className="my-3">
-                  <Link href="#" passHref>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link href="/form/personalize" passHref className="flex-grow">
+                      <Button
+                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg transition-shadow hover:shadow-2xl"
+                      >
+                          Start Naming
+                      </Button>
+                  </Link>
+                  <Link href="/check-nakshatra-rashi" passHref>
                     <Button
                       variant="outline"
-                      className="w-full border-primary/50 text-primary"
+                      className="w-full border-primary/50 text-primary py-6 text-lg rounded-xl"
                     >
                       Check Nakshatra & Rashi
                     </Button>
                   </Link>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
+                <p className="text-xs text-muted-foreground mt-3 text-center">See your next favorite names—no signup needed.</p>
                 <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-muted rounded-lg border">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
                         <Star className="w-4 h-4 fill-current" />
