@@ -6,7 +6,7 @@ import { useDebounce } from "use-debounce";
 import { searchLocations } from "@/lib/actions";
 import type { LocationSearchResult } from "@/lib/types";
 import { MapPin, Loader2, Check } from "lucide-react";
-import { Input } from "./ui/input";
+import { ClientInput } from "./client-input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
@@ -75,7 +75,7 @@ export function LocationSearch({ value, onValueChange, onLocationSelect }: Locat
          <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
              <PopoverTrigger asChild>
-                <Input
+                <ClientInput
                   type="text"
                   placeholder="Search for a location"
                   value={query}
