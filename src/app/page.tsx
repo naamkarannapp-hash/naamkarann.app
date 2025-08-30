@@ -142,6 +142,16 @@ export default function Home() {
                         Start Naming
                     </Button>
                 </Link>
+                <div className="my-3">
+                  <Link href="#" passHref>
+                    <Button
+                      variant="outline"
+                      className="w-full border-primary/50 text-primary"
+                    >
+                      Check Nakshatra & Rashi
+                    </Button>
+                  </Link>
+                </div>
                 <p className="text-xs text-muted-foreground mt-2">See your next favorite names—no signup needed.</p>
                 <div className="flex items-center justify-center space-x-2 text-sm mt-2 p-3 bg-muted rounded-lg border">
                     <div className="flex items-center text-yellow-400" aria-label="4.8 out of 5 stars">
