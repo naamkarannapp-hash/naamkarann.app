@@ -119,3 +119,10 @@ export interface LocationSearchResult {
   country: string;
   coordinates: [number, number]; // [lat, lon]
 }
+
+export interface NakshatraResult {
+    nakshatra: string;
+    pada: number;
+    syllable: string;
+    rashi: string;
+}

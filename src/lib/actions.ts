@@ -2,12 +2,14 @@
 'use server';
 
 import {z} from 'zod';
-import {nameFormSchema, type NameResult, type LocationSearchResult} from './types';
+import {nameFormSchema, type NameResult, type LocationSearchResult, type NakshatraResult} from './types';
 import {prioritizeNames} from '@/ai/flows/prioritize-names';
 import { find as findTz } from 'geo-tz';
 import { format } from 'date-fns';
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const NAKSHATRA_WEBHOOK_URL = "https://n8n.srv973313.hstgr.cloud/webhook/getNakshatra";
+
 
 interface ApiNameResult {
   name: string;
@@ -193,5 +195,40 @@ export async function convertToUTCTimestamp(
     const [hours, minutes] = time.split(':').map(Number);
     fallbackDate.setUTCHours(hours, minutes, 0, 0);
     return fallbackDate.toISOString();
+  }
+}
+
+const nakshatraApiSchema = z.object({
+  dateOfBirth: z.string(),
+  timeOfBirth: z.string(),
+  placeOfBirth: z.string(),
+  lat: z.number(),
+  lon: z.number(),
+});
+
+export async function getNakshatraDetails(
+  values: z.infer<typeof nakshatraApiSchema>
+): Promise<{ result: NakshatraResult } | { error: string }> {
+  try {
+    const response = await fetch(NAKSHATRA_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      console.error('Nakshatra webhook response not OK', {status: response.status, statusText: response.statusText});
+      return { error: 'Failed to fetch Nakshatra details.' };
+    }
+
+    const data = await response.json();
+    if (data.output && data.output.nakshatra) {
+      return { result: data.output };
+    } else {
+      return { error: 'Invalid response from Nakshatra service.' };
+    }
+  } catch (error) {
+    console.error('Error in getNakshatraDetails:', error);
+    return { error: 'An unexpected error occurred while fetching details.' };
   }
 }
