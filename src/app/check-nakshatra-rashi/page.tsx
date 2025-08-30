@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ArrowLeft } from "lucide-react";
+import { CalendarIcon, ArrowLeft, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { LocationSearch } from "@/components/location-search";
@@ -26,7 +26,6 @@ import { ClientInput } from "@/components/client-input";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { getNakshatraDetails } from "@/lib/actions";
-import { LoadingSpinner } from "@/components/loading-spinner";
 import { NakshatraResultCard } from "@/components/nakshatra-result-card";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -72,7 +71,8 @@ export default function CheckNakshatraRashiPage() {
       ...data,
       dateOfBirth: format(data.dateOfBirth, "yyyy-MM-dd"),
     };
-
+    
+    console.log("Submitting to getNakshatraDetails with payload:", apiPayload);
     const response = await getNakshatraDetails(apiPayload);
 
     setIsLoading(false);
@@ -90,7 +90,10 @@ export default function CheckNakshatraRashiPage() {
 
   const handleReset = () => {
     setResult(null);
-    form.reset();
+    form.reset({
+        timeOfBirth: "",
+        placeOfBirth: ""
+    });
   }
 
   return (
@@ -111,8 +114,12 @@ export default function CheckNakshatraRashiPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  className="flex flex-col items-center justify-center text-center"
                 >
-                  <LoadingSpinner />
+                  <Loader2 className="w-12 h-12 animate-spin text-primary" />
+                  <p className="mt-4 text-lg text-muted-foreground font-semibold">
+                    Calculating your Nakshatra...
+                  </p>
                 </motion.div>
               ) : result ? (
                  <motion.div

@@ -41,11 +41,11 @@ export async function getAndPrioritizeNames(
       siblingName: values.siblingName || "",
       inspirations: values.inspirations || [],
       astrologyMode: values.astrologyMode || false,
-      dateOfBirth: values.dateOfBirth || null,
+      dateOfBirth: values.dateOfBirth ? format(values.dateOfBirth, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") : null,
       timeOfBirth: values.timeOfBirth || "",
       placeOfBirth: values.placeOfBirth || "",
-      lat: values.lat,
-      lon: values.lon,
+      lat: values.lat ?? null,
+      lon: values.lon ?? null,
       utcTimestamp: values.utcTimestamp || null
     };
 
@@ -209,6 +209,7 @@ const nakshatraApiSchema = z.object({
 export async function getNakshatraDetails(
   values: z.infer<typeof nakshatraApiSchema>
 ): Promise<{ result: NakshatraResult } | { error: string }> {
+  console.log("getNakshatraDetails action called with:", values);
   try {
     const response = await fetch(NAKSHATRA_WEBHOOK_URL, {
       method: 'POST',
@@ -216,15 +217,21 @@ export async function getNakshatraDetails(
       body: JSON.stringify(values),
     });
 
+    console.log("Nakshatra API response status:", response.status);
+
     if (!response.ok) {
-      console.error('Nakshatra webhook response not OK', {status: response.status, statusText: response.statusText});
+      const errorText = await response.text();
+      console.error('Nakshatra webhook response not OK', {status: response.status, statusText: response.statusText, body: errorText});
       return { error: 'Failed to fetch Nakshatra details.' };
     }
 
     const data = await response.json();
+    console.log("Nakshatra API response data:", data);
+
     if (data.output && data.output.nakshatra) {
       return { result: data.output };
     } else {
+      console.error("Invalid response from Nakshatra service:", data);
       return { error: 'Invalid response from Nakshatra service.' };
     }
   } catch (error) {
