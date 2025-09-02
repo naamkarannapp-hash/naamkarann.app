@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ArrowLeft, Loader2 } from "lucide-react";
+import { CalendarIcon, ArrowLeft, Loader2, Sparkles } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { LocationSearch } from "@/components/location-search";
@@ -28,6 +28,8 @@ import { useToast } from "@/hooks/use-toast";
 import { getNakshatraDetails } from "@/lib/actions";
 import { NakshatraResultCard } from "@/components/nakshatra-result-card";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAppState } from "@/context/app-state-context";
+import { useRouter } from "next/navigation";
 
 
 const nakshatraSchema = z.object({
@@ -46,6 +48,9 @@ export default function CheckNakshatraRashiPage() {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<NakshatraResult | null>(null);
+  const [formData, setFormData] = useState<NakshatraFormValues | null>(null);
+  const { setState } = useAppState();
+  const router = useRouter();
   
   const form = useForm<NakshatraFormValues>({
     resolver: zodResolver(nakshatraSchema),
@@ -66,6 +71,7 @@ export default function CheckNakshatraRashiPage() {
   async function onSubmit(data: NakshatraFormValues) {
     setIsLoading(true);
     setResult(null);
+    setFormData(data);
 
     const apiPayload = {
       ...data,
@@ -90,11 +96,24 @@ export default function CheckNakshatraRashiPage() {
 
   const handleReset = () => {
     setResult(null);
+    setFormData(null);
     form.reset({
         timeOfBirth: "",
         placeOfBirth: ""
     });
   }
+
+  const handleFindNames = () => {
+    if (result) {
+        setState({
+            formValues: {
+                startingLetters: result.syllable,
+                astrologyMode: false,
+            },
+        });
+        router.push("/form/personalize");
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pattern-background">
@@ -127,9 +146,13 @@ export default function CheckNakshatraRashiPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="w-full max-w-md flex flex-col items-center"
+                    className="w-full max-w-md flex flex-col items-center space-y-6"
                   >
-                    <NakshatraResultCard result={result} onReset={handleReset} />
+                    <NakshatraResultCard result={result} dateOfBirth={formData?.dateOfBirth} />
+                    <Button onClick={handleFindNames} size="lg" className="w-full">
+                      Find names starting with '{result.syllable}'
+                      <Sparkles className="ml-2 h-4 w-4" />
+                    </Button>
                  </motion.div>
               ) : (
                 <motion.div
