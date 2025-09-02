@@ -24,6 +24,14 @@ const backgroundGradients = [
     'linear-gradient(to top right, #f857a6 0%, #ff5858 100%)'
 ];
 
+function formatRashi(rashi: string) {
+    if (rashi.includes('/')) {
+        const parts = rashi.split('/');
+        return `${parts[0]} (${parts[1]})`;
+    }
+    return rashi;
+}
+
 export function NakshatraResultCard({ result, onReset }: NakshatraResultCardProps) {
   const cardRef = React.useRef<HTMLDivElement>(null);
   const [gradient, setGradient] = React.useState('');
@@ -58,32 +66,36 @@ export function NakshatraResultCard({ result, onReset }: NakshatraResultCardProp
           style={{ background: gradient || 'linear-gradient(to top right, #1A52E1, #9C27B0)' }}
         >
             <div className="flex-grow flex flex-col justify-center items-center text-center z-10">
-                <div className="space-y-6">
+                <div className="space-y-6 w-full">
                     <div>
                         <p className="text-sm uppercase tracking-widest opacity-80">Nakshatra (Birth Star)</p>
                         <p className="text-4xl font-bold">{result.nakshatra}</p>
                     </div>
-                     <div>
-                        <p className="text-sm uppercase tracking-widest opacity-80">Rashi (Moon Sign)</p>
-                        <p className="text-3xl font-semibold">{result.rashi}</p>
+
+                    <Separator className="my-6 bg-white/20" />
+                    
+                    <div className="grid grid-cols-2 gap-4 w-full text-center">
+                        <div>
+                            <p className="text-sm uppercase tracking-widest opacity-80">Pada</p>
+                            <p className="text-2xl font-bold">{result.pada}</p>
+                        </div>
+                         <div>
+                            <p className="text-sm uppercase tracking-widest opacity-80">Syllable</p>
+                            <p className="text-2xl font-bold">{result.syllable}</p>
+                        </div>
                     </div>
-                </div>
 
-                <Separator className="my-8 bg-white/20" />
+                    <Separator className="my-6 bg-white/20" />
 
-                <div className="grid grid-cols-2 gap-4 w-full text-center">
                     <div>
-                        <p className="text-sm uppercase tracking-widest opacity-80">Pada</p>
-                        <p className="text-2xl font-bold">{result.pada}</p>
-                    </div>
-                     <div>
-                        <p className="text-sm uppercase tracking-widest opacity-80">Syllable</p>
-                        <p className="text-2xl font-bold">{result.syllable}</p>
+                        <p className="text-sm uppercase tracking-widest opacity-80">Rashi (Moon Sign)</p>
+                        <p className="text-3xl font-semibold">{formatRashi(result.rashi)}</p>
                     </div>
                 </div>
+
             </div>
             <CardFooter className="flex-col pt-8 pb-0 px-0 items-center justify-center">
-                <Badge className="bg-black/10 text-white/80 border-none">Powered by Naamkarann.com</Badge>
+                <Badge className="bg-black/10 text-white/80 border-none">Powered by Naamkarann.in</Badge>
             </CardFooter>
         </Card>
 
