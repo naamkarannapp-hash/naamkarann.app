@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/context/app-state-context";
-import type { NameFormValues, LocationSearchResult } from "@/lib/types";
+import type { NameFormValues } from "@/lib/types";
 import { personalizePageSchema } from "@/lib/types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -23,21 +23,12 @@ import { cn } from "@/lib/utils";
 import { ClientInput } from "@/components/client-input";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, MapPin } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { LocationSearch } from "@/components/location-search";
-import { convertToUTCTimestamp } from "@/lib/actions";
-
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
 export default function PersonalizePage() {
   const { state, setState } = useAppState();
   const router = useRouter();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   
   const form = useForm<NameFormValues>({
     resolver: zodResolver(personalizePageSchema),
@@ -48,7 +39,6 @@ export default function PersonalizePage() {
 
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
-  const astrologyMode = watch("astrologyMode");
   
   useEffect(() => {
     reset(state.formValues);
@@ -65,51 +55,17 @@ export default function PersonalizePage() {
   useEffect(() => {
       if (blendParents) {
           setValue('matchSibling', false);
-          setValue('astrologyMode', false);
       }
   }, [blendParents, setValue]);
 
   useEffect(() => {
       if (matchSibling) {
           setValue('blendParents', false);
-          setValue('astrologyMode', false);
       }
   }, [matchSibling, setValue]);
 
-  useEffect(() => {
-    if (astrologyMode) {
-      setValue('startingLetters', '');
-      setValue('blendParents', false);
-      setValue('matchSibling', false);
-    } else {
-        setValue('dateOfBirth', undefined);
-        setValue('timeOfBirth', '');
-        setValue('placeOfBirth', '');
-        setValue('lat', undefined);
-        setValue('lon', undefined);
-        setValue('utcTimestamp', undefined);
-    }
-  }, [astrologyMode, setValue]);
-
-  function handleLocationSelect(location: LocationSearchResult) {
-    setValue('placeOfBirth', [location.name, location.city, location.state, location.country].filter(Boolean).join(", "));
-    setValue('lat', location.coordinates[0], { shouldValidate: true, shouldDirty: true });
-    setValue('lon', location.coordinates[1], { shouldValidate: true, shouldDirty: true });
-  }
-
-  async function onSubmit(data: NameFormValues) {
-    let submissionData = { ...data };
-    if (data.astrologyMode && data.dateOfBirth && data.timeOfBirth && data.lat !== undefined && data.lon !== undefined) {
-      const utcTimestamp = await convertToUTCTimestamp({
-        date: data.dateOfBirth,
-        time: data.timeOfBirth,
-        lat: data.lat,
-        lon: data.lon,
-      });
-      submissionData.utcTimestamp = utcTimestamp;
-    }
-    
-    setState({ formValues: submissionData });
+  function onSubmit(data: NameFormValues) {
+    setState({ formValues: data });
     router.push("/form/inspirations");
   }
 
@@ -153,126 +109,7 @@ export default function PersonalizePage() {
               )}
             />
 
-            <div className="p-4 border rounded-lg space-y-4">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <FormField
-                      control={control}
-                      name="astrologyMode"
-                      render={({ field }) => (
-                        <FormItem className="flex items-center justify-between">
-                          <FormLabel htmlFor="astrology-mode-switch" className="font-semibold mb-0 cursor-pointer flex items-center gap-2">
-                            Astrology Mode <span className="text-sm font-normal text-muted-foreground">(Vedic horoscope)</span>
-                          </FormLabel>
-                          <FormControl>
-                            <Switch id="astrology-mode-switch" checked={field.value} onCheckedChange={field.onChange} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Let us suggest names based on nakshatra, using your baby’s exact birth details.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <AnimatePresence>
-                {astrologyMode && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <div className="space-y-4 pt-4">
-                       <FormField
-                          control={control}
-                          name="dateOfBirth"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-col">
-                              <FormLabel>Date of Birth</FormLabel>
-                              <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={"outline"}
-                                      className={cn(
-                                        "w-full pl-3 text-left font-normal",
-                                        !field.value && "text-muted-foreground"
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        format(field.value, "PPP")
-                                      ) : (
-                                        <span>Pick a date</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                  <Calendar
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={(date) => {
-                                      field.onChange(date);
-                                      setIsDatePickerOpen(false);
-                                    }}
-                                    disabled={(date) =>
-                                      date > new Date() || date < new Date("1900-01-01")
-                                    }
-                                    initialFocus
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                         <FormField
-                          control={control}
-                          name="timeOfBirth"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Time of Birth</FormLabel>
-                              <FormControl>
-                                <ClientInput type="time" placeholder="HH:MM (24-hour)" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                         <FormField
-                          control={control}
-                          name="placeOfBirth"
-                          render={({ field }) => (
-                            <FormItem>
-                               <FormLabel className="flex items-baseline gap-2">
-                                Place of Birth
-                                <span className="text-sm font-normal text-muted-foreground">(to calculate star positions)</span>
-                              </FormLabel>
-                              <FormControl>
-                                <LocationSearch
-                                  value={field.value || ""}
-                                  onValueChange={(value) => field.onChange(value)}
-                                  onLocationSelect={handleLocationSelect}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
             <AnimatePresence>
-            {!astrologyMode && (
                <motion.div
                 initial={{ opacity: 1, height: "auto" }}
                 animate={{ opacity: 1, height: "auto" }}
@@ -296,7 +133,6 @@ export default function PersonalizePage() {
                                           placeholder="e.g., A, Ra" {...field} 
                                           className="mt-0 w-28"
                                           maxLength={3}
-                                          disabled={astrologyMode}
                                       />
                                   </FormControl>
                                   <FormMessage />
@@ -316,7 +152,7 @@ export default function PersonalizePage() {
                                   <span className="text-sm text-muted-foreground">(Optional)</span>
                               </div>
                               <FormControl>
-                                <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} disabled={astrologyMode} />
+                                <Switch id="blend-parents-switch" checked={field.value} onCheckedChange={field.onChange} />
                               </FormControl>
                           </FormItem>
                         )}
@@ -362,7 +198,7 @@ export default function PersonalizePage() {
                                 <span className="text-sm text-muted-foreground">(Optional)</span>
                               </div>
                               <FormControl>
-                                <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} disabled={astrologyMode} />
+                                <Switch id="match-sibling-switch" checked={field.value} onCheckedChange={field.onChange} />
                               </FormControl>
                           </FormItem>
                         )}
@@ -384,9 +220,7 @@ export default function PersonalizePage() {
                     )}
                   </div>
                 </motion.div>
-              )}
             </AnimatePresence>
-            {!astrologyMode && (
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -395,7 +229,6 @@ export default function PersonalizePage() {
               >
                 <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
               </motion.div>
-            )}
           </form>
         </Form>
       </CardContent>

@@ -40,13 +40,6 @@ export async function getAndPrioritizeNames(
       matchSibling: values.matchSibling || false,
       siblingName: values.siblingName || "",
       inspirations: values.inspirations || [],
-      astrologyMode: values.astrologyMode || false,
-      dateOfBirth: values.dateOfBirth ? format(values.dateOfBirth, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") : null,
-      timeOfBirth: values.timeOfBirth || "",
-      placeOfBirth: values.placeOfBirth || "",
-      lat: values.lat ?? null,
-      lon: values.lon ?? null,
-      utcTimestamp: values.utcTimestamp || null
     };
 
     const response = await fetch(WEBHOOK_URL, {
