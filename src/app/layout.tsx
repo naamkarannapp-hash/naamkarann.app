@@ -23,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-adsense-account" content="ca-pub-2944289032966757" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
          <Script id="vh-fix">
           {`
