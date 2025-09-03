@@ -1,6 +1,13 @@
 
 import { FormHeader } from '@/components/form-header';
 import { FormFooter } from '@/components/form-footer';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Personalize Your Baby Name Search | Naamkarann',
+  description: 'Start your search by personalizing name suggestions based on gender, starting letters, and family names. Find the perfect name with our AI-powered generator.',
+};
+
 
 export default function FormLayout({
   children,
