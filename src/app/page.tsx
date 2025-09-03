@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -82,7 +81,7 @@ export default function Home() {
               Naamkarann
             </motion.h2>
             <div className="mb-8">
-              <a href="https://www.producthunt.com/products/naamkarann?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-naamkarann" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009980&theme=light&t=1756293005883" alt="Naamkarann - A culturally aware AI assistant for finding the perfect Indian baby name | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" /></a>
+              <a href="https://www.producthunt.com/products/naamkarann?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-naamkarann" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009980&theme=light&t=1756293005883" alt="Naamkarann - AI Baby Name Generator | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" /></a>
             </div>
             <div className="my-4 h-px w-24 bg-foreground/20" />
             <div className="relative">

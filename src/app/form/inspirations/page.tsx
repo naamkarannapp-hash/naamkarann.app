@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -37,7 +36,7 @@ export default function InspirationsPage() {
   
   const [showMoreRoots, setShowMoreRoots] = React.useState(false);
   const [customRoot, setCustomRoot] = React.useState("");
-  const [showMoreInspirations, setShowMoreInspirations] = React.useState(false);
+  const [showMoreInspirations, setShowMoreInspirations = React.useState(false);
   
   const [showReminderToast, setShowReminderToast] = useState(false);
 
@@ -141,7 +140,7 @@ export default function InspirationsPage() {
     <>
       <Card className="w-full max-w-2xl shadow-none border-none bg-transparent">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Choose Inspirations</CardTitle>
+          <CardTitle as="h1" className="font-headline text-2xl">Choose Inspirations</CardTitle>
           <CardDescription>Select language roots and vibes to find the perfect name.</CardDescription>
         </CardHeader>
         <CardContent>

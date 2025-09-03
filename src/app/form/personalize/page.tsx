@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -75,7 +74,7 @@ export default function PersonalizePage() {
     <>
     <Card className="w-full max-w-2xl shadow-none border-none bg-transparent">
       <CardHeader>
-        <CardTitle className="font-headline text-2xl">Personalise the name</CardTitle>
+        <CardTitle as="h1" className="font-headline text-2xl">Personalise the name</CardTitle>
         <CardDescription>Add personal touches to make it uniquely yours.</CardDescription>
       </CardHeader>
       <CardContent>

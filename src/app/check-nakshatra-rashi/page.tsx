@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -164,7 +163,7 @@ export default function CheckNakshatraRashiPage() {
                 >
                   <Card className="w-full max-w-lg mx-auto shadow-none border-none bg-transparent">
                     <CardHeader>
-                      <CardTitle className="font-headline text-3xl text-center">Check Nakshatra &amp; Rashi</CardTitle>
+                      <CardTitle as="h1" className="font-headline text-3xl text-center">Check Nakshatra &amp; Rashi</CardTitle>
                       <CardDescription className="text-center">Enter birth details to find the birth star and moon sign.</CardDescription>
                     </CardHeader>
                     <CardContent>
