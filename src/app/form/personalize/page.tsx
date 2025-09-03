@@ -23,6 +23,8 @@ import { cn } from "@/lib/utils";
 import { ClientInput } from "@/components/client-input";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { Sparkles } from "lucide-react";
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
@@ -221,14 +223,29 @@ export default function PersonalizePage() {
                   </div>
                 </motion.div>
             </AnimatePresence>
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex items-center space-x-2 pt-2"
-              >
-                <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
-              </motion.div>
+             <div className="pt-2 space-y-3">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="flex items-center justify-center text-center space-x-2"
+                >
+                  <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="flex items-center justify-center text-center space-x-2"
+                >
+                  <p className="text-xs text-muted-foreground">
+                    Astrology fan?{' '}
+                     <Link href="/check-nakshatra-rashi" className="text-primary font-semibold hover:underline">
+                      Find names by Nakshatra & Rashi
+                    </Link>
+                  </p>
+                </motion.div>
+              </div>
           </form>
         </Form>
       </CardContent>
