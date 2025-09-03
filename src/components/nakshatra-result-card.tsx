@@ -67,8 +67,10 @@ export function NakshatraResultCard({ result, onReset, dateOfBirth }: NakshatraR
 
     toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 })
       .then((dataUrl) => {
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
         const link = document.createElement('a');
-        link.download = 'nakshatra-rashi-details.png';
+        link.download = `nakshatra-rashi-details_${timestamp}.png`;
         link.href = dataUrl;
         link.click();
       })
