@@ -119,6 +119,22 @@ export default function PersonalizePage() {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="space-y-6 overflow-hidden"
                >
+                  <div className="pt-2 space-y-3">
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="flex items-center justify-center text-center space-x-2"
+                      >
+                        <p className="text-xs text-muted-foreground">
+                          Astrology fan?{' '}
+                          <Link href="/check-nakshatra-rashi" className="text-primary font-semibold hover:underline">
+                            Find names by Nakshatra & Rashi
+                          </Link>
+                        </p>
+                      </motion.div>
+                  </div>
+                  
                   <FormField
                       control={control}
                       name="startingLetters"
@@ -231,19 +247,6 @@ export default function PersonalizePage() {
                   className="flex items-center justify-center text-center space-x-2"
                 >
                   <p className="text-xs text-muted-foreground">Most parents blend or match their kids’ names to create family harmony</p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  className="flex items-center justify-center text-center space-x-2"
-                >
-                  <p className="text-xs text-muted-foreground">
-                    Astrology fan?{' '}
-                     <Link href="/check-nakshatra-rashi" className="text-primary font-semibold hover:underline">
-                      Find names by Nakshatra & Rashi
-                    </Link>
-                  </p>
                 </motion.div>
               </div>
           </form>
