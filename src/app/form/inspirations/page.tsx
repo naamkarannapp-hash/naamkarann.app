@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -36,7 +37,7 @@ export default function InspirationsPage() {
   
   const [showMoreRoots, setShowMoreRoots] = React.useState(false);
   const [customRoot, setCustomRoot] = React.useState("");
-  const [showMoreInspirations, setShowMoreInspirations = React.useState(false);
+  const [showMoreInspirations, setShowMoreInspirations] = React.useState(false);
   
   const [showReminderToast, setShowReminderToast] = useState(false);
 
