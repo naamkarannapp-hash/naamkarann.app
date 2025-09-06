@@ -7,13 +7,13 @@ import { useAppState } from "@/context/app-state-context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { NameCard } from "@/components/name-card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users } from "lucide-react";
-import AdBanner from "@/components/ad-banner";
+import { ArrowLeft, Users, Download } from "lucide-react";
 import Link from 'next/link';
 import { getAndPrioritizeNames } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { toPng } from 'html-to-image';
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
@@ -24,6 +24,7 @@ export default function ResultsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const hasFetched = React.useRef(false);
+  const cardRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
   React.useEffect(() => {
     if (isLoading && nameResults.length === 0 && !hasFetched.current) {
@@ -40,6 +41,10 @@ export default function ResultsPage() {
       fetchNames();
     }
   }, [isLoading, nameResults.length, formValues, setState, toast, router]);
+  
+  React.useEffect(() => {
+    cardRefs.current = cardRefs.current.slice(0, nameResults.length);
+  }, [nameResults]);
 
   React.useEffect(() => {
     if (!api) {
@@ -51,6 +56,34 @@ export default function ResultsPage() {
       setCurrent(api.selectedScrollSnap() + 1);
     });
   }, [api, nameResults]);
+
+  const handleDownload = React.useCallback(() => {
+    const cardIndex = api?.selectedScrollSnap();
+    if (cardIndex === undefined) return;
+    
+    const cardRef = cardRefs.current[cardIndex];
+    const currentName = nameResults[cardIndex]?.name;
+
+    if (cardRef === null || !currentName) {
+      return;
+    }
+
+    toPng(cardRef, { cacheBust: true, pixelRatio: 2 })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `naamkarann_${currentName.toLowerCase()}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error('oops, something went wrong!', err);
+        toast({
+            title: "Error",
+            description: "Could not download the image. Please try again.",
+            variant: "destructive"
+        })
+      });
+  }, [api, nameResults, toast]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -72,10 +105,13 @@ export default function ResultsPage() {
               </div>
               <Carousel className="w-full max-w-md mx-auto" opts={{ loop: true }} setApi={setApi}>
                   <CarouselContent>
-                      {nameResults.map((name) => (
+                      {nameResults.map((name, index) => (
                       <CarouselItem key={name.id}>
                           <div className="p-1">
-                            <NameCard name={name} />
+                            <NameCard 
+                                ref={el => cardRefs.current[index] = el}
+                                name={name} 
+                            />
                           </div>
                       </CarouselItem>
                       ))}
@@ -83,8 +119,12 @@ export default function ResultsPage() {
                   <CarouselPrevious className="text-primary -left-2 md:-left-4 bg-background/50 border-primary" />
                   <CarouselNext className="text-primary -right-2 md:-right-4 bg-background/50 border-primary" />
               </Carousel>
-              <div className="mt-6 text-center">
+              <div className="mt-6 text-center flex flex-col items-center gap-4">
                    <p className="text-xs text-muted-foreground">Swipe to browse names</p>
+                   <Button onClick={handleDownload} variant="outline">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Card
+                   </Button>
               </div>
             </>
           ) : (
