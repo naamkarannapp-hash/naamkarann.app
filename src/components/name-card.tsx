@@ -6,7 +6,6 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
 import React from "react";
 import { Separator } from "./ui/separator";
-import { NaamkarannLogoN } from "./logo-n";
 
 interface NameCardProps {
   name: NameResult;
@@ -20,8 +19,6 @@ export const NameCard = React.forwardRef<HTMLDivElement, NameCardProps>(
         className="w-full aspect-[4/5] rounded-3xl shadow-2xl flex flex-col justify-between p-8 text-white relative overflow-hidden"
         style={{ background: name.gradient || 'linear-gradient(to top right, #1A52E1, #9C27B0)' }}
       >
-        <NaamkarannLogoN className="absolute top-6 right-6 w-8 h-8 text-white/50" />
-
         <div className="flex-grow flex flex-col justify-center items-center text-center z-10 -mt-8">
           <div className="relative">
               <h2 className="font-headline text-6xl font-bold tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{name.name}</h2>
