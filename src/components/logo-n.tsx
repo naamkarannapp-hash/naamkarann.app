@@ -17,7 +17,8 @@ export const NaamkarannLogoN = React.forwardRef<SVGSVGElement, React.SVGProps<SV
                 xmlns="http://www.w3.org/2000/svg"
                 {...props}
             >
-                <path d="M7 13l5 5 5-5" />
+                <path d="M17 17L12 7L7 17" />
+                <path d="M17 7L7 7" />
             </svg>
         );
     }
