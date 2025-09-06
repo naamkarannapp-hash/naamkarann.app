@@ -104,15 +104,13 @@ export default function ResultsPage() {
                   <Progress value={(current / count) * 100} className="h-1" />
               </div>
               <Carousel className="w-full max-w-md mx-auto" opts={{ loop: true }} setApi={setApi}>
-                  <CarouselContent>
+                  <CarouselContent className="-ml-2">
                       {nameResults.map((name, index) => (
-                      <CarouselItem key={name.id}>
-                          <div className="p-1">
-                            <NameCard 
-                                ref={el => cardRefs.current[index] = el}
-                                name={name} 
-                            />
-                          </div>
+                      <CarouselItem key={name.id} className="pl-2">
+                        <NameCard 
+                            ref={el => cardRefs.current[index] = el}
+                            name={name} 
+                        />
                       </CarouselItem>
                       ))}
                   </CarouselContent>
