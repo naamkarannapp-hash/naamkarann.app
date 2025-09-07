@@ -6,6 +6,7 @@ import { Star, Wand2, Users, BookOpen } from "lucide-react";
 import Link from 'next/link';
 import { namesByTradition } from '@/lib/name-data';
 import { motion, AnimatePresence } from "framer-motion";
+import * as gtag from '@/lib/gtag';
 
 const baseWord = "Naamkarann";
 
@@ -68,6 +69,23 @@ const AnimatedName = () => {
 };
 
 export default function Home() {
+
+  const handleStartNamingClick = () => {
+    gtag.event({
+        action: 'click',
+        category: 'navigation',
+        label: 'Start Naming - Hero',
+    });
+  };
+
+  const handleCheckNakshatraClick = () => {
+    gtag.event({
+        action: 'click',
+        category: 'navigation',
+        label: 'Check Nakshatra - Hero',
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <main className="flex-grow flex flex-col items-center text-center pattern-background">
@@ -137,6 +155,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link href="/form/personalize" passHref className="flex-grow">
                       <Button
+                          onClick={handleStartNamingClick}
                           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 text-lg rounded-xl shadow-lg transition-shadow hover:shadow-2xl"
                       >
                           Start Naming
@@ -144,6 +163,7 @@ export default function Home() {
                   </Link>
                   <Link href="/check-nakshatra-rashi" passHref>
                     <Button
+                      onClick={handleCheckNakshatraClick}
                       variant="outline"
                       className="w-full border-primary/50 text-primary py-6 text-lg rounded-xl"
                     >

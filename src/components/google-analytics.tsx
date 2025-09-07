@@ -3,9 +3,23 @@
 
 import Script from 'next/script'
 import * as React from 'react'
+import { usePathname } from 'next/navigation'
+import * as gtag from '@/lib/gtag'
 
 export function GoogleAnalytics({ gaId }: { gaId: string }) {
-  if (!gaId || gaId === "G-XXXXXXXXXX") {
+  const pathname = usePathname()
+
+  React.useEffect(() => {
+    if (!gaId || pathname === null) {
+      return
+    }
+    const url = new URL(pathname, window.location.origin)
+    gtag.pageview(url)
+
+  }, [pathname, gaId])
+
+
+  if (!gaId) {
     return null
   }
 
@@ -20,7 +34,9 @@ export function GoogleAnalytics({ gaId }: { gaId: string }) {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}');
+          gtag('config', '${gaId}', {
+            page_path: window.location.pathname,
+          });
         `}
       </Script>
     </>

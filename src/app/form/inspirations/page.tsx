@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { InspirationReminderToast } from "@/components/inspiration-reminder-toast";
+import * as gtag from '@/lib/gtag';
 
 const allCulturalRoots = ["Sanskrit", "Hindi", "Tamil", "Marathi", "Kannada", "Telugu", "Bengali", "Gujarati", "Punjabi", "Malayalam", "Odia", "Urdu"];
 const inspirationsList = ["Nature", "Music", "Wisdom", "Heritage", "Literature", "Colors"];
@@ -64,6 +65,7 @@ export default function InspirationsPage() {
 
   const handleChipSelection = (value: string) => {
     let newSelection = [...selectedRoots];
+    let isAdding = false;
     if (newSelection.includes(value)) {
       newSelection = newSelection.filter((i) => i !== value);
     } else {
@@ -75,8 +77,15 @@ export default function InspirationsPage() {
         return;
       }
       newSelection.push(value);
+      isAdding = true;
     }
     setValue('regionalRoots', newSelection, { shouldDirty: true, shouldValidate: true });
+    
+    gtag.event({
+        action: 'select_root',
+        category: 'inspirations',
+        label: value,
+    });
   };
   
   const addCustomRoot = () => {
@@ -90,6 +99,11 @@ export default function InspirationsPage() {
     if (customRoot && !selectedRoots.includes(customRoot)) {
        const newRoots = [...selectedRoots, customRoot];
        setValue('regionalRoots', newRoots, { shouldDirty: true, shouldValidate: true });
+       gtag.event({
+           action: 'add_custom_root',
+           category: 'inspirations',
+           label: customRoot,
+       });
        setCustomRoot("");
     }
   };
@@ -109,11 +123,22 @@ export default function InspirationsPage() {
       newInspirations.push(inspiration);
     }
     setValue('inspirations', newInspirations, { shouldDirty: true, shouldValidate: true });
+
+    gtag.event({
+        action: 'select_inspiration',
+        category: 'inspirations',
+        label: inspiration,
+    });
   };
 
   const proceedToResults = (data: NameFormValues) => {
     const finalFormValues = { ...state.formValues, ...data };
     setState({ formValues: finalFormValues, isLoading: true, nameResults: [], error: null });
+    gtag.event({
+        action: 'click',
+        category: 'navigation',
+        label: 'Show Names',
+    });
     router.push('/results');
   };
   

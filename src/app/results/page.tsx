@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { toPng } from 'html-to-image';
+import * as gtag from '@/lib/gtag';
 
 export default function ResultsPage() {
   const { state, setState } = useAppState();
@@ -67,6 +68,12 @@ export default function ResultsPage() {
     if (cardRef === null || !currentName) {
       return;
     }
+    
+    gtag.event({
+      action: 'download_card',
+      category: 'engagement',
+      label: currentName,
+    });
 
     toPng(cardRef, { cacheBust: true, pixelRatio: 4 })
       .then((dataUrl) => {
