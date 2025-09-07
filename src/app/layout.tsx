@@ -20,6 +20,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Naamkarann",
+      "operatingSystem": "WEB",
+      "applicationCategory": "LifestyleApplication",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1000"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -35,6 +53,10 @@ export default function RootLayout({
             setVh();
           `}
         </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
          <Script 
             id="adsbygoogle-init"
             strategy="lazyOnload"
