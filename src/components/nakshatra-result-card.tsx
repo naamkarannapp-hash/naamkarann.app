@@ -10,6 +10,7 @@ import { Download, Repeat } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import { format } from 'date-fns';
+import * as gtag from '@/lib/gtag';
 
 interface NakshatraResultCardProps {
   result: NakshatraResult;
@@ -64,8 +65,14 @@ export function NakshatraResultCard({ result, onReset, dateOfBirth }: NakshatraR
     if (cardRef.current === null) {
       return;
     }
+    
+    gtag.event({
+        action: 'click',
+        category: 'nakshatra',
+        label: 'Download Card',
+    });
 
-    toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 })
+    toPng(cardRef.current, { cacheBust: true, pixelRatio: 4 })
       .then((dataUrl) => {
         const now = new Date();
         const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;

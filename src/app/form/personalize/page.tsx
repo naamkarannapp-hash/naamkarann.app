@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -24,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import * as gtag from '@/lib/gtag';
 
 const genders = ["Boy", "Girl", "Neutral"] as const;
 
@@ -46,8 +48,30 @@ export default function PersonalizePage() {
   }, [state.formValues, reset]);
   
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch((value, { name, type }) => {
       setState({ formValues: value as NameFormValues });
+      
+      if (type === 'change') {
+          if (name === 'gender') {
+            gtag.event({
+                action: 'select_gender',
+                category: 'personalize',
+                label: value.gender || 'Unknown',
+            });
+          } else if (name === 'blendParents') {
+            gtag.event({
+                action: 'toggle_blend_parents',
+                category: 'personalize',
+                label: value.blendParents ? 'on' : 'off',
+            });
+          } else if (name === 'matchSibling') {
+            gtag.event({
+                action: 'toggle_match_sibling',
+                category: 'personalize',
+                label: value.matchSibling ? 'on' : 'off',
+            });
+          }
+      }
     });
     return () => subscription.unsubscribe();
   }, [watch, setState]);
@@ -69,6 +93,14 @@ export default function PersonalizePage() {
     setState({ formValues: data });
     router.push("/form/inspirations");
   }
+  
+  const handleAstrologyClick = () => {
+    gtag.event({
+        action: 'click',
+        category: 'personalize',
+        label: 'Astrology Link',
+    });
+  };
 
   return (
     <>
@@ -127,7 +159,7 @@ export default function PersonalizePage() {
                       >
                         <p className="text-xs text-muted-foreground">
                           Astrology fan?{' '}
-                          <Link href="/check-nakshatra-rashi" className="text-primary font-semibold hover:underline">
+                          <Link href="/check-nakshatra-rashi" onClick={handleAstrologyClick} className="text-primary font-semibold hover:underline">
                             Find names by Nakshatra & Rashi
                           </Link>
                         </p>

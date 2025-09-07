@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -29,6 +30,7 @@ import { NakshatraResultCard } from "@/components/nakshatra-result-card";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppState } from "@/context/app-state-context";
 import { useRouter } from "next/navigation";
+import * as gtag from '@/lib/gtag';
 
 
 const nakshatraSchema = z.object({
@@ -72,6 +74,12 @@ export default function CheckNakshatraRashiPage() {
     setResult(null);
     setFormData(data);
 
+    gtag.event({
+        action: 'submit_nakshatra_check',
+        category: 'nakshatra',
+        label: 'Check Now',
+    });
+
     const apiPayload = {
       ...data,
       dateOfBirth: format(data.dateOfBirth, "yyyy-MM-dd"),
@@ -94,6 +102,11 @@ export default function CheckNakshatraRashiPage() {
   }
 
   const handleReset = () => {
+    gtag.event({
+        action: 'click',
+        category: 'nakshatra',
+        label: 'Check Again',
+    });
     setResult(null);
     setFormData(null);
     form.reset({
@@ -104,6 +117,11 @@ export default function CheckNakshatraRashiPage() {
 
   const handleFindNames = () => {
     if (result) {
+        gtag.event({
+            action: 'click',
+            category: 'nakshatra',
+            label: `Find names with ${result.syllable}`,
+        });
         setState({
             formValues: {
                 startingLetters: result.syllable,
@@ -147,7 +165,7 @@ export default function CheckNakshatraRashiPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="w-full max-w-md flex flex-col items-center space-y-6"
                   >
-                    <NakshatraResultCard result={result} dateOfBirth={formData?.dateOfBirth} />
+                    <NakshatraResultCard result={result} onReset={handleReset} dateOfBirth={formData?.dateOfBirth} />
                     <Button onClick={handleFindNames} size="lg" className="w-full">
                       Find names starting with '{result.syllable}'
                       <Sparkles className="ml-2 h-4 w-4" />
