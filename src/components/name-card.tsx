@@ -6,6 +6,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
 import React from "react";
 import { Separator } from "./ui/separator";
+import { cn } from "@/lib/utils";
 
 interface NameCardProps {
   name: NameResult;
@@ -38,7 +39,7 @@ export const NameCard = React.forwardRef<HTMLDivElement, NameCardProps>(
         </div>
         
         <CardFooter className="p-0 z-10 justify-center">
-            <Badge className="bg-black/10 text-white/80 border-none">Powered by Naamkarann.in</Badge>
+            <Badge className={cn("bg-black/10 text-white/80 border-none", "whitespace-nowrap")}>Powered by Naamkarann.in</Badge>
         </CardFooter>
       </Card>
     );
