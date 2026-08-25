@@ -2,64 +2,81 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Sparkles, Compass, ShieldCheck, Sparkle } from "lucide-react";
+import { Star, Sparkles, Compass, ShieldCheck, Shuffle, ArrowRight } from "lucide-react";
 import Link from 'next/link';
 import { curatedNamesDatabase } from '@/lib/curated-names';
 import { motion, AnimatePresence } from "framer-motion";
 import * as gtag from '@/lib/gtag';
 
-// Curated list of diverse, evocative sample names for live showcase
-const showcaseNames = curatedNamesDatabase.slice(0, 10);
-
 const LiveNameCardPreview = () => {
+    const [names, setNames] = useState(curatedNamesDatabase);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
 
     useEffect(() => {
         setHasMounted(true);
+        // Randomize the entire name collection on every visit/refresh for rich variety
+        const shuffled = [...curatedNamesDatabase].sort(() => 0.5 - Math.random());
+        setNames(shuffled);
     }, []);
 
     useEffect(() => {
-        if (!hasMounted) return;
+        if (!hasMounted || isPaused || names.length === 0) return;
 
         const intervalId = setInterval(() => {
-            setCurrentIndex(prevIndex => (prevIndex + 1) % showcaseNames.length);
-        }, 3200);
+            setCurrentIndex(prevIndex => (prevIndex + 1) % names.length);
+        }, 3400);
 
         return () => clearInterval(intervalId);
-    }, [hasMounted]);
+    }, [hasMounted, isPaused, names.length]);
 
-    const item = showcaseNames[currentIndex] || showcaseNames[0];
+    const handleNext = () => {
+        setCurrentIndex(prev => (prev + 1) % names.length);
+    };
+
+    const item = names[currentIndex] || curatedNamesDatabase[0];
 
     if (!hasMounted) {
         return (
-            <div className="w-full max-w-sm sm:max-w-md h-[210px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
+            <div className="w-full max-w-sm sm:max-w-md h-[220px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
         );
     }
 
     return (
         <div className="w-full max-w-sm sm:max-w-md mx-auto mb-8">
-            <div className="relative group">
+            <div 
+                className="relative group cursor-pointer"
+                onClick={handleNext}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                title="Click to preview another name"
+            >
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={item.name}
-                        initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                        initial={{ opacity: 0, y: 14, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -12, scale: 0.97 }}
+                        exit={{ opacity: 0, y: -14, scale: 0.96 }}
                         transition={{ duration: 0.45, ease: "easeOut" }}
-                        className="w-full h-[210px] sm:h-[220px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:shadow-primary/25"
+                        className="w-full h-[220px] sm:h-[230px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:scale-[1.02] group-hover:shadow-primary/30 select-none"
                         style={{
                             background: item.gradient || 'linear-gradient(135deg, #1A52E1 0%, #9C27B0 100%)',
                         }}
                     >
                         {/* Top Meta Bar */}
-                        <div className="flex items-center justify-between text-xs text-white/80 z-10">
-                            <span className="flex items-center gap-1 bg-black/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
-                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Card Preview
+                        <div className="flex items-center justify-between text-xs text-white/85 z-10">
+                            <span className="flex items-center gap-1.5 bg-black/25 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
+                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Preview
                             </span>
-                            <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
-                                {item.gender}
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
+                                    {item.gender}
+                                </span>
+                                <span className="bg-black/20 hover:bg-black/40 backdrop-blur-md p-1 rounded-full text-white/80 transition-colors" title="Click for next name">
+                                    <Shuffle className="w-3 h-3" />
+                                </span>
+                            </div>
                         </div>
 
                         {/* Name & Pronunciation */}
@@ -84,28 +101,20 @@ const LiveNameCardPreview = () => {
                             </p>
                         </div>
 
-                        {/* Bottom Tags */}
-                        <div className="flex items-center justify-between z-10 pt-1 border-t border-white/15">
+                        {/* Bottom Tags & Indicator */}
+                        <div className="flex items-center justify-between z-10 pt-1.5 border-t border-white/15">
                             <div className="flex items-center gap-1.5">
-                                <span className="text-[11px] bg-black/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
                                     {item.origin}
                                 </span>
-                                <span className="text-[11px] bg-black/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
                                     {item.category}
                                 </span>
                             </div>
 
-                            {/* Cycle Dots */}
-                            <div className="flex items-center gap-1">
-                                {showcaseNames.map((_, i) => (
-                                    <span 
-                                        key={i} 
-                                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                                            i === currentIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/40'
-                                        }`} 
-                                    />
-                                ))}
-                            </div>
+                            <span className="text-[10px] text-white/70 flex items-center gap-1 group-hover:text-white transition-colors">
+                                Tap to shuffle <ArrowRight className="w-2.5 h-2.5" />
+                            </span>
                         </div>
                     </motion.div>
                 </AnimatePresence>
@@ -190,7 +199,7 @@ export default function Home() {
               Thousands of culturally authentic, linguist-verified baby names tailored to your heritage and vibe.
             </motion.p>
             
-            {/* Live Mini-Card Preview Component */}
+            {/* Dynamic Randomized Live Card Preview */}
             <LiveNameCardPreview />
 
             {/* Call to Action Buttons */}
