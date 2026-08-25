@@ -2,67 +2,114 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Sparkles, Compass, ShieldCheck, Heart } from "lucide-react";
+import { Star, Sparkles, Compass, ShieldCheck, Sparkle } from "lucide-react";
 import Link from 'next/link';
-import { namesByTradition } from '@/lib/name-data';
+import { curatedNamesDatabase } from '@/lib/curated-names';
 import { motion, AnimatePresence } from "framer-motion";
 import * as gtag from '@/lib/gtag';
 
-const baseWord = "Naamkarann";
+// Curated list of diverse, evocative sample names for live showcase
+const showcaseNames = curatedNamesDatabase.slice(0, 10);
 
-const AnimatedName = () => {
-    const [displayNames, setDisplayNames] = useState<string[]>([]);
+const LiveNameCardPreview = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
         setHasMounted(true);
-        
-        const traditions = Object.values(namesByTradition);
-        const randomized = traditions.map(names => names[Math.floor(Math.random() * names.length)]);
-        
-        for (let i = randomized.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [randomized[i], randomized[j]] = [randomized[j], randomized[i]];
-        }
-        
-        setDisplayNames([...randomized, baseWord]);
     }, []);
 
     useEffect(() => {
-        if (!hasMounted || displayNames.length <= 1) return;
+        if (!hasMounted) return;
 
         const intervalId = setInterval(() => {
-            setCurrentIndex(prevIndex => (prevIndex + 1) % displayNames.length);
-        }, 2800); 
+            setCurrentIndex(prevIndex => (prevIndex + 1) % showcaseNames.length);
+        }, 3200);
 
         return () => clearInterval(intervalId);
-    }, [hasMounted, displayNames]);
+    }, [hasMounted]);
+
+    const item = showcaseNames[currentIndex] || showcaseNames[0];
 
     if (!hasMounted) {
         return (
-            <span className="font-headline text-3xl sm:text-4xl font-bold text-accent">
-                Naamkarann
-            </span>
+            <div className="w-full max-w-sm sm:max-w-md h-[210px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
         );
     }
-    
-    const currentName = displayNames[currentIndex] || baseWord;
 
     return (
-        <div className="relative h-12 w-56 sm:w-64 overflow-hidden flex items-center justify-center">
-            <AnimatePresence mode="wait">
-                <motion.span
-                    key={currentName}
-                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -15, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="absolute font-headline text-3xl sm:text-4xl font-bold text-accent tracking-wide"
-                >
-                    {currentName}
-                </motion.span>
-            </AnimatePresence>
+        <div className="w-full max-w-sm sm:max-w-md mx-auto mb-8">
+            <div className="relative group">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={item.name}
+                        initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -12, scale: 0.97 }}
+                        transition={{ duration: 0.45, ease: "easeOut" }}
+                        className="w-full h-[210px] sm:h-[220px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:shadow-primary/25"
+                        style={{
+                            background: item.gradient || 'linear-gradient(135deg, #1A52E1 0%, #9C27B0 100%)',
+                        }}
+                    >
+                        {/* Top Meta Bar */}
+                        <div className="flex items-center justify-between text-xs text-white/80 z-10">
+                            <span className="flex items-center gap-1 bg-black/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
+                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Card Preview
+                            </span>
+                            <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
+                                {item.gender}
+                            </span>
+                        </div>
+
+                        {/* Name & Pronunciation */}
+                        <div className="flex flex-col items-center justify-center text-center z-10 my-auto">
+                            <h3 
+                                className="font-headline text-3xl sm:text-4xl font-extrabold tracking-tight text-white" 
+                                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.25)' }}
+                            >
+                                {item.name}
+                            </h3>
+                            <p 
+                                className="text-xs sm:text-sm italic text-white/85 mt-0.5" 
+                                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}
+                            >
+                                {item.pronunciation}
+                            </p>
+                            <p 
+                                className="text-xs sm:text-sm text-white/95 mt-2 line-clamp-2 max-w-xs mx-auto leading-snug" 
+                                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}
+                            >
+                                "{item.meaning}"
+                            </p>
+                        </div>
+
+                        {/* Bottom Tags */}
+                        <div className="flex items-center justify-between z-10 pt-1 border-t border-white/15">
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[11px] bg-black/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                    {item.origin}
+                                </span>
+                                <span className="text-[11px] bg-black/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                    {item.category}
+                                </span>
+                            </div>
+
+                            {/* Cycle Dots */}
+                            <div className="flex items-center gap-1">
+                                {showcaseNames.map((_, i) => (
+                                    <span 
+                                        key={i} 
+                                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                                            i === currentIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/40'
+                                        }`} 
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
         </div>
     );
 };
@@ -122,7 +169,7 @@ export default function Home() {
             </motion.div>
 
             {/* Hero Main Heading */}
-            <div className="relative mb-4">
+            <div className="relative mb-3">
                 <motion.h1 
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -143,25 +190,8 @@ export default function Home() {
               Thousands of culturally authentic, linguist-verified baby names tailored to your heritage and vibe.
             </motion.p>
             
-            {/* Interactive Animated Name Capsule Showcase */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="w-full max-w-md bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-2xl border border-primary/15 shadow-xl shadow-primary/5 p-4 sm:p-5 mb-8 flex flex-col items-center justify-center transition-all hover:border-primary/25 hover:shadow-2xl hover:shadow-primary/10"
-            >
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                  <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
-                  <span>Explore names like</span>
-                </div>
-                
-                <AnimatedName />
-                
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>One swipe at a time • Instant meanings & origins</span>
-                </div>
-            </motion.div>
+            {/* Live Mini-Card Preview Component */}
+            <LiveNameCardPreview />
 
             {/* Call to Action Buttons */}
             <motion.div 
