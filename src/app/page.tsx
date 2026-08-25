@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Sparkles, Compass, ShieldCheck, Dices } from "lucide-react";
+import { Star, Sparkles, Compass, ShieldCheck } from "lucide-react";
 import Link from 'next/link';
 import { curatedNamesDatabase } from '@/lib/curated-names';
 import { motion, AnimatePresence } from "framer-motion";
 import * as gtag from '@/lib/gtag';
 
-const AUTOPLAY_DURATION = 6000; // 6 seconds
-const TICK_INTERVAL = 50; // Update progress every 50ms
+const AUTOPLAY_DURATION = 6000; // 6 seconds per name
+const TICK_INTERVAL = 50; // 50ms tick for fluid dial
 
 const LiveNameCardPreview = () => {
     const [names, setNames] = useState(curatedNamesDatabase);
@@ -22,12 +22,12 @@ const LiveNameCardPreview = () => {
 
     useEffect(() => {
         setHasMounted(true);
-        // Randomize initial collection on load
+        // Randomize initial collection on load for diverse discovery
         const shuffled = [...curatedNamesDatabase].sort(() => 0.5 - Math.random());
         setNames(shuffled);
     }, []);
 
-    // Smooth linear countdown timer
+    // Smooth circular countdown
     useEffect(() => {
         if (!hasMounted || names.length === 0) return;
 
@@ -51,24 +51,19 @@ const LiveNameCardPreview = () => {
         setCurrentIndex(prev => (prev + 1) % names.length);
     };
 
-    const handleSurpriseMe = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Don't trigger outer card click twice
-        progressRef.current = 0;
-        setProgress(0);
-        let randomIndex = Math.floor(Math.random() * names.length);
-        if (randomIndex === currentIndex && names.length > 1) {
-            randomIndex = (currentIndex + 1) % names.length;
-        }
-        setCurrentIndex(randomIndex);
-    };
-
     const item = names[currentIndex] || curatedNamesDatabase[0];
+
+    // Circle perimeter: 2 * Math.PI * 7 ≈ 43.98
+    const circlePerimeter = 43.98;
+    const strokeOffset = circlePerimeter - (circlePerimeter * progress) / 100;
 
     if (!hasMounted) {
         return (
-            <div className="w-full max-w-sm sm:max-w-md h-[230px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
+            <div className="w-full max-w-sm sm:max-w-md h-[220px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
         );
     }
+
+    const genderEmoji = item.gender === 'boy' ? '👦' : item.gender === 'girl' ? '👧' : '✨';
 
     return (
         <div className="w-full max-w-sm sm:max-w-md mx-auto mb-8">
@@ -77,7 +72,7 @@ const LiveNameCardPreview = () => {
                 onClick={handleNext}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                title="Tap card or 'Surprise Me' to see another name"
+                title="Tap to see next name (Pauses on hover)"
             >
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -86,27 +81,45 @@ const LiveNameCardPreview = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.97 }}
                         transition={{ duration: 0.45, ease: "easeOut" }}
-                        className="w-full h-[225px] sm:h-[235px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:scale-[1.01] group-hover:shadow-primary/30"
+                        className="w-full h-[220px] sm:h-[230px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:scale-[1.01] group-hover:shadow-primary/30"
                         style={{
                             background: item.gradient || 'linear-gradient(135deg, #1A52E1 0%, #9C27B0 100%)',
                         }}
                     >
-                        {/* Top Meta Bar with Surprise Me Button directly ON the card */}
+                        {/* Top Meta Bar: Radial Timer + Gender in Top Right */}
                         <div className="flex items-center justify-between text-xs text-white/90 z-10">
-                            <span className="flex items-center gap-1.5 bg-black/25 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
-                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Preview
-                            </span>
+                            {/* Radial Countdown Indicator */}
+                            <div className="flex items-center gap-2 bg-black/25 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">
+                                <svg className="w-3.5 h-3.5 -rotate-90 shrink-0" viewBox="0 0 18 18">
+                                    <circle 
+                                        cx="9" 
+                                        cy="9" 
+                                        r="7" 
+                                        fill="none" 
+                                        stroke="rgba(255,255,255,0.25)" 
+                                        strokeWidth="2.5" 
+                                    />
+                                    <circle 
+                                        cx="9" 
+                                        cy="9" 
+                                        r="7" 
+                                        fill="none" 
+                                        stroke={isPaused ? "#fde047" : "#ffffff"} 
+                                        strokeWidth="2.5" 
+                                        strokeDasharray={circlePerimeter}
+                                        strokeDashoffset={strokeOffset}
+                                        strokeLinecap="round"
+                                        className="transition-all duration-75"
+                                    />
+                                </svg>
+                                <span>{isPaused ? "Paused" : "Live Preview"}</span>
+                            </div>
 
-                            {/* Direct ON-CARD Surprise Me Button */}
-                            <button
-                                type="button"
-                                onClick={handleSurpriseMe}
-                                className="bg-white/20 hover:bg-white/35 active:scale-95 px-3 py-1 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 backdrop-blur-md transition-all shadow-sm border border-white/25"
-                                title="Surprise me with a random name"
-                            >
-                                <Dices className="w-3.5 h-3.5 text-yellow-300" />
-                                <span>Surprise Me</span>
-                            </button>
+                            {/* Gender Pill in Top Right */}
+                            <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold capitalize text-white tracking-wide border border-white/20 shadow-sm flex items-center gap-1">
+                                <span>{genderEmoji}</span>
+                                <span>{item.gender}</span>
+                            </span>
                         </div>
 
                         {/* Name, Pronunciation & Meaning */}
@@ -131,39 +144,39 @@ const LiveNameCardPreview = () => {
                             </p>
                         </div>
 
-                        {/* Bottom Tags & Visual Countdown Progress Timer */}
-                        <div className="flex flex-col gap-2 z-10 pt-1.5 border-t border-white/15">
-                            <div className="flex items-center justify-between text-xs">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
-                                        {item.origin}
-                                    </span>
-                                    <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
-                                        {item.category}
-                                    </span>
-                                </div>
-                                <span className="text-[11px] bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium capitalize text-white/90">
-                                    {item.gender}
+                        {/* Bottom Tags & Story Dots */}
+                        <div className="flex items-center justify-between z-10 pt-2 border-t border-white/15">
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                    {item.origin}
+                                </span>
+                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                    {item.category}
                                 </span>
                             </div>
 
-                            {/* 6-Second Visual Countdown Timer Bar */}
-                            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden" title={isPaused ? "Paused on hover" : "Auto-advances every 6s"}>
-                                <div 
-                                    className={`h-full rounded-full transition-all duration-75 ease-linear ${isPaused ? 'bg-yellow-300' : 'bg-white/90'}`}
-                                    style={{ width: `${progress}%` }}
-                                />
+                            {/* Story-style Progress Dots */}
+                            <div className="flex items-center gap-1">
+                                {names.slice(0, 6).map((_, i) => {
+                                    const isActive = (currentIndex % 6) === i;
+                                    return (
+                                        <span 
+                                            key={i} 
+                                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                                                isActive ? 'w-4 bg-white shadow-sm' : 'w-1.5 bg-white/40'
+                                            }`} 
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     </motion.div>
                 </AnimatePresence>
             </div>
 
-            {/* Helper Caption */}
-            <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-center gap-1">
-                <span>{isPaused ? "⏸️ Paused while hovering" : "⏳ Changes every 6s"}</span>
-                <span>•</span>
-                <span>Tap card or Surprise Me to explore</span>
+            {/* Subtle Helper Caption */}
+            <p className="text-[11px] text-muted-foreground mt-2 text-center">
+                Tap card to advance • Auto-rotates every 6s (pauses on hover)
             </p>
         </div>
     );
@@ -245,7 +258,7 @@ export default function Home() {
               Thousands of culturally authentic, linguist-verified baby names tailored to your heritage and vibe.
             </motion.p>
             
-            {/* Interactive Live Card Preview with on-card Surprise Me and 6s countdown timer */}
+            {/* Interactive Live Card Preview with Radial Timer & Top-Right Gender */}
             <LiveNameCardPreview />
 
             {/* Call to Action Buttons */}
