@@ -1,48 +1,60 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Sparkles, Compass, ShieldCheck, Dices, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Sparkles, Compass, ShieldCheck, Dices } from "lucide-react";
 import Link from 'next/link';
 import { curatedNamesDatabase } from '@/lib/curated-names';
 import { motion, AnimatePresence } from "framer-motion";
 import * as gtag from '@/lib/gtag';
+
+const AUTOPLAY_DURATION = 6000; // 6 seconds
+const TICK_INTERVAL = 50; // Update progress every 50ms
 
 const LiveNameCardPreview = () => {
     const [names, setNames] = useState(curatedNamesDatabase);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    const progressRef = useRef(0);
 
     useEffect(() => {
         setHasMounted(true);
-        // Randomize the initial sequence for fresh discovery on every visit
+        // Randomize initial collection on load
         const shuffled = [...curatedNamesDatabase].sort(() => 0.5 - Math.random());
         setNames(shuffled);
     }, []);
 
-    // Gentle, relaxed auto-advance (every 6.5 seconds) that gives ample reading time
+    // Smooth linear countdown timer
     useEffect(() => {
-        if (!hasMounted || isPaused || names.length === 0) return;
+        if (!hasMounted || names.length === 0) return;
 
-        const intervalId = setInterval(() => {
-            setCurrentIndex(prevIndex => (prevIndex + 1) % names.length);
-        }, 6500);
+        const interval = setInterval(() => {
+            if (!isPaused) {
+                progressRef.current += (TICK_INTERVAL / AUTOPLAY_DURATION) * 100;
+                if (progressRef.current >= 100) {
+                    progressRef.current = 0;
+                    setCurrentIndex(prev => (prev + 1) % names.length);
+                }
+                setProgress(progressRef.current);
+            }
+        }, TICK_INTERVAL);
 
-        return () => clearInterval(intervalId);
+        return () => clearInterval(interval);
     }, [hasMounted, isPaused, names.length]);
 
     const handleNext = () => {
+        progressRef.current = 0;
+        setProgress(0);
         setCurrentIndex(prev => (prev + 1) % names.length);
     };
 
-    const handlePrev = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setCurrentIndex(prev => (prev - 1 + names.length) % names.length);
-    };
-
     const handleSurpriseMe = (e: React.MouseEvent) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Don't trigger outer card click twice
+        progressRef.current = 0;
+        setProgress(0);
         let randomIndex = Math.floor(Math.random() * names.length);
         if (randomIndex === currentIndex && names.length > 1) {
             randomIndex = (currentIndex + 1) % names.length;
@@ -54,18 +66,18 @@ const LiveNameCardPreview = () => {
 
     if (!hasMounted) {
         return (
-            <div className="w-full max-w-sm sm:max-w-md h-[225px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
+            <div className="w-full max-w-sm sm:max-w-md h-[230px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
         );
     }
 
     return (
         <div className="w-full max-w-sm sm:max-w-md mx-auto mb-8">
             <div 
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer select-none"
                 onClick={handleNext}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                title="Tap card for next name"
+                title="Tap card or 'Surprise Me' to see another name"
             >
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -73,20 +85,28 @@ const LiveNameCardPreview = () => {
                         initial={{ opacity: 0, y: 10, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.97 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="w-full h-[220px] sm:h-[230px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:shadow-primary/30 select-none"
+                        transition={{ duration: 0.45, ease: "easeOut" }}
+                        className="w-full h-[225px] sm:h-[235px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:scale-[1.01] group-hover:shadow-primary/30"
                         style={{
                             background: item.gradient || 'linear-gradient(135deg, #1A52E1 0%, #9C27B0 100%)',
                         }}
                     >
-                        {/* Top Meta Bar */}
+                        {/* Top Meta Bar with Surprise Me Button directly ON the card */}
                         <div className="flex items-center justify-between text-xs text-white/90 z-10">
                             <span className="flex items-center gap-1.5 bg-black/25 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
-                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Interactive Preview
+                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Preview
                             </span>
-                            <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
-                                {item.gender}
-                            </span>
+
+                            {/* Direct ON-CARD Surprise Me Button */}
+                            <button
+                                type="button"
+                                onClick={handleSurpriseMe}
+                                className="bg-white/20 hover:bg-white/35 active:scale-95 px-3 py-1 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 backdrop-blur-md transition-all shadow-sm border border-white/25"
+                                title="Surprise me with a random name"
+                            >
+                                <Dices className="w-3.5 h-3.5 text-yellow-300" />
+                                <span>Surprise Me</span>
+                            </button>
                         </div>
 
                         {/* Name, Pronunciation & Meaning */}
@@ -111,61 +131,40 @@ const LiveNameCardPreview = () => {
                             </p>
                         </div>
 
-                        {/* Bottom Tags */}
-                        <div className="flex items-center justify-between z-10 pt-1.5 border-t border-white/15">
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
-                                    {item.origin}
-                                </span>
-                                <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
-                                    {item.category}
+                        {/* Bottom Tags & Visual Countdown Progress Timer */}
+                        <div className="flex flex-col gap-2 z-10 pt-1.5 border-t border-white/15">
+                            <div className="flex items-center justify-between text-xs">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                        {item.origin}
+                                    </span>
+                                    <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
+                                        {item.category}
+                                    </span>
+                                </div>
+                                <span className="text-[11px] bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-md font-medium capitalize text-white/90">
+                                    {item.gender}
                                 </span>
                             </div>
 
-                            <span className="text-[10px] text-white/75 flex items-center gap-1 group-hover:text-white transition-colors">
-                                Tap card to advance
-                            </span>
+                            {/* 6-Second Visual Countdown Timer Bar */}
+                            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden" title={isPaused ? "Paused on hover" : "Auto-advances every 6s"}>
+                                <div 
+                                    className={`h-full rounded-full transition-all duration-75 ease-linear ${isPaused ? 'bg-yellow-300' : 'bg-white/90'}`}
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
                         </div>
                     </motion.div>
                 </AnimatePresence>
             </div>
 
-            {/* Interactive Navigation & Surprise Me Controls */}
-            <div className="flex items-center justify-between mt-3 px-1 text-xs text-muted-foreground">
-                <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={handlePrev}
-                    className="h-8 px-2.5 text-xs hover:bg-muted/80 text-foreground/75"
-                    title="Previous name"
-                >
-                    <ChevronLeft className="w-4 h-4 mr-1" /> Prev
-                </Button>
-
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSurpriseMe}
-                    className="h-8 px-3.5 text-xs font-semibold rounded-full border-primary/30 bg-white/80 dark:bg-card/80 hover:bg-primary/10 text-primary shadow-sm hover:shadow transition-all flex items-center gap-1.5"
-                    title="Pick a random surprise name"
-                >
-                    <Dices className="w-3.5 h-3.5 text-accent" />
-                    Surprise Me
-                </Button>
-
-                <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleNext}
-                    className="h-8 px-2.5 text-xs hover:bg-muted/80 text-foreground/75"
-                    title="Next name"
-                >
-                    Next <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-            </div>
+            {/* Helper Caption */}
+            <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-center gap-1">
+                <span>{isPaused ? "⏸️ Paused while hovering" : "⏳ Changes every 6s"}</span>
+                <span>•</span>
+                <span>Tap card or Surprise Me to explore</span>
+            </p>
         </div>
     );
 };
@@ -246,7 +245,7 @@ export default function Home() {
               Thousands of culturally authentic, linguist-verified baby names tailored to your heritage and vibe.
             </motion.p>
             
-            {/* Interactive Live Card Preview with Surprise Me Controls */}
+            {/* Interactive Live Card Preview with on-card Surprise Me and 6s countdown timer */}
             <LiveNameCardPreview />
 
             {/* Call to Action Buttons */}
