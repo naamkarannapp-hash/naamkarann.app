@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation";
 import { useAppState } from "@/context/app-state-context";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
-import { X, Check } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
 
 const steps = [
-  { path: "/form/personalize", label: "Personalize", stepNumber: 1 },
-  { path: "/form/inspirations", label: "Inspirations", stepNumber: 2 },
+  { path: "/form/personalize", label: "Personalize" },
+  { path: "/form/inspirations", label: "Inspirations" },
 ];
 
 const chipColorClasses = [
@@ -90,8 +90,8 @@ export function FormHeader() {
   const selections = getVisibleSelections();
 
   return (
-    <header className="w-full max-w-xl mx-auto space-y-4 mb-4">
-      {/* Brand logo & Home link */}
+    <header className="w-full max-w-xl mx-auto space-y-3 mb-2">
+      {/* Clean Brand logo & Step count badge */}
       <div className="flex items-center justify-between">
         <Link href="/" className="group flex items-center gap-1">
           <h2 className="text-xl font-extrabold tracking-tight text-primary">
@@ -103,44 +103,15 @@ export function FormHeader() {
         </span>
       </div>
 
-      {/* Dual Step Progress Bar */}
-      <div className="grid grid-cols-2 gap-2">
-        {steps.map((step, idx) => {
-          const isActive = idx === currentStepIndex;
-          const isCompleted = idx < currentStepIndex;
-          return (
-            <div 
-              key={step.path}
-              className={cn(
-                "flex items-center gap-2 p-2 rounded-xl border text-xs font-semibold transition-all",
-                isActive ? "bg-primary/10 border-primary text-primary shadow-sm" : 
-                isCompleted ? "bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-950/30" : 
-                "bg-white/60 dark:bg-card/60 border-border/60 text-muted-foreground"
-              )}
-            >
-              <div className={cn(
-                "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0",
-                isActive ? "bg-primary text-white" : 
-                isCompleted ? "bg-emerald-600 text-white" : 
-                "bg-muted text-muted-foreground"
-              )}>
-                {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : step.stepNumber}
-              </div>
-              <span className="truncate">{step.label}</span>
-            </div>
-          );
-        })}
-      </div>
-
       {/* Active Selections Tags */}
       {selections.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 items-center justify-center pt-1 min-h-[28px]">
+          <div className="flex flex-wrap gap-1.5 items-center justify-center pt-1 min-h-[24px]">
               {selections.map((selection, index) => (
                   <Badge 
                     key={`${selection.type}-${selection.value}-${index}`} 
                     variant="outline" 
                     className={cn(
-                        "py-1 pl-2.5 pr-2 rounded-full font-medium text-xs border flex items-center gap-1 shadow-sm transition-all",
+                        "py-0.5 pl-2.5 pr-2 rounded-full font-medium text-xs border flex items-center gap-1 shadow-sm transition-all",
                         chipColorClasses[index % chipColorClasses.length]
                     )}
                    >

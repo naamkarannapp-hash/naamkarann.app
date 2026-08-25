@@ -25,9 +25,24 @@ import { Compass, Heart, Users } from "lucide-react";
 import * as gtag from '@/lib/gtag';
 
 const genders = [
-  { value: "Boy", label: "Boy", icon: "👦", color: "hover:border-blue-300 active:border-blue-400" },
-  { value: "Girl", label: "Girl", icon: "👧", color: "hover:border-pink-300 active:border-pink-400" },
-  { value: "Neutral", label: "Neutral", icon: "✨", color: "hover:border-purple-300 active:border-purple-400" },
+  { 
+    value: "Boy", 
+    label: "Boy",
+    unselectedClass: "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100",
+    selectedClass: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
+  },
+  { 
+    value: "Girl", 
+    label: "Girl",
+    unselectedClass: "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100",
+    selectedClass: "bg-pink-600 text-white border-pink-600 shadow-md shadow-pink-500/20"
+  },
+  { 
+    value: "Neutral", 
+    label: "Neutral",
+    unselectedClass: "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100",
+    selectedClass: "bg-primary text-white border-primary shadow-md shadow-primary/20"
+  },
 ] as const;
 
 export default function PersonalizePage() {
@@ -43,7 +58,6 @@ export default function PersonalizePage() {
 
   const blendParents = watch("blendParents");
   const matchSibling = watch("matchSibling");
-  const currentGender = watch("gender");
   
   useEffect(() => {
     reset(state.formValues);
@@ -122,17 +136,19 @@ export default function PersonalizePage() {
         </div>
 
         <Form {...form}>
-          <form id="personalize-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
+          <form id="personalize-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5 text-left">
             
-            {/* Gender Selection Section */}
+            {/* Compact Color-Coded Gender Selection */}
             <FormField
               control={control}
               name="gender"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-bold text-foreground">Gender</FormLabel>
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-xs font-bold text-foreground uppercase tracking-wider">
+                    Gender
+                  </FormLabel>
                   <FormControl>
-                    <div className="grid grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-3 gap-2">
                         {genders.map((g) => {
                           const isSelected = field.value === g.value;
                           return (
@@ -141,14 +157,11 @@ export default function PersonalizePage() {
                               type="button"
                               onClick={() => field.onChange(g.value)}
                               className={cn(
-                                "flex flex-col sm:flex-row items-center justify-center gap-1.5 py-3 px-3 rounded-2xl border-2 font-semibold text-sm transition-all select-none",
-                                isSelected 
-                                  ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20 scale-[1.02]" 
-                                  : "bg-white/70 dark:bg-card/70 border-border/80 text-foreground hover:bg-muted/50 hover:border-primary/30"
+                                "py-2 px-3 rounded-full border text-sm font-semibold transition-all select-none",
+                                isSelected ? g.selectedClass : g.unselectedClass
                               )}
                             >
-                              <span className="text-lg">{g.icon}</span>
-                              <span>{g.label}</span>
+                              {g.label}
                             </button>
                           );
                         })}
@@ -174,12 +187,12 @@ export default function PersonalizePage() {
               </Link>
             </div>
 
-            {/* Starting Letters Field */}
+            {/* Starts with */}
             <FormField
               control={control}
               name="startingLetters"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-muted/30 border border-border/60">
+                <FormItem className="flex items-center justify-between gap-4 p-3.5 rounded-2xl bg-muted/30 border border-border/60">
                   <div>
                     <FormLabel htmlFor="startingLetters" className="font-bold text-sm text-foreground">
                       Starts with
@@ -202,7 +215,7 @@ export default function PersonalizePage() {
             />
 
             {/* Family Name Harmonization Options */}
-            <div className="space-y-3 pt-1">
+            <div className="space-y-2.5 pt-1">
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 Family Harmonization
               </span>
@@ -213,15 +226,15 @@ export default function PersonalizePage() {
                 name="blendParents"
                 render={({ field }) => (
                   <FormItem className={cn(
-                    "p-4 rounded-2xl border transition-all",
+                    "p-3.5 rounded-2xl border transition-all",
                     field.value 
                       ? "bg-primary/5 border-primary/40 shadow-sm" 
                       : "bg-muted/30 border-border/60"
                   )}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                          <Heart className="w-4 h-4" />
+                        <div className="p-1.5 rounded-xl bg-primary/10 text-primary">
+                          <Heart className="w-3.5 h-3.5" />
                         </div>
                         <div className="flex flex-col">
                           <FormLabel htmlFor="blend-parents-switch" className="font-bold text-sm text-foreground cursor-pointer">
@@ -242,7 +255,7 @@ export default function PersonalizePage() {
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="grid grid-cols-2 gap-3 pt-3 overflow-hidden"
+                          className="grid grid-cols-2 gap-2.5 pt-3 overflow-hidden"
                         >
                           <FormField
                             name="parent1Name"
@@ -283,15 +296,15 @@ export default function PersonalizePage() {
                 name="matchSibling"
                 render={({ field }) => (
                   <FormItem className={cn(
-                    "p-4 rounded-2xl border transition-all",
+                    "p-3.5 rounded-2xl border transition-all",
                     field.value 
                       ? "bg-primary/5 border-primary/40 shadow-sm" 
                       : "bg-muted/30 border-border/60"
                   )}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                          <Users className="w-4 h-4" />
+                        <div className="p-1.5 rounded-xl bg-primary/10 text-primary">
+                          <Users className="w-3.5 h-3.5" />
                         </div>
                         <div className="flex flex-col">
                           <FormLabel htmlFor="match-sibling-switch" className="font-bold text-sm text-foreground cursor-pointer">
