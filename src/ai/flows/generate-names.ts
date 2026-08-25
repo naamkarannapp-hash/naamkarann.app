@@ -1,12 +1,11 @@
 'use server';
 
 /**
- * @fileOverview Generates culturally authentic, personalized baby names directly inside Next.js.
- * Supports both Genkit flow and direct Google Gemini REST API execution for zero-bundle-overhead on Vercel.
+ * @fileOverview Generates culturally authentic, personalized baby names directly inside Next.js using OpenRouter.
+ * Supports configurable LLM models (defaulting to openai/gpt-4o-mini) and graceful fallbacks.
  */
 
 import { z } from 'zod';
-import { ai } from '@/ai/genkit';
 
 export const GenerateNamesInputSchema = z.object({
   gender: z.enum(['Boy', 'Girl', 'Neutral']).default('Neutral'),
@@ -55,65 +54,146 @@ function getRandomGradient(index: number): string {
   return gradientPalette[index % gradientPalette.length];
 }
 
-/**
- * Direct Gemini REST API call for high performance and zero serverless bundling issues on Vercel
- */
-async function generateViaDirectGemini(input: GenerateNamesInput, apiKey: string): Promise<GeneratedNameItem[]> {
-  const promptText = `You are a world-class culturally authentic linguist and baby naming master.
-Generate 14 to 18 authentic baby names matching these criteria:
-- Gender: ${input.gender}
-- Cultural/Regional Roots: ${input.regionalRoots?.length ? input.regionalRoots.join(', ') : 'Any authentic Indian / Global root'}
-${input.startingLetters ? `- Must start with prefix: "${input.startingLetters}"` : ''}
-${input.blendParents ? `- Harmoniously blend sounds/syllables from Parent 1 ("${input.parent1Name}") and Parent 2 ("${input.parent2Name}")` : ''}
-${input.matchSibling ? `- Complement sibling name: "${input.siblingName}"` : ''}
-${input.inspirations?.length ? `- Inspirations/Vibes to incorporate: ${input.inspirations.join(', ')}` : ''}
-
-Respond ONLY with a JSON array of objects with the exact schema:
-[
-  {
-    "name": "string (properly capitalized)",
-    "meaning": "string (1-2 sentences)",
-    "pronunciation": "string (phonetic guide like AAR-v-ee)",
-    "origin": "string (e.g. Sanskrit, Hindi, Tamil, Telugu, etc.)",
-    "category": "string (e.g. Modern Classic, Celestial, Nature, Spiritual, Vedic)",
-    "gender": "boy" | "girl" | "neutral",
-    "gradient": "string (CSS linear-gradient)"
+function normalizeModelName(rawModel?: string): string {
+  if (!rawModel || rawModel.trim() === '') {
+    return 'openai/gpt-4o-mini';
   }
-]`;
+  const model = rawModel.trim();
+  if (model.includes('/')) {
+    return model;
+  }
+  if (model.startsWith('gpt-')) {
+    return `openai/${model}`;
+  }
+  if (model.startsWith('claude-')) {
+    return `anthropic/${model}`;
+  }
+  if (model.startsWith('gemini-')) {
+    return `google/${model}`;
+  }
+  return model;
+}
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+/**
+ * OpenRouter AI Name Generation Service
+ */
+async function generateViaOpenRouter(
+  input: GenerateNamesInput,
+  apiKey: string,
+  modelName: string
+): Promise<GeneratedNameItem[]> {
+  const model = normalizeModelName(modelName);
 
-  const response = await fetch(url, {
+  const systemPrompt = `You are a world-class culturally authentic linguist and baby naming master specializing in Indian, Vedic, and global cultures.
+Your task is to generate 14 to 18 authentic baby names matching the given criteria.
+Always respond ONLY with valid JSON adhering to this structure:
+{
+  "names": [
+    {
+      "name": "string (properly capitalized)",
+      "meaning": "string (1-2 evocative sentences)",
+      "pronunciation": "string (phonetic guide like AAR-v-ee)",
+      "origin": "string (e.g. Sanskrit, Hindi, Tamil, Telugu, Arabic, etc.)",
+      "category": "string (e.g. Modern Classic, Celestial, Nature, Spiritual, Vedic, Royal)",
+      "gender": "boy" | "girl" | "neutral",
+      "gradient": "string (CSS linear-gradient matching the aura)"
+    }
+  ]
+}`;
+
+  const userPrompt = `Generate baby names for these preferences:
+- Target Gender: ${input.gender}
+- Regional / Linguistic Roots: ${input.regionalRoots?.length ? input.regionalRoots.join(', ') : 'Any authentic Indian or global root'}
+${input.startingLetters ? `- Required Starting Prefix: "${input.startingLetters}" (must start with this)` : ''}
+${input.blendParents ? `- Blend sounds/elements from Parent 1 ("${input.parent1Name}") and Parent 2 ("${input.parent2Name}")` : ''}
+${input.matchSibling ? `- Complement sibling name: "${input.siblingName}"` : ''}
+${input.inspirations?.length ? `- Inspirations / Vibes to weave into names: ${input.inspirations.join(', ')}` : ''}
+
+Output only the JSON object with the "names" array.`;
+
+  const siteUrl = process.env.OPENROUTER_SITE_URL || 'https://naamkarann.app';
+  const siteName = process.env.OPENROUTER_SITE_NAME || 'Naamkarann';
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': siteUrl,
+      'X-Title': siteName,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: promptText }] }],
-      generationConfig: {
-        responseMimeType: 'application/json',
-        temperature: 0.7,
-      },
+      model: model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.7,
     }),
   });
 
   if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Gemini API responded with ${response.status}: ${errText}`);
+    const errorText = await response.text();
+    throw new Error(`OpenRouter API error ${response.status}: ${errorText}`);
   }
 
   const data = await response.json();
+  const rawContent = data?.choices?.[0]?.message?.content;
+
+  if (!rawContent) {
+    throw new Error('Empty response received from OpenRouter API');
+  }
+
+  // Remove potential markdown code blocks
+  const cleanJson = rawContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const parsed = JSON.parse(cleanJson);
+
+  const rawList: any[] = Array.isArray(parsed) ? parsed : (parsed.names || parsed.output || []);
+
+  if (!Array.isArray(rawList) || rawList.length === 0) {
+    throw new Error('OpenRouter response did not contain a valid names list');
+  }
+
+  return rawList.map((item: any, idx: number) => ({
+    name: String(item.name || 'Aarav').trim(),
+    meaning: String(item.meaning || 'Peaceful and full of wisdom.').trim(),
+    pronunciation: String(item.pronunciation || item.name).trim(),
+    origin: String(item.origin || 'Sanskrit').trim(),
+    category: String(item.category || 'Modern Classic').trim(),
+    gender: (item.gender === 'boy' || item.gender === 'girl' || item.gender === 'neutral') ? item.gender : 'neutral',
+    gradient: item.gradient || getRandomGradient(idx),
+  }));
+}
+
+/**
+ * Direct Gemini REST API fallback if GEMINI_API_KEY is configured
+ */
+async function generateViaDirectGemini(input: GenerateNamesInput, apiKey: string): Promise<GeneratedNameItem[]> {
+  const promptText = `Generate 14 to 18 authentic baby names matching:
+- Gender: ${input.gender}
+- Roots: ${input.regionalRoots?.join(', ') || 'Indian/Global'}
+- Starts with: ${input.startingLetters || 'any'}
+- Inspirations: ${input.inspirations?.join(', ') || 'any'}
+Return JSON array with name, meaning, pronunciation, origin, category, gender ("boy"|"girl"|"neutral"), gradient.`;
+
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ role: 'user', parts: [{ text: promptText }] }],
+      generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+    }),
+  });
+
+  if (!response.ok) throw new Error(`Gemini status ${response.status}`);
+  const data = await response.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw new Error('Empty response from Gemini API');
-  }
-
   const parsed = JSON.parse(text);
-  if (!Array.isArray(parsed)) {
-    throw new Error('Gemini response is not an array');
-  }
-
-  return parsed.map((item: any, idx: number) => ({
-    name: item.name || 'Aarav',
-    meaning: item.meaning || 'Peaceful and radiant.',
+  const list = Array.isArray(parsed) ? parsed : (parsed.names || []);
+  return list.map((item: any, idx: number) => ({
+    name: item.name,
+    meaning: item.meaning,
     pronunciation: item.pronunciation || item.name,
     origin: item.origin || 'Sanskrit',
     category: item.category || 'Modern Classic',
@@ -123,32 +203,27 @@ Respond ONLY with a JSON array of objects with the exact schema:
 }
 
 export async function generateNames(input: GenerateNamesInput): Promise<GeneratedNameItem[]> {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
+  const openRouterKey = process.env.OPENROUTER_API_KEY;
+  const modelName = process.env.OPENROUTER_MODEL || process.env.LLM_MODEL || 'openai/gpt-4o-mini';
 
-  if (apiKey) {
+  // 1. Primary engine: OpenRouter with configurable LLM model (default: gpt-4o-mini)
+  if (openRouterKey) {
     try {
-      return await generateViaDirectGemini(input, apiKey);
+      return await generateViaOpenRouter(input, openRouterKey, modelName);
     } catch (err) {
-      console.warn('Direct Gemini API call failed, attempting Genkit flow:', err);
+      console.warn(`OpenRouter generation with ${modelName} failed:`, err);
     }
   }
 
-  // Fallback to Genkit flow if configured
-  try {
-    const prompt = ai.definePrompt({
-      name: 'generateNamesPrompt',
-      input: { schema: GenerateNamesInputSchema },
-      output: { schema: z.array(GeneratedNameItemSchema) },
-      prompt: `Generate 14-18 authentic baby names matching gender {{gender}}, roots {{regionalRoots}}, starting with {{startingLetters}}, inspirations {{inspirations}}. Return JSON array.`,
-    });
-
-    const { output } = await prompt(input);
-    if (output && Array.isArray(output) && output.length > 0) {
-      return output;
+  // 2. Secondary engine: Gemini API if GEMINI_API_KEY is present
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
+  if (geminiKey) {
+    try {
+      return await generateViaDirectGemini(input, geminiKey);
+    } catch (err) {
+      console.warn('Gemini API generation failed:', err);
     }
-  } catch (genkitErr) {
-    console.warn('Genkit prompt flow failed:', genkitErr);
   }
 
-  throw new Error('Unable to generate names via AI service.');
+  throw new Error('No AI API key configured or all AI providers failed.');
 }
