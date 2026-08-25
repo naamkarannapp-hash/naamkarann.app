@@ -1,10 +1,8 @@
-
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import { Sparkles, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Sparkles, ArrowLeft, ArrowRight } from "lucide-react";
 
 const steps = [
   "/form/personalize",
@@ -20,15 +18,23 @@ export function FormFooter() {
     const getButtonInfo = () => {
         switch (pathname) {
             case "/form/personalize":
-                return { text: "Next: Inspirations", formId: "personalize-form" };
+                return { 
+                  text: "Next: Inspirations", 
+                  formId: "personalize-form", 
+                  icon: <ArrowRight className="ml-2 h-4 w-4" /> 
+                };
             case "/form/inspirations":
-                return { text: "Show Names", formId: "inspirations-form", icon: <Sparkles className="ml-2 h-5 w-5"/> };
+                return { 
+                  text: "Discover Names", 
+                  formId: "inspirations-form", 
+                  icon: <Sparkles className="ml-2 h-4 w-4" /> 
+                };
             default:
                 if (currentStepIndex !== -1) {
                     const formId = steps[currentStepIndex].split('/').pop() + "-form";
-                    return { text: "Next", formId: formId };
+                    return { text: "Next", formId: formId, icon: <ArrowRight className="ml-2 h-4 w-4" /> };
                 }
-                return { text: "Next", formId: "" };
+                return { text: "Next", formId: "", icon: <ArrowRight className="ml-2 h-4 w-4" /> };
         }
     };
 
@@ -42,26 +48,25 @@ export function FormFooter() {
 
     const { text, formId, icon } = getButtonInfo();
 
-
     return (
-        <footer className="w-full fixed bottom-0 left-0 bg-background py-4 px-4 border-t border-border/20 z-50">
-           <div className="w-full max-w-md mx-auto flex items-center justify-between space-x-4">
+        <footer className="w-full fixed bottom-0 left-0 bg-white/90 dark:bg-card/90 backdrop-blur-md py-3.5 px-4 border-t border-border/60 z-50 shadow-lg">
+           <div className="w-full max-w-xl mx-auto flex items-center justify-between gap-3">
                  <Button 
+                    type="button"
                     variant="ghost"
                     onClick={handleBack}
-                    className="text-muted-foreground"
+                    className="text-muted-foreground hover:text-foreground font-semibold px-4 rounded-xl"
                 >
-                    <ArrowLeft className="mr-2 h-4 w-4"/>
+                    <ArrowLeft className="mr-1.5 h-4 w-4"/>
                     Back
                 </Button>
 
                 <Button 
                     type="submit"
                     form={formId}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl shadow-lg flex-grow"
-                    style={{ minWidth: '120px' }}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-5 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 flex-grow max-w-xs transition-all"
                 >
-                    {text}
+                    <span>{text}</span>
                     {icon}
                 </Button>
            </div>

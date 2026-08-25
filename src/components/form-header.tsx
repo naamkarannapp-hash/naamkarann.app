@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -6,21 +5,21 @@ import { usePathname } from "next/navigation";
 import { useAppState } from "@/context/app-state-context";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
-import { Button } from "./ui/button";
+import { X, Check } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
-  { path: "/form/personalize", label: "Personalize" },
-  { path: "/form/inspirations", label: "Inspirations" },
+  { path: "/form/personalize", label: "Personalize", stepNumber: 1 },
+  { path: "/form/inspirations", label: "Inspirations", stepNumber: 2 },
 ];
 
 const chipColorClasses = [
-    "bg-blue-100 text-blue-700 hover:bg-blue-200",
-    "bg-pink-100 text-pink-700 hover:bg-pink-200",
-    "bg-green-100 text-green-700 hover:bg-green-200",
-    "bg-purple-100 text-purple-700 hover:bg-purple-200",
-    "bg-orange-100 text-orange-700 hover:bg-orange-200",
-    "bg-teal-100 text-teal-700 hover:bg-teal-200",
+    "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100",
+    "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100",
+    "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
+    "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100",
+    "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100",
+    "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100",
 ];
 
 interface Selection {
@@ -60,7 +59,6 @@ export function FormHeader() {
     }
   };
 
-
   const getVisibleSelections = (): Selection[] => {
     const { formValues } = state;
     const selections: Selection[] = [];
@@ -92,20 +90,57 @@ export function FormHeader() {
   const selections = getVisibleSelections();
 
   return (
-    <header className="space-y-6">
-      <div className="flex items-center justify-center relative">
-        <div className="text-sm font-semibold text-center">
-            Step {currentStepIndex + 1}/{steps.length}
-        </div>
+    <header className="w-full max-w-xl mx-auto space-y-4 mb-4">
+      {/* Brand logo & Home link */}
+      <div className="flex items-center justify-between">
+        <Link href="/" className="group flex items-center gap-1">
+          <h2 className="text-xl font-extrabold tracking-tight text-primary">
+            Naamkarann<span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider ml-0.5">app</span>
+          </h2>
+        </Link>
+        <span className="text-xs font-semibold text-muted-foreground bg-white/80 dark:bg-card/80 px-2.5 py-1 rounded-full border border-border/60 shadow-sm">
+          Step {currentStepIndex + 1} of {steps.length}
+        </span>
       </div>
+
+      {/* Dual Step Progress Bar */}
+      <div className="grid grid-cols-2 gap-2">
+        {steps.map((step, idx) => {
+          const isActive = idx === currentStepIndex;
+          const isCompleted = idx < currentStepIndex;
+          return (
+            <div 
+              key={step.path}
+              className={cn(
+                "flex items-center gap-2 p-2 rounded-xl border text-xs font-semibold transition-all",
+                isActive ? "bg-primary/10 border-primary text-primary shadow-sm" : 
+                isCompleted ? "bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-950/30" : 
+                "bg-white/60 dark:bg-card/60 border-border/60 text-muted-foreground"
+              )}
+            >
+              <div className={cn(
+                "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0",
+                isActive ? "bg-primary text-white" : 
+                isCompleted ? "bg-emerald-600 text-white" : 
+                "bg-muted text-muted-foreground"
+              )}>
+                {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : step.stepNumber}
+              </div>
+              <span className="truncate">{step.label}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Active Selections Tags */}
       {selections.length > 0 && (
-          <div className="flex flex-wrap gap-2 items-center justify-center min-h-[28px]">
+          <div className="flex flex-wrap gap-1.5 items-center justify-center pt-1 min-h-[28px]">
               {selections.map((selection, index) => (
                   <Badge 
                     key={`${selection.type}-${selection.value}-${index}`} 
-                    variant="secondary" 
+                    variant="outline" 
                     className={cn(
-                        "py-1 pl-3 pr-2 rounded-full font-semibold border-none flex items-center gap-1 group",
+                        "py-1 pl-2.5 pr-2 rounded-full font-medium text-xs border flex items-center gap-1 shadow-sm transition-all",
                         chipColorClasses[index % chipColorClasses.length]
                     )}
                    >
@@ -115,9 +150,9 @@ export function FormHeader() {
                           type="button"
                           aria-label={`Remove ${selection.displayValue}`}
                           onClick={() => handleRemove(selection)}
-                          className="rounded-full opacity-50 group-hover:opacity-100 hover:bg-black/10"
+                          className="rounded-full opacity-60 hover:opacity-100 hover:bg-black/10 p-0.5 transition-colors"
                         >
-                            <X className="h-3.5 w-3.5" />
+                            <X className="h-3 w-3" />
                         </button>
                       )}
                   </Badge>
