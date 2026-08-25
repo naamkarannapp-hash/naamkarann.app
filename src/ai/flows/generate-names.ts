@@ -1,5 +1,3 @@
-'use server';
-
 /**
  * @fileOverview Generates culturally authentic, personalized baby names directly inside Next.js using OpenRouter.
  * Supports configurable LLM models (defaulting to openai/gpt-4o-mini) and limits to max 10 names per search.
