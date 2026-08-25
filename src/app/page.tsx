@@ -173,11 +173,6 @@ const LiveNameCardPreview = () => {
                     </motion.div>
                 </AnimatePresence>
             </div>
-
-            {/* Subtle Helper Caption */}
-            <p className="text-[11px] text-muted-foreground mt-2 text-center">
-                Tap card to advance • Auto-rotates every 6s (pauses on hover)
-            </p>
         </div>
     );
 };
