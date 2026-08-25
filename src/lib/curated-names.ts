@@ -200,9 +200,9 @@ export function generateCuratedFallbackNames(values: Partial<NameFormValues>): N
     }
   }
 
-  // Shuffle and pick 12 to 16
+  // Shuffle and pick max 10 names
   const shuffled = list.sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, Math.min(16, Math.max(10, shuffled.length)));
+  const selected = shuffled.slice(0, Math.min(10, shuffled.length));
 
   return selected.map((item, index) => ({
     id: `${item.name.toLowerCase()}-${index}-${Date.now()}`,

@@ -2,7 +2,7 @@
 
 /**
  * @fileOverview Generates culturally authentic, personalized baby names directly inside Next.js using OpenRouter.
- * Supports configurable LLM models (defaulting to openai/gpt-4o-mini) and graceful fallbacks.
+ * Supports configurable LLM models (defaulting to openai/gpt-4o-mini) and limits to max 10 names per search.
  */
 
 import { z } from 'zod';
@@ -75,7 +75,7 @@ function normalizeModelName(rawModel?: string): string {
 }
 
 /**
- * OpenRouter AI Name Generation Service
+ * OpenRouter AI Name Generation Service (Max 10 names)
  */
 async function generateViaOpenRouter(
   input: GenerateNamesInput,
@@ -85,7 +85,7 @@ async function generateViaOpenRouter(
   const model = normalizeModelName(modelName);
 
   const systemPrompt = `You are a world-class culturally authentic linguist and baby naming master specializing in Indian, Vedic, and global cultures.
-Your task is to generate 14 to 18 authentic baby names matching the given criteria.
+Your task is to generate up to 10 high-quality, authentic, and unique baby names matching the user's criteria.
 Always respond ONLY with valid JSON adhering to this structure:
 {
   "names": [
@@ -101,7 +101,7 @@ Always respond ONLY with valid JSON adhering to this structure:
   ]
 }`;
 
-  const userPrompt = `Generate baby names for these preferences:
+  const userPrompt = `Generate a maximum of 10 baby names for these preferences:
 - Target Gender: ${input.gender}
 - Regional / Linguistic Roots: ${input.regionalRoots?.length ? input.regionalRoots.join(', ') : 'Any authentic Indian or global root'}
 ${input.startingLetters ? `- Required Starting Prefix: "${input.startingLetters}" (must start with this)` : ''}
@@ -109,7 +109,7 @@ ${input.blendParents ? `- Blend sounds/elements from Parent 1 ("${input.parent1N
 ${input.matchSibling ? `- Complement sibling name: "${input.siblingName}"` : ''}
 ${input.inspirations?.length ? `- Inspirations / Vibes to weave into names: ${input.inspirations.join(', ')}` : ''}
 
-Output only the JSON object with the "names" array.`;
+Output only the JSON object with the "names" array containing at most 10 names.`;
 
   const siteUrl = process.env.OPENROUTER_SITE_URL || 'https://naamkarann.app';
   const siteName = process.env.OPENROUTER_SITE_NAME || 'Naamkarann';
@@ -155,7 +155,7 @@ Output only the JSON object with the "names" array.`;
     throw new Error('OpenRouter response did not contain a valid names list');
   }
 
-  return rawList.map((item: any, idx: number) => ({
+  return rawList.slice(0, 10).map((item: any, idx: number) => ({
     name: String(item.name || 'Aarav').trim(),
     meaning: String(item.meaning || 'Peaceful and full of wisdom.').trim(),
     pronunciation: String(item.pronunciation || item.name).trim(),
@@ -167,15 +167,15 @@ Output only the JSON object with the "names" array.`;
 }
 
 /**
- * Direct Gemini REST API fallback if GEMINI_API_KEY is configured
+ * Direct Gemini REST API fallback (Max 10 names)
  */
 async function generateViaDirectGemini(input: GenerateNamesInput, apiKey: string): Promise<GeneratedNameItem[]> {
-  const promptText = `Generate 14 to 18 authentic baby names matching:
+  const promptText = `Generate at most 10 authentic baby names matching:
 - Gender: ${input.gender}
 - Roots: ${input.regionalRoots?.join(', ') || 'Indian/Global'}
 - Starts with: ${input.startingLetters || 'any'}
 - Inspirations: ${input.inspirations?.join(', ') || 'any'}
-Return JSON array with name, meaning, pronunciation, origin, category, gender ("boy"|"girl"|"neutral"), gradient.`;
+Return JSON array with up to 10 objects (name, meaning, pronunciation, origin, category, gender ("boy"|"girl"|"neutral"), gradient).`;
 
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
     method: 'POST',
@@ -191,7 +191,7 @@ Return JSON array with name, meaning, pronunciation, origin, category, gender ("
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   const parsed = JSON.parse(text);
   const list = Array.isArray(parsed) ? parsed : (parsed.names || []);
-  return list.map((item: any, idx: number) => ({
+  return list.slice(0, 10).map((item: any, idx: number) => ({
     name: item.name,
     meaning: item.meaning,
     pronunciation: item.pronunciation || item.name,
