@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Sparkles, Compass, ShieldCheck, Shuffle, ArrowRight } from "lucide-react";
+import { Star, Sparkles, Compass, ShieldCheck, Dices, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from 'next/link';
 import { curatedNamesDatabase } from '@/lib/curated-names';
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,17 +16,18 @@ const LiveNameCardPreview = () => {
 
     useEffect(() => {
         setHasMounted(true);
-        // Randomize the entire name collection on every visit/refresh for rich variety
+        // Randomize the initial sequence for fresh discovery on every visit
         const shuffled = [...curatedNamesDatabase].sort(() => 0.5 - Math.random());
         setNames(shuffled);
     }, []);
 
+    // Gentle, relaxed auto-advance (every 6.5 seconds) that gives ample reading time
     useEffect(() => {
         if (!hasMounted || isPaused || names.length === 0) return;
 
         const intervalId = setInterval(() => {
             setCurrentIndex(prevIndex => (prevIndex + 1) % names.length);
-        }, 3400);
+        }, 6500);
 
         return () => clearInterval(intervalId);
     }, [hasMounted, isPaused, names.length]);
@@ -35,11 +36,25 @@ const LiveNameCardPreview = () => {
         setCurrentIndex(prev => (prev + 1) % names.length);
     };
 
+    const handlePrev = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(prev => (prev - 1 + names.length) % names.length);
+    };
+
+    const handleSurpriseMe = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        let randomIndex = Math.floor(Math.random() * names.length);
+        if (randomIndex === currentIndex && names.length > 1) {
+            randomIndex = (currentIndex + 1) % names.length;
+        }
+        setCurrentIndex(randomIndex);
+    };
+
     const item = names[currentIndex] || curatedNamesDatabase[0];
 
     if (!hasMounted) {
         return (
-            <div className="w-full max-w-sm sm:max-w-md h-[220px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
+            <div className="w-full max-w-sm sm:max-w-md h-[225px] rounded-3xl bg-gradient-to-tr from-[#1A52E1] to-[#9C27B0] p-5 shadow-xl text-white flex flex-col justify-between" />
         );
     }
 
@@ -50,36 +65,31 @@ const LiveNameCardPreview = () => {
                 onClick={handleNext}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                title="Click to preview another name"
+                title="Tap card for next name"
             >
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={item.name}
-                        initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -14, scale: 0.96 }}
-                        transition={{ duration: 0.45, ease: "easeOut" }}
-                        className="w-full h-[220px] sm:h-[230px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:scale-[1.02] group-hover:shadow-primary/30 select-none"
+                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="w-full h-[220px] sm:h-[230px] rounded-3xl shadow-2xl flex flex-col justify-between p-5 text-white relative overflow-hidden transition-all group-hover:shadow-primary/30 select-none"
                         style={{
                             background: item.gradient || 'linear-gradient(135deg, #1A52E1 0%, #9C27B0 100%)',
                         }}
                     >
                         {/* Top Meta Bar */}
-                        <div className="flex items-center justify-between text-xs text-white/85 z-10">
+                        <div className="flex items-center justify-between text-xs text-white/90 z-10">
                             <span className="flex items-center gap-1.5 bg-black/25 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide">
-                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Live Preview
+                                <Sparkles className="w-3 h-3 text-yellow-300 animate-pulse" /> Interactive Preview
                             </span>
-                            <div className="flex items-center gap-2">
-                                <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
-                                    {item.gender}
-                                </span>
-                                <span className="bg-black/20 hover:bg-black/40 backdrop-blur-md p-1 rounded-full text-white/80 transition-colors" title="Click for next name">
-                                    <Shuffle className="w-3 h-3" />
-                                </span>
-                            </div>
+                            <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium capitalize">
+                                {item.gender}
+                            </span>
                         </div>
 
-                        {/* Name & Pronunciation */}
+                        {/* Name, Pronunciation & Meaning */}
                         <div className="flex flex-col items-center justify-center text-center z-10 my-auto">
                             <h3 
                                 className="font-headline text-3xl sm:text-4xl font-extrabold tracking-tight text-white" 
@@ -101,7 +111,7 @@ const LiveNameCardPreview = () => {
                             </p>
                         </div>
 
-                        {/* Bottom Tags & Indicator */}
+                        {/* Bottom Tags */}
                         <div className="flex items-center justify-between z-10 pt-1.5 border-t border-white/15">
                             <div className="flex items-center gap-1.5">
                                 <span className="text-[11px] bg-black/25 backdrop-blur-md px-2 py-0.5 rounded-md font-medium text-white/90">
@@ -112,12 +122,49 @@ const LiveNameCardPreview = () => {
                                 </span>
                             </div>
 
-                            <span className="text-[10px] text-white/70 flex items-center gap-1 group-hover:text-white transition-colors">
-                                Tap to shuffle <ArrowRight className="w-2.5 h-2.5" />
+                            <span className="text-[10px] text-white/75 flex items-center gap-1 group-hover:text-white transition-colors">
+                                Tap card to advance
                             </span>
                         </div>
                     </motion.div>
                 </AnimatePresence>
+            </div>
+
+            {/* Interactive Navigation & Surprise Me Controls */}
+            <div className="flex items-center justify-between mt-3 px-1 text-xs text-muted-foreground">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handlePrev}
+                    className="h-8 px-2.5 text-xs hover:bg-muted/80 text-foreground/75"
+                    title="Previous name"
+                >
+                    <ChevronLeft className="w-4 h-4 mr-1" /> Prev
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSurpriseMe}
+                    className="h-8 px-3.5 text-xs font-semibold rounded-full border-primary/30 bg-white/80 dark:bg-card/80 hover:bg-primary/10 text-primary shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+                    title="Pick a random surprise name"
+                >
+                    <Dices className="w-3.5 h-3.5 text-accent" />
+                    Surprise Me
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleNext}
+                    className="h-8 px-2.5 text-xs hover:bg-muted/80 text-foreground/75"
+                    title="Next name"
+                >
+                    Next <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
             </div>
         </div>
     );
@@ -199,7 +246,7 @@ export default function Home() {
               Thousands of culturally authentic, linguist-verified baby names tailored to your heritage and vibe.
             </motion.p>
             
-            {/* Dynamic Randomized Live Card Preview */}
+            {/* Interactive Live Card Preview with Surprise Me Controls */}
             <LiveNameCardPreview />
 
             {/* Call to Action Buttons */}
